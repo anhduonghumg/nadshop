@@ -25,7 +25,7 @@ class AdminUserController extends Controller
             if ($request->has('keyword')) {
                 $kw = $request->input('keyword');
             }
-            $users = M_user::where('name', 'like', "%{$kw}%")->paginate(5);
+            $users = M_user::where('name', 'like', "%{$kw}%")->paginate(1);
         }
         $count_user_active = M_user::count();
         $count_user_trash = M_user::onlyTrashed()->count();
@@ -47,7 +47,7 @@ class AdminUserController extends Controller
                     'name' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255|unique:m_users',
                     'username' => 'required|string|min:5|max:50|unique:m_users',
-                    'phone' => 'required|numeric|size:10',
+                    'phone' => 'required|numeric',
                     'password' => 'required|string|min:8|confirmed',
 
                 ],
@@ -58,7 +58,7 @@ class AdminUserController extends Controller
                     'confirmed' => 'Xác nhận mật khẩu không thành công.',
                     'unique' => ':attribute đã tồn tại.',
                     'numberic' => ':attribute phải là một chuỗi số.',
-                    'size' => ':attribute phải là :size số.'
+                    // 'size' => ':attribute phải là :size số.'
                 ],
                 [
                     'name' => 'Họ và tên',
@@ -95,14 +95,14 @@ class AdminUserController extends Controller
             $request->validate(
                 [
                     'name' => 'required|string|max:255',
-                    'phone' => 'required|numeric|size:10'
+                    'phone' => 'required|numeric'
                 ],
                 [
                     'required' => ':attribute không được để trống',
                     'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
                     'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
                     'numberic' => ':attribute phải là một chuối số.',
-                    'size' => ':attribute phải là :size số.'
+                    // 'size' => ':attribute phải là :size số.'
                 ],
                 [
                     'name' => 'Tên người dùng',
@@ -172,7 +172,7 @@ class AdminUserController extends Controller
                 [
                     'name' => 'required|string|max:255',
                     'password' => 'required|string|min:8|confirmed',
-                    'phone' => 'required|numeric|size:10',
+                    'phone' => 'required|numeric',
                 ],
                 [
                     'required' => ':attribute không được để trống',
@@ -180,7 +180,7 @@ class AdminUserController extends Controller
                     'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
                     'confirmed' => 'Xác nhận mật khẩu không thành công',
                     'numberic' => ':attribute phải là một chuối số.',
-                    'size' => ':attribute phải là :size số.'
+                    // 'size' => ':attribute phải là :size số.'
                 ],
                 [
                     'name' => 'Tên người dùng',
