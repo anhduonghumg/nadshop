@@ -9,10 +9,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/solid.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="https://cdn.tiny.cloud/1/numi57lzygq762f9vfvkurk8qjdqln3t6lun4y16ql5iho4u/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+
     <title>@yield('title')</title>
 </head>
 
 <body>
+    <script>
+        var editor_config = {
+            path_absolute : "http://localhost:8080/nadshop/",
+            selector: 'textarea',
+            relative_urls: false,
+            plugins: [
+              "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+              "searchreplace wordcount visualblocks visualchars code fullscreen",
+              "insertdatetime media nonbreaking save table directionality",
+              "emoticons template paste textpattern"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+            file_picker_callback : function(callback, value, meta) {
+              var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+              var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
+        
+              var cmsURL = editor_config.path_absolute + 'laravel-filemanager?editor=' + meta.fieldname;
+              if (meta.filetype == 'image') {
+                cmsURL = cmsURL + "&type=Images";
+              } else {
+                cmsURL = cmsURL + "&type=Files";
+              }
+        
+              tinyMCE.activeEditor.windowManager.openUrl({
+                url : cmsURL,
+                title : 'Filemanager',
+                width : x * 0.8,
+                height : y * 0.8,
+                resizable : "yes",
+                close_previous : "no",
+                onMessage: (api, message) => {
+                  callback(message.content);
+                }
+              });
+            }
+          };
+        
+          tinymce.init(editor_config);
+    </script>
     <div id="warpper" class="nav-fixed">
         <nav class="topnav shadow navbar-light bg-white d-flex">
             <div class="navbar-brand"><a href="{{ url('dashboard') }}">ADMIN</a></div>
@@ -36,6 +78,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="{{ route('admin.user.profile')}}">Thông tin tài
                             khoản</a>
+                        <a class="dropdown-item" href="{{ route('admin.user.changePass')}}">Thay đổi mật khẩu</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
                             {{ __('auth.Logout') }}
@@ -68,10 +111,10 @@
                             Trang
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
-                        {{-- <ul class="sub-menu">
-                            <li><a href="?view=add-post">Thêm mới</a></li>
-                            <li><a href="?view=list-post">Danh sách</a></li>
-                        </ul> --}}
+                        <ul class="sub-menu">
+                            <li><a href="{{ url('admin/page/add') }}">Thêm mới</a></li>
+                            <li><a href="{{ url('admin/page/list') }}">Danh sách</a></li>
+                        </ul>
                     </li>
                     <li class="nav-link">
                         <a href="{{ url('admin/post/list') }}">
@@ -114,7 +157,7 @@
                         </ul>
                     </li>
                     <li class="nav-link">
-                        <a href="?view=list-user">
+                        <a href="{{ url('admin/user/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
@@ -143,7 +186,7 @@
                 </ul>
             </div>
             <div id="wp-content">
-                @yield('content');
+                @yield('content')
             </div>
         </div>
 

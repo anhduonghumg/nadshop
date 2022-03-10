@@ -40,11 +40,8 @@ class ResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->subject("Thay Đổi Mật Khẩu")
-            ->line("Xin chào,Có vẻ bạn đã quên mất mật khẩu của mình? Bấm vào nút thay đổi mật khẩu.")
-            ->action('Thay Đổi Mật Khẩu', url('password/reset', $this->token))
-            ->line('Cảm ơn bạn!');
+        $token_reset = $this->token;
+        return (new MailMessage)->view('email.reset_pass', compact('token_reset'));
     }
 
     /**

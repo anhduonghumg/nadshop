@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = 'login';
 
     /**
      * Create a new controller instance.
@@ -50,13 +50,32 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:m_users'],
-            'phone' => ['required', 'numeric'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:m_users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        return Validator::make(
+            $data,
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'username' => ['required', 'string', 'max:255', 'unique:m_users'],
+                'phone' => ['required', 'numeric'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:m_users'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ],
+            [
+                'required' => ':attribute không được để trống',
+                'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
+                'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
+                'confirmed' => 'Xác nhận mật khẩu không thành công',
+                'numeric' => ':attribute phải là một chuối số.',
+                // 'size' => ':attribute phải là :size số.'
+
+            ],
+            [
+                'name' => 'Tên người dùng',
+                'password' => 'Mật khẩu',
+                'phone' => 'Số điện thoại',
+                'username' => 'Tên tài khoản',
+                'email' => 'Email'
+            ]
+        );
     }
 
     /**
@@ -78,10 +97,6 @@ class RegisterController extends Controller
 
     protected function redirectTo()
     {
-        if (Auth::user()->role_id == 0) {
-            return '/dashboard';
-        } else {
-            return '/home';
-        }
+        return 'email/verify';
     }
 }

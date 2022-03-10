@@ -43,7 +43,7 @@ class VerifyEmailNotification extends VerifyEmailBase
     public function toMail($notifiable)
     {
         $verificationUrl = $this->verificationUrl($notifiable);
-        return (new MailMessage)->view('email.user', compact('verificationUrl'));
+        return (new MailMessage)->view('email.verify', compact('verificationUrl'));
     }
 
     /**

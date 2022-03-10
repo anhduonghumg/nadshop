@@ -47,6 +47,7 @@
                             <th scope="col">Họ tên</th>
                             <th scope="col">Email</th>
                             <th scope="col">Quyền</th>
+                            <th scope="col">Xác thực tài khoản</th>
                             <th scope="col">Ngày tạo</th>
                             <th scope="col">Tác vụ</th>
                         </tr>
@@ -72,7 +73,12 @@
                             @else
                             <td>Quản trị</td>
                             @endif
-
+                            @if ($user->email_verified_at != null)
+                            <td>Đã xác thực</td>
+                            @else
+                            <td>Chưa xác thực</td>
+                            @endif
+                            {{-- <td>{{ $user->email_verified_at }}</td> --}}
                             <td>{{ $user->created_at }}</td>
                             @if(request()->status != 'trash')
                             <td>
@@ -93,7 +99,7 @@
                         @endforeach
                         @else
                         <tr>
-                            <td colspan='7' class="bg-white">
+                            <td colspan='6' class="bg-white">
                                 <p>Không có bản ghi nào.</p>
                             </td>
                         </tr>
@@ -101,7 +107,7 @@
                     </tbody>
                 </table>
             </form>
-            {{ $users->links() }}
+            {{ $users->links('layouts.paginationlink') }}
         </div>
     </div>
 </div>

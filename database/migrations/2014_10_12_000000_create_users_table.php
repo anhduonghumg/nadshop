@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
+        // Schema::rename('users','m_users');
         Schema::create('m_users', function (Blueprint $table) {
             $table->id();
             $table->string('name');

@@ -17,10 +17,24 @@
                     @enderror
                 </div>
                 <div class="form-group">
+                    <label for="username">Tên tài khoản</label>
+                    <input class="form-control" type="text" name="username" id="username" value="{{ $user->username }}" disabled>
+                    @error('username')
+                    {{--  <small class="text-danger">{{ $message }}</small>  --}}
+                    @enderror
+                </div>
+                <div class="form-group">
                     <label for="email">Email</label>
                     <input class="form-control" type="text" name="email" id="email" value="{{ $user->email }}" disabled>
                     @error('email')
                     {{-- <small class="text-danger">{{ $message }}</small> --}}
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input class="form-control" type="text" name="phone" id="phone" value="{{ $user->phone }}">
+                    @error('phone')
+                    <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
                 <div class="form-group">

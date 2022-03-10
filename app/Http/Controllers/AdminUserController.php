@@ -17,7 +17,7 @@ class AdminUserController extends Controller
         if ($status == 'trash') {
             $list_act = [
                 'restore' => 'Khôi phục',
-                'forceDelete' => 'Xóa tạm thời'
+                'forceDelete' => 'Xóa vĩnh viễn'
             ];
             $users = M_user::onlyTrashed()->paginate(5);
         } else {
@@ -47,7 +47,7 @@ class AdminUserController extends Controller
                     'name' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255|unique:m_users',
                     'username' => 'required|string|min:5|max:50|unique:m_users',
-                    'phone' => 'required|numeric|size:10',
+                    'phone' => 'required|numeric',
                     'password' => 'required|string|min:8|confirmed',
 
                 ],
@@ -58,7 +58,7 @@ class AdminUserController extends Controller
                     'confirmed' => 'Xác nhận mật khẩu không thành công.',
                     'unique' => ':attribute đã tồn tại.',
                     'numberic' => ':attribute phải là một chuỗi số.',
-                    'size' => ':attribute phải là :size số.'
+                    // 'size' => ':attribute phải là :size số.'
                 ],
                 [
                     'name' => 'Họ và tên',
@@ -95,14 +95,14 @@ class AdminUserController extends Controller
             $request->validate(
                 [
                     'name' => 'required|string|max:255',
-                    'phone' => 'required|numeric|size:10'
+                    'phone' => 'required|numeric'
                 ],
                 [
                     'required' => ':attribute không được để trống',
                     'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
                     'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
-                    'numberic' => ':attribute phải là một chuối số.',
-                    'size' => ':attribute phải là :size số.'
+                    'numeric' => ':attribute phải là một chuối số.',
+                    // 'size' => ':attribute phải là :size số.'
                 ],
                 [
                     'name' => 'Tên người dùng',
@@ -171,20 +171,17 @@ class AdminUserController extends Controller
             $request->validate(
                 [
                     'name' => 'required|string|max:255',
-                    'password' => 'required|string|min:8|confirmed',
-                    'phone' => 'required|numeric|size:10',
+                    'phone' => 'required|numeric',
                 ],
                 [
                     'required' => ':attribute không được để trống',
                     'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
                     'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
-                    'confirmed' => 'Xác nhận mật khẩu không thành công',
-                    'numberic' => ':attribute phải là một chuối số.',
-                    'size' => ':attribute phải là :size số.'
+                    'numeric' => ':attribute phải là một chuối số.',
+                    // 'size' => ':attribute phải là :size số.'
                 ],
                 [
                     'name' => 'Tên người dùng',
-                    'password' => 'Mật khẩu',
                     'phone' => 'Số điện thoại'
                 ]
             );
@@ -192,10 +189,47 @@ class AdminUserController extends Controller
             M_user::where('id', $id)->update([
                 'name' => $request->input('name'),
                 'phone' => $request->input('phone'),
-                'password' => Hash::make($request->input('password'))
             ]);
 
             return redirect('admin/user/list')->with('status', 'Bạn đã cập nhập thông tin thành công');
+        } else {
+            return redirect('dashboard');
+        }
+    }
+
+    public function changePass(Request $request)
+    {
+        $id = Auth::id();
+        $user = M_user::find($id);
+        return view('admin.user.changePass', compact('user'));
+    }
+
+    public function changePassUpdate(Request $request, $id)
+    {
+        if (Auth::id() == $id) {
+            $request->validate(
+                [
+                    'password' => 'required|string|min:8|confirmed|',
+
+                ],
+                [
+                    'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự.',
+                    'confirmed' => 'Xác nhận mật khẩu không thành công.',
+                ],
+                [
+                    'password' => 'Mật khẩu',
+                ]
+
+            );
+            $current_pass = Auth::user();
+            if (Hash::check($request->password, $current_pass->password)) {
+                M_user::where('id', $id)->update([
+                    'password' => Hash::make($request->input('password')),
+                ]);
+                return redirect('admin/user/list')->with('status', 'Bạn đã thay đổi password thành công');
+            } else {
+                return redirect()->back()->with('status', 'Bạn không nên để mật khẩu mới giống mật khẩu cũ');
+            }
         } else {
             return redirect('dashboard');
         }
