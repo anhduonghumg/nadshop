@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Page;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AdminPageController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware(function (Request $request, $next) {
@@ -21,30 +20,30 @@ class AdminPageController extends Controller
     public function list(Request $request)
     {
         $status = $request->input('status');
-        $list_act = ['delete' => 'Xóa tạm thời'];
+
         if ($status == 'trash') {
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
             $pages = Page::onlyTrashed()->paginate(10);
-        } elseif ($status == 'active') {
-            $list_act = ['delete' => 'Xóa tạm thời'];
-            $pages = Page::where('status', 'public')->paginate(10);
         } elseif ($status == 'pending') {
-            $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa tạm thời'];
+            $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
             $pages = Page::where('status', 'pending')->paginate(10);
         } else {
-            $kw = '';
-            if ($request->has('kw')) {
-                $kw = $request->input('kw');
+            $key = "";
+            $list_act = ['delete' => 'Xóa'];
+            if ($request->input('keyword')) {
+                $key = $request->input('keyword');
             }
-            $pages = Page::where('name', 'like', "%{$kw}%")->paginate(10);
+            $pages = Page::where("name", "LIKE", "%{$key}%")->Paginate(10);
         }
 
-        $count_page_active = Page::where('status', 'public')->count();
-        $count_page_trash = Page::onlyTrashed()->count();
-        $count_page_pending = Page::Where('status', 'pending')->count();
-        $count = [$count_page_active, $count_page_trash, $count_page_pending];
+        $num_page_active = Page::count();
+        $num_page_trash = Page::onlyTrashed()->count();
+        $num_page_pending = Page::where('status', 'pending')->count();
+        $count = [$num_page_active, $num_page_trash, $num_page_pending];
+
         return view('admin.page.list', compact('pages', 'count', 'list_act'));
     }
+
     public function add()
     {
         return view('admin.page.add');
@@ -56,36 +55,37 @@ class AdminPageController extends Controller
 
             $request->validate(
                 [
-                    'name' => 'required|string|max:255|unique:pages',
-                    'desc' => 'required',
-                    'content' => 'required',
+                    'name' => ['required', 'string', 'max:255', 'unique:pages'],
+                    'desc' => ['required', 'string'],
+                    'content' => ['required', 'string'],
+
                 ],
                 [
-                    'required' => ':attribute không được để trống.',
-                    'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự.',
-                    'unique' => ':attribute đã tồn tại.',
+                    'required' => ':attribute không được để trống',
+                    'max' => ':attribute có độ dài ít nhất :max ký tự',
+                    'string' => ':attribute phải là một chuỗi',
+                    'unique' => ':attribute đã tồn tại'
                 ],
                 [
-                    'name' => 'Tên trang',
-                    'desc' => 'Mô tả ngắn',
-                    'content' => 'Nôi dung trang',
+                    'name' => 'Tiêu đề trang',
+                    'content' => 'Nội dung trang',
                 ]
             );
-
-            Page::create([
-                'name' => $request->input('name'),
-                'slug' => Str::slug($request->input('name')),
-                'desc' => $request->input('desc'),
-                'content' => $request->input('content'),
-                'status' => $request->input('status'),
-                'user_id' => Auth::id()
-            ]);
-
-            return redirect('admin/page/list')->with('status', 'Đã thêm trang thành công');
+            Page::create(
+                [
+                    'name' => $request->input('name'),
+                    'slug' => Str::slug($request->input('name')),
+                    'desc' => $request->input('desc'),
+                    'status' => $request->input(('status')),
+                    'content' => $request->input('content'),
+                    'user_id' => Auth::id(),
+                ]
+            );
+            return redirect('admin/page/list')->with('status', 'Đã thêm trang thành công.');
         }
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         if (!isset($id) || $id == 0) {
             return redirect('admin/page/list');
@@ -104,20 +104,19 @@ class AdminPageController extends Controller
 
                 $request->validate(
                     [
-                        'name' => ['required', 'string', 'min:6', 'unique:pages,name,' . $id . ',id'],
+                        'name' => ['required', 'string', 'max:255', 'unique:pages,name,' . $id . ',id'],
                         'desc' => ['required', 'string'],
                         'content' => ['required', 'string']
                     ],
                     [
                         'required' => ':attribute không được để trống',
-                        'min' => ':attribute có độ dài tối đa :min ký tự',
+                        'max' => ':attribute có độ dài ít nhất :max ký tự',
                         'string' => ':attribute phải là một chuỗi',
                         'unique' => ':attribute đã tồn tại'
                     ],
                     [
                         'name' => 'Tiêu đề trang',
-                        'content' => 'Nội dung trang',
-                        'desc' => 'Mô tả trang'
+                        'content' => 'Nội dung trang'
                     ]
                 );
 
@@ -125,8 +124,8 @@ class AdminPageController extends Controller
                     [
                         'name' => $request->input('name'),
                         'content' => $request->input('content'),
-                        'slug' => Str::slug($request->input('name')),
-                        'desc' => $request->input('desc')
+                        'desc' => $request->input('desc'),
+                        'slug' => Str::slug($request->input('name'))
                     ]
                 );
 
@@ -148,19 +147,23 @@ class AdminPageController extends Controller
 
     public function action(Request $request)
     {
+        // Kiểm tra action có tồn tại hay ko
         if ($request->has('btn_action')) {
+            // Lấy ra danh sách bản ghi được chọn
             $list_check = $request->input('list_check');
+            // Kiểm tra list_check có rỗng ko
             if (!empty($list_check)) {
+                // Lấy hành động
                 $act = $request->input('act');
                 if ($act == 'delete') {
                     Page::destroy($list_check);
                     return redirect('admin/page/list')->with('status', 'Bạn đã xóa thành công.');
+                } elseif ($act == 'active') {
+                    Page::whereIn('id', $list_check)->update(['status' => 'public']);
+                    return redirect('admin/page/list')->with('status', 'Bạn đã kích hoạt thành công.');
                 } elseif ($act == 'restore') {
                     Page::withTrashed()->whereIn('id', $list_check)->restore();
                     return redirect('admin/page/list')->with('status', 'Bạn đã khôi phục thành công.');
-                } elseif ($act == 'active') {
-                    Page::whereIn('id', $list_check)->update(['status' => 'public']);
-                    return redirect('admin/page/list')->with('status', 'Bạn đã kích hoạt trang thành công.');
                 } elseif ($act == 'forceDelete') {
                     Page::withTrashed()->whereIn('id', $list_check)->forceDelete();
                     return redirect('admin/page/list')->with('status', 'Bạn đã vĩnh viễn thành công.');

@@ -8,6 +8,7 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/solid.min.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="https://cdn.tiny.cloud/1/numi57lzygq762f9vfvkurk8qjdqln3t6lun4y16ql5iho4u/tinymce/5/tinymce.min.js"
         referrerpolicy="origin"></script>
@@ -76,7 +77,7 @@
                         {{ Auth::user()->name }}
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="{{ route('admin.user.profile')}}">Thông tin tài
+                        <a class="dropdown-item" href="{{ route('admin.user.profile') }}">Thông tin tài
                             khoản</a>
                         <a class="dropdown-item" href="{{ route('admin.user.changePass')}}">Thay đổi mật khẩu</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

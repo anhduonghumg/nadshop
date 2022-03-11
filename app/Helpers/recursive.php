@@ -19,10 +19,10 @@ function recursive($data, $parent_id = 0, $level = 0)
 function dataSelect($model)
 {
     $data_select = [];
-    $data_models = $model::all();
-    $data_models = recursive($data_models);
+    $dataModels = $model::all();
+    $dataModels = recursive($dataModels);
 
-    foreach ($data_models as $data) {
+    foreach ($dataModels as $data) {
         $data_select[$data->id] = str_repeat('|---', $data->level) . $data->name;
     }
 

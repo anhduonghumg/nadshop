@@ -25,7 +25,7 @@ class AdminUserController extends Controller
             if ($request->has('keyword')) {
                 $kw = $request->input('keyword');
             }
-            $users = M_user::where('name', 'like', "%{$kw}%")->paginate(5);
+            $users = M_user::where('name', 'like', "%{$kw}%")->paginate(20);
         }
         $count_user_active = M_user::count();
         $count_user_trash = M_user::onlyTrashed()->count();
@@ -101,7 +101,7 @@ class AdminUserController extends Controller
                     'required' => ':attribute không được để trống',
                     'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
                     'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
-                    'numeric' => ':attribute phải là một chuối số.',
+                    'numberic' => ':attribute phải là một chuối số.',
                     // 'size' => ':attribute phải là :size số.'
                 ],
                 [
@@ -171,13 +171,15 @@ class AdminUserController extends Controller
             $request->validate(
                 [
                     'name' => 'required|string|max:255',
+                    'password' => 'required|string|min:8|confirmed',
                     'phone' => 'required|numeric',
                 ],
                 [
                     'required' => ':attribute không được để trống',
                     'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
                     'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
-                    'numeric' => ':attribute phải là một chuối số.',
+                    'confirmed' => 'Xác nhận mật khẩu không thành công',
+                    'numberic' => ':attribute phải là một chuối số.',
                     // 'size' => ':attribute phải là :size số.'
                 ],
                 [

@@ -54,6 +54,9 @@
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Người tạo</th>
                             <th scope="col">Ngày tạo</th>
+                            @if (request()->input('status') == 'trash')
+                            <th scope="col">Ngày xóa</th>
+                            @endif
                             <th scope="col">Tác vụ</th>
                         </tr>
                     </thead>

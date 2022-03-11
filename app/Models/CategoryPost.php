@@ -11,17 +11,17 @@ class CategoryPost extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = [];
 
-    public function catPostChild()
+    function catPostChild()
     {
         return $this->hasMany(CategoryPost::class, 'parent_id');
     }
 
-    public function catPostParent()
+    function catPostParent()
     {
         return $this->belongsTo(CategoryPost::class, 'parent_id');
     }
 
-    public function user()
+    function user()
     {
         return $this->belongsTo('App\models\M_user', 'user_id', 'id');
     }
