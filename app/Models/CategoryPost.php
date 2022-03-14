@@ -26,6 +26,11 @@ class CategoryPost extends Model
         return $this->belongsTo('App\models\M_user', 'user_id', 'id');
     }
 
+    function post()
+    {
+        return $this->hasMany('App\models\Post');
+    }
+
     public static function check_parent_post_cat($id)
     {
         $postCatALL = CategoryPost::all();

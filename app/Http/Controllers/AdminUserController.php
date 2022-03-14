@@ -19,7 +19,7 @@ class AdminUserController extends Controller
                 'restore' => 'Khôi phục',
                 'forceDelete' => 'Xóa vĩnh viễn'
             ];
-            $users = M_user::onlyTrashed()->paginate(5);
+            $users = M_user::onlyTrashed()->paginate(20);
         } else {
             $kw = "";
             if ($request->has('keyword')) {
@@ -51,22 +51,6 @@ class AdminUserController extends Controller
                     'password' => 'required|string|min:8|confirmed',
 
                 ],
-                [
-                    'required' => ':attribute không được để trống.',
-                    'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự.',
-                    'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự.',
-                    'confirmed' => 'Xác nhận mật khẩu không thành công.',
-                    'unique' => ':attribute đã tồn tại.',
-                    'numberic' => ':attribute phải là một chuỗi số.',
-                    // 'size' => ':attribute phải là :size số.'
-                ],
-                [
-                    'name' => 'Họ và tên',
-                    'email' => 'Email',
-                    'password' => 'Password',
-                    'phone' => 'Số điện thoại',
-                    'username' => 'Tên người dùng'
-                ]
             );
 
             M_user::create([
@@ -97,17 +81,6 @@ class AdminUserController extends Controller
                     'name' => 'required|string|max:255',
                     'phone' => 'required|numeric'
                 ],
-                [
-                    'required' => ':attribute không được để trống',
-                    'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
-                    'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
-                    'numberic' => ':attribute phải là một chuối số.',
-                    // 'size' => ':attribute phải là :size số.'
-                ],
-                [
-                    'name' => 'Tên người dùng',
-                    'phone' => 'Số điện thoại'
-                ]
             );
 
             M_user::where('id', $id)->update([
@@ -174,18 +147,6 @@ class AdminUserController extends Controller
                     'password' => 'required|string|min:8|confirmed',
                     'phone' => 'required|numeric',
                 ],
-                [
-                    'required' => ':attribute không được để trống',
-                    'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
-                    'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
-                    'confirmed' => 'Xác nhận mật khẩu không thành công',
-                    'numberic' => ':attribute phải là một chuối số.',
-                    // 'size' => ':attribute phải là :size số.'
-                ],
-                [
-                    'name' => 'Tên người dùng',
-                    'phone' => 'Số điện thoại'
-                ]
             );
 
             M_user::where('id', $id)->update([
@@ -214,13 +175,6 @@ class AdminUserController extends Controller
                     'password' => 'required|string|min:8|confirmed|',
 
                 ],
-                [
-                    'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự.',
-                    'confirmed' => 'Xác nhận mật khẩu không thành công.',
-                ],
-                [
-                    'password' => 'Mật khẩu',
-                ]
 
             );
             $current_pass = Auth::user();

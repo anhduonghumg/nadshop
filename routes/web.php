@@ -58,4 +58,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/post/cat/update/{id}', [App\Http\Controllers\AdminCategoryPostController::class, 'update'])->name('admin.catPost.update');
     Route::get('/admin/post/cat/delete/{id}', [App\Http\Controllers\AdminCategoryPostController::class, 'delete'])->name('admin.catPost.delete');
     Route::post('/admin/post/cat/action', [App\Http\Controllers\AdminCategoryPostController::class, 'action'])->name('admin.catPost.action');
+
+    // Admin/post
+    Route::get('/admin/post/list', [App\Http\Controllers\AdminPostController::class, 'list'])->name('admin.post.list');
+    Route::get('/admin/post/add', [App\Http\Controllers\AdminPostController::class, 'add'])->name('admin.post.add');
+    Route::post('/admin/post/store', [App\Http\Controllers\AdminPostController::class, 'store'])->name('admin.post.store');
+    Route::get('/admin/post/edit/{id}', [App\Http\Controllers\AdminPostController::class, 'edit'])->name('admin.post.edit');
+    Route::post('/admin/post/update/{id}', [App\Http\Controllers\AdminPostController::class, 'update'])->name('admin.post.update');
+    Route::get('/admin/post/delete/{id}', [App\Http\Controllers\AdminPostController::class, 'delete'])->name('admin.post.delete');
+    Route::post('/admin/post/action', [App\Http\Controllers\AdminPostController::class, 'action'])->name('admin.post.action');
 });

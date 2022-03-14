@@ -89,7 +89,11 @@
                                     <th scope="col">Tên</th>
                                     {{-- <th scope="col">Slug</th> --}}
                                     <th scope="col">Danh mục cha</th>
+                                    @if (request()->input('status') == 'trash')
+                                    <th scope="col">Ngày xóa</th>
+                                    @else
                                     <th scope="col">Trạng thái</th>
+                                    @endif
                                     <th scope="col">Người tạo</th>
                                     <th scope="col">Tác vụ</th>
                                 </tr>
@@ -111,7 +115,9 @@
                                     @else
                                     <td>{{ $item->catPostParent->name }}</td>
                                     @endif
-                                    @if ($item->status == 'public')
+                                    @if(request()->input('status') == 'trash')
+                                    <td>{{ $item->deleted_at }}</td>
+                                    @elseif ($item->status == 'public')
                                     <td>Công khai</td>
                                     @else
                                     <td>Chờ duyệt</td>

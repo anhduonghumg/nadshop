@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Page;
+use App\Models\Page\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Page\StorePageRequest;
 
 class AdminPageController extends Controller
 {
@@ -33,7 +35,7 @@ class AdminPageController extends Controller
             if ($request->input('keyword')) {
                 $key = $request->input('keyword');
             }
-            $pages = Page::where("name", "LIKE", "%{$key}%")->Paginate(10);
+            $pages = Page::list_page($key)->Paginate(10);
         }
 
         $num_page_active = Page::count();
@@ -49,41 +51,62 @@ class AdminPageController extends Controller
         return view('admin.page.add');
     }
 
-    public function store(Request $request)
+    // Validation form request
+    public function store(StorePageRequest $request)
     {
         if ($request->has('btn_add')) {
+            $request->validated();
+            $data = [
+                'name' => $request->input('name'),
+                'slug' => Str::slug($request->input('name')),
+                'desc' => $request->input('desc'),
+                'status' => $request->input(('status')),
+                'content' => $request->input('content'),
+                'user_id' => Auth::id(),
+            ];
 
-            $request->validate(
-                [
-                    'name' => ['required', 'string', 'max:255', 'unique:pages'],
-                    'desc' => ['required', 'string'],
-                    'content' => ['required', 'string'],
-
-                ],
-                [
-                    'required' => ':attribute không được để trống',
-                    'max' => ':attribute có độ dài ít nhất :max ký tự',
-                    'string' => ':attribute phải là một chuỗi',
-                    'unique' => ':attribute đã tồn tại'
-                ],
-                [
-                    'name' => 'Tiêu đề trang',
-                    'content' => 'Nội dung trang',
-                ]
-            );
-            Page::create(
-                [
-                    'name' => $request->input('name'),
-                    'slug' => Str::slug($request->input('name')),
-                    'desc' => $request->input('desc'),
-                    'status' => $request->input(('status')),
-                    'content' => $request->input('content'),
-                    'user_id' => Auth::id(),
-                ]
-            );
+            Page::add_page($data);
             return redirect('admin/page/list')->with('status', 'Đã thêm trang thành công.');
         }
     }
+    // public function store(Request $request)
+    // {
+    //     if ($request->has('btn_add')) {
+
+    //         // Validation logic
+    //         // $request->validate(
+    //         //     [
+    //         //         'name' => ['required', 'string', 'max:255', 'unique:pages'],
+    //         //         'desc' => ['required', 'string'],
+    //         //         'content' => ['required', 'string'],
+
+    //         //     ],
+    //         // );
+
+    //         // Validation thủ công
+    //         $validator = Validator::make($request->all(), [
+    //             'name' => ['required', 'string', 'max:255', 'unique:pages'],
+    //             'desc' => ['required', 'string'],
+    //             'content' => ['required', 'string'],
+    //         ]);
+
+    //         if ($validator->fails()) {
+    //             return back()->withErrors($validator);
+    //         }
+
+    //         $data = [
+    //             'name' => $request->input('name'),
+    //             'slug' => Str::slug($request->input('name')),
+    //             'desc' => $request->input('desc'),
+    //             'status' => $request->input(('status')),
+    //             'content' => $request->input('content'),
+    //             'user_id' => Auth::id(),
+    //         ];
+
+    //         Page::add_page($data);
+    //         return redirect('admin/page/list')->with('status', 'Đã thêm trang thành công.');
+    //     }
+    // }
 
     public function edit(Request $request, $id)
     {
@@ -108,27 +131,16 @@ class AdminPageController extends Controller
                         'desc' => ['required', 'string'],
                         'content' => ['required', 'string']
                     ],
-                    [
-                        'required' => ':attribute không được để trống',
-                        'max' => ':attribute có độ dài ít nhất :max ký tự',
-                        'string' => ':attribute phải là một chuỗi',
-                        'unique' => ':attribute đã tồn tại'
-                    ],
-                    [
-                        'name' => 'Tiêu đề trang',
-                        'content' => 'Nội dung trang'
-                    ]
                 );
 
-                Page::where('id', $id)->update(
-                    [
-                        'name' => $request->input('name'),
-                        'content' => $request->input('content'),
-                        'desc' => $request->input('desc'),
-                        'slug' => Str::slug($request->input('name'))
-                    ]
-                );
+                $data = [
+                    'name' => $request->input('name'),
+                    'content' => $request->input('content'),
+                    'desc' => $request->input('desc'),
+                    'slug' => Str::slug($request->input('name'))
+                ];
 
+                Page::update_page($data, $id);
                 return redirect('admin/page/list')->with('status', 'Đã cập nhập trang thành công.');
             }
         }
@@ -137,8 +149,7 @@ class AdminPageController extends Controller
     public function delete($id)
     {
         if ($id != null) {
-            $page = Page::find($id);
-            $page->delete();
+            Page::delete_page($id);
             return redirect('admin/page/list')->with('status', 'Xóa trang thành công.');
         } else {
             return redirect('admin/page/list')->with('status', 'Không có dữ liệu.');
@@ -147,13 +158,9 @@ class AdminPageController extends Controller
 
     public function action(Request $request)
     {
-        // Kiểm tra action có tồn tại hay ko
         if ($request->has('btn_action')) {
-            // Lấy ra danh sách bản ghi được chọn
             $list_check = $request->input('list_check');
-            // Kiểm tra list_check có rỗng ko
             if (!empty($list_check)) {
-                // Lấy hành động
                 $act = $request->input('act');
                 if ($act == 'delete') {
                     Page::destroy($list_check);

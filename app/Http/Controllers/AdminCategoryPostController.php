@@ -47,11 +47,6 @@ class AdminCategoryPostController extends Controller
                 [
                     'name' => 'required|max:100|unique:category_posts',
                 ],
-                [
-                    'required' => 'Tên danh mục không được để trống',
-                    'unique' => 'Tên danh mục đã tồn tại',
-                    'max' => 'Tên danh mục tối đa nhất 100 ký tự'
-                ]
             );
             CategoryPost::create(
                 [
@@ -81,11 +76,6 @@ class AdminCategoryPostController extends Controller
             [
                 'name' => 'required|max:100|unique:category_posts,name,' . $id . ',id',
             ],
-            [
-                'required' => 'Tên danh mục không được để trống',
-                'unique' => 'Tên danh mục đã tồn tại',
-                'max' => 'Tên danh mục tối đa nhất 100 ký tự'
-            ]
         );
 
         CategoryPost::find($id)->update([
@@ -101,7 +91,9 @@ class AdminCategoryPostController extends Controller
     {
         if ($id != null) {
             $catPost = CategoryPost::find($id);
-            if (CategoryPost::check_parent_post_cat($id)) {
+            if ($catPost->status == 'pending') {
+                $catPost->delete();
+            } elseif (CategoryPost::check_parent_post_cat($id)) {
                 return redirect('admin/post/cat/list')->with('status', 'Bạn phải xóa danh mục con trước.');
             } else {
                 $catPost->delete();
@@ -109,6 +101,32 @@ class AdminCategoryPostController extends Controller
             return redirect('admin/post/cat/list')->with('status', 'Xóa danh mục thành công.');
         } else {
             return redirect('admin/post/cat/list')->with('status', 'Không có dữ liệu.');
+        }
+    }
+    public function action(Request $request)
+    {
+        if ($request->has('btn_action')) {
+            $list_check = $request->input('list_check');
+            if (!empty($list_check)) {
+                $act = $request->input('act');
+                if ($act == 'delete') {
+                    CategoryPost::destroy($list_check);
+                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã xóa thành công.');
+                } elseif ($act == 'active') {
+                    CategoryPost::whereIn('id', $list_check)->update(['status' => 'public']);
+                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã kích hoạt thành công.');
+                } elseif ($act == 'restore') {
+                    CategoryPost::withTrashed()->whereIn('id', $list_check)->restore();
+                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã khôi phục thành công.');
+                } elseif ($act == 'forceDelete') {
+                    CategoryPost::withTrashed()->whereIn('id', $list_check)->forceDelete();
+                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã vĩnh viễn thành công.');
+                } else {
+                    return redirect('admin/post/cat/list')->with('status', 'Bạn cần chọn tác vụ thực hiện.');
+                }
+            } else {
+                return redirect('admin/post/cat/list')->with('status', 'Bạn cần chọn phần tử để thực thi');
+            }
         }
     }
 }

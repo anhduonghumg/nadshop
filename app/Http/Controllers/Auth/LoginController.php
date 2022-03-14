@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Constants\Constants;
 
 class LoginController extends Controller
 {
@@ -56,7 +57,7 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        if (Auth::user()->role_id == 0) {
+        if (Auth::user()->role_id == Constants::ADMIN) {
             return '/dashboard';
         } else {
             return '/home';

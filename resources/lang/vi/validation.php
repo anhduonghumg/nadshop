@@ -125,6 +125,7 @@ return [
     'uploaded'             => 'Trường :attribute tải lên thất bại.',
     'url'                  => 'Trường :attribute không giống với định dạng một URL.',
     'uuid'                 => 'Trường :attribute phải là một chuỗi UUID hợp lệ.',
+    'uppercase' => 'Trường :attribute phải viết hoa tất cả chữ cái.',
     'custom'               => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
@@ -163,6 +164,9 @@ return [
         'title'                 => 'tiêu đề',
         'username'              => 'tên đăng nhập',
         'year'                  => 'năm',
+        'desc' => 'mô tả',
+        'gender' => 'giới tính',
+        'thumbnail' => 'ảnh'
     ],
 
 ];

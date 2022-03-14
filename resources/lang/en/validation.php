@@ -129,6 +129,7 @@ return [
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'uppercase' => 'The :attribute must be Uppercase.',
 
     /*
     |--------------------------------------------------------------------------
@@ -158,6 +159,42 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'address'               => 'address',
+        'age'                   => 'age',
+        'available'             => 'available',
+        'body'                  => 'body',
+        'city'                  => 'city',
+        'content'               => 'content',
+        'country'               => 'country',
+        'date'                  => 'date',
+        'day'                   => 'day',
+        'description'           => 'mô tả',
+        'email'                 => 'email',
+        'excerpt'               => 'excerpt',
+        'first_name'            => 'first_name',
+        'gender'                => 'gender',
+        'hour'                  => 'hour',
+        'last_name'             => 'last_name',
+        'message'               => 'message',
+        'minute'                => 'minute',
+        'mobile'                => 'mobile',
+        'month'                 => 'month',
+        'name'                  => 'name',
+        'password'              => 'password',
+        'password_confirmation' => 'password_confirmation',
+        'phone'                 => 'phone',
+        'second'                => 'second',
+        'sex'                   => 'sex',
+        'size'                  => 'size',
+        'subject'               => 'subject',
+        'time'                  => 'time',
+        'title'                 => 'title',
+        'username'              => 'username',
+        'year'                  => 'year',
+        'desc' => 'desc',
+        'gender' => 'gender',
+        'thumbnail' => 'thumbnail'
+    ],
 
 ];

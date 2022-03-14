@@ -1,5 +1,7 @@
 <?php
 
+use App\Constants\Constants;
+
 function recursive($data, $parent_id = 0, $level = 0)
 {
     $result = [];
@@ -23,7 +25,8 @@ function dataSelect($model)
     $dataModels = recursive($dataModels);
 
     foreach ($dataModels as $data) {
-        $data_select[$data->id] = str_repeat('|---', $data->level) . $data->name;
+        if ($data['status'] == Constants::PUBLIC)
+            $data_select[$data->id] = str_repeat('|---', $data->level) . $data->name;
     }
 
     return $data_select;

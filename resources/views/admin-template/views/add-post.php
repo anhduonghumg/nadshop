@@ -10,8 +10,12 @@
                     <input class="form-control" type="text" name="name" id="name">
                 </div>
                 <div class="form-group">
+                    <label for="desc">Nội dung bài viết</label>
+                    <textarea name="desc" class="form-control" id="desc" cols="30" rows="5"></textarea>
+                </div>
+                <div class="form-group">
                     <label for="content">Nội dung bài viết</label>
-                    <textarea name="" class="form-control" id="content" cols="30" rows="5"></textarea>
+                    <textarea name="content" class="form-control" id="content" cols="30" rows="5"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="">Danh mục</label>
