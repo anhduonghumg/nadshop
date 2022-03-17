@@ -166,7 +166,9 @@ return [
         'year'                  => 'năm',
         'desc' => 'mô tả',
         'gender' => 'giới tính',
-        'thumbnail' => 'ảnh'
+        'thumbnail' => 'ảnh',
+        'category_post' => 'danh mục bài viết',
+        'category_product_name' => 'tên danh mục'
     ],
 
 ];

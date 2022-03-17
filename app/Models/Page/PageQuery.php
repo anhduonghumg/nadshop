@@ -6,7 +6,7 @@ trait PageQuery
 {
     public static function list_page($key)
     {
-        return Page::where("name", "LIKE", "%{$key}%");
+        return Page::where("page_name", "LIKE", "%{$key}%");
     }
 
     public static function add_page($data)

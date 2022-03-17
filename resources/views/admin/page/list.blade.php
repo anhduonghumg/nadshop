@@ -74,7 +74,7 @@
                                 <input type="checkbox" name="list_check[]" value="{{ $page->id }}">
                             </td>
                             <td scope="row">{{ $temp }}</td>
-                            <td>{{ $page->name }}</td>
+                            <td>{{ $page->page_name }}</td>
                             @if($page->status == 'public')
                             <td>Công khai</td>
                             @else

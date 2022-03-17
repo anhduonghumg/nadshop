@@ -57,7 +57,7 @@ class AdminPageController extends Controller
         if ($request->has('btn_add')) {
             $request->validated();
             $data = [
-                'name' => $request->input('name'),
+                'page_name' => $request->input('name'),
                 'slug' => Str::slug($request->input('name')),
                 'desc' => $request->input('desc'),
                 'status' => $request->input(('status')),
@@ -134,7 +134,7 @@ class AdminPageController extends Controller
                 );
 
                 $data = [
-                    'name' => $request->input('name'),
+                    'page_name' => $request->input('name'),
                     'content' => $request->input('content'),
                     'desc' => $request->input('desc'),
                     'slug' => Str::slug($request->input('name'))

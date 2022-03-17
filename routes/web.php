@@ -57,6 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/post/cat/edit/{id}', [App\Http\Controllers\AdminCategoryPostController::class, 'edit'])->name('admin.catPost.edit');
     Route::post('/admin/post/cat/update/{id}', [App\Http\Controllers\AdminCategoryPostController::class, 'update'])->name('admin.catPost.update');
     Route::get('/admin/post/cat/delete/{id}', [App\Http\Controllers\AdminCategoryPostController::class, 'delete'])->name('admin.catPost.delete');
+    Route::get('/admin/post/cat/forceDelete/{id}', [App\Http\Controllers\AdminCategoryPostController::class, 'forceDelete'])->name('admin.catPost.forceDelete');
     Route::post('/admin/post/cat/action', [App\Http\Controllers\AdminCategoryPostController::class, 'action'])->name('admin.catPost.action');
 
     // Admin/post
@@ -66,5 +67,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/post/edit/{id}', [App\Http\Controllers\AdminPostController::class, 'edit'])->name('admin.post.edit');
     Route::post('/admin/post/update/{id}', [App\Http\Controllers\AdminPostController::class, 'update'])->name('admin.post.update');
     Route::get('/admin/post/delete/{id}', [App\Http\Controllers\AdminPostController::class, 'delete'])->name('admin.post.delete');
+    Route::get('/admin/post/forceDelete/{id}', [App\Http\Controllers\AdminPostController::class, 'forceDelete'])->name('admin.post.forceDelete');
     Route::post('/admin/post/action', [App\Http\Controllers\AdminPostController::class, 'action'])->name('admin.post.action');
+
+    // Admin/product/cat
+    Route::get('/admin/product/cat/list', [App\Http\Controllers\AdminCategoryProductController::class, 'list'])->name('admin.catProduct.list');
+    Route::post('/admin/product/cat/add', [App\Http\Controllers\AdminCategoryProductController::class, 'add'])->name('admin.catProduct.add');
+    Route::get('/admin/product/cat/edit/{id}', [App\Http\Controllers\AdminCategoryProductController::class, 'edit'])->name('admin.catProduct.edit');
+    Route::post('/admin/product/cat/update/{id}', [App\Http\Controllers\AdminCategoryProductController::class, 'update'])->name('admin.catProduct.update');
+    Route::get('/admin/product/cat/delete/{id}', [App\Http\Controllers\AdminCategoryProductController::class, 'delete'])->name('admin.catProduct.delete');
+    Route::get('/admin/product/cat/forceDelete/{id}', [App\Http\Controllers\AdminCategoryProductController::class, 'forceDelete'])->name('admin.catProduct.forceDelete');
+    Route::post('/admin/product/cat/action', [App\Http\Controllers\AdminCategoryProductController::class, 'action'])->name('admin.catProduct.action');
 });

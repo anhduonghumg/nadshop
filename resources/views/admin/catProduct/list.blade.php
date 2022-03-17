@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Danh mục bài viết')
+@section('title', 'Danh mục sản phẩm')
 @section('content')
 <div id="content" class="container-fluid">
     <div class="row">
@@ -9,13 +9,13 @@
                     Thêm danh mục bài viết
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('admin/post/cat/add') }}" method="POST">
+                    <form action="{{ url('admin/product/cat/add') }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="name">Tên danh mục</label>
-                            <input class="form-control @error('name') is-invalid @enderror" type="text" name="name"
-                                id="name">
-                            @error('name')
+                            <input class="form-control @error('name') is-invalid @enderror" type="text"
+                                name="category_product_name" id="name">
+                            @error('category_product_name')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -23,7 +23,7 @@
                             <label for="">Danh mục</label>
                             <select name="parent_id" class="form-control" id="">
                                 <option value="0">Danh mục cha</option>
-                                @foreach ($data_cat_post as $key => $val)
+                                @foreach ($data_cat_product as $key => $val)
                                 <option value="{{ $key }}">{{ $val }}</option>
                                 @endforeach
                             </select>
@@ -68,7 +68,7 @@
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
                             hóa<span class="text-muted">({{ $count[1] }})</span></a>
                     </div>
-                    <form action="{{ url('admin/post/cat/action') }}" method="POST">
+                    <form action="{{ url('admin/product/cat/action') }}" method="POST">
                         @csrf
                         <div class="form-action form-inline py-3">
                             <select class="form-control mr-1" name="act" id="">
@@ -99,26 +99,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($category_post->total() > 0)
+                                @if ($category_product->total() > 0)
                                 @php
                                 $t = 1;
                                 @endphp
-                                @foreach ($category_post as $item)
+                                @foreach ($category_product as $item)
                                 <tr>
                                     <td>
                                         <input type="checkbox" name="list_check[]" value="{{ $item->id }}">
                                     </td>
                                     <th scope="row">{{ $t++ }}</th>
                                     {{-- <td>{{ str_repeat('---', $item->level) . $item->name }}</td> --}}
-                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->category_product_name }}</td>
                                     @if ($item->parent_id == 0)
                                     <td>Không có</td>
                                     @else
-                                    <td>{{ Helpers::get_name_parent_cat('category_posts',$item->parent_id,'name')}}</td>
+                                    <td>{{
+                                        Helpers::get_name_parent_cat('category_products',$item->parent_id,'category_product_name')}}
+                                    </td>
                                     @endif
                                     @if(request()->input('status') == 'trash')
                                     <td>{{ $item->deleted_at }}</td>
-                                    @elseif ($item->status == 'public')
+                                    @elseif ($item->category_product_status == 'public')
                                     <td>Công khai</td>
                                     @else
                                     <td>Chờ duyệt</td>
@@ -126,11 +128,11 @@
                                     <td>{{ $item->fullname }}</td>
                                     @if (request()->input('status') == 'trash')
                                     <td>
-                                        <a href="{{ route('admin.catPost.edit', ['id' => $item->id]) }}"
+                                        <a href="{{ route('admin.catProduct.edit', ['id' => $item->id]) }}"
                                             class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                             data-toggle="tooltip" data-placement="top" title="Edit"><i
                                                 class="fa fa-edit"></i></a>
-                                        <a href="{{ route('admin.catPost.forceDelete', ['id' => $item->id]) }}"
+                                        <a href="{{ route('admin.catProduct.forceDelete', ['id' => $item->id]) }}"
                                             onclick="return confirm('Bạn muốn xóa bản ghi này?')"
                                             class="btn btn-danger btn-sm rounded-0 text-white" type="button"
                                             data-toggle="tooltip" data-placement="top" title="Delete"><i
@@ -138,11 +140,11 @@
                                     </td>
                                     @else
                                     <td>
-                                        <a href="{{ route('admin.catPost.edit', ['id' => $item->id]) }}"
+                                        <a href="{{ route('admin.catProduct.edit', ['id' => $item->id]) }}"
                                             class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                             data-toggle="tooltip" data-placement="top" title="Edit"><i
                                                 class="fa fa-edit"></i></a>
-                                        <a href="{{ route('admin.catPost.delete', ['id' => $item->id]) }}"
+                                        <a href="{{ route('admin.catProduct.delete', ['id' => $item->id]) }}"
                                             onclick="return confirm('Bạn muốn xóa bản ghi này?')"
                                             data-url="{{ route('admin.catPost.delete', ['id' => $item->id]) }}"
                                             class="btn btn-danger btn-sm rounded-0 text-white action_delete"
@@ -162,7 +164,7 @@
                             </tbody>
                         </table>
                     </form>
-                    {{ $category_post->links('layouts.paginationlink') }}
+                    {{-- {{ $category_post->links('layouts.paginationlink') }} --}}
                 </div>
             </div>
         </div>

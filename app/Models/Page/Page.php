@@ -12,7 +12,7 @@ class Page extends Model
     use HasFactory, SoftDeletes, PageRelationship, PageQuery;
     protected $table = 'pages';
     protected $fillable = [
-        'name',
+        'page_name',
         'slug',
         'desc',
         'content',

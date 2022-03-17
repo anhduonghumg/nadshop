@@ -9,4 +9,8 @@ class Constants
     const PENDING = 'pending';
     const ACTIVE = 'active';
     const TRASH = 'trash';
+    const DELETE = 'delete';
+    const RESTORE = 'restore';
+    const FORCE_DELETE = 'forceDelete';
+    const EMPTY = null;
 }

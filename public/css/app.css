@@ -119,3 +119,13 @@ ul#sidebar-menu * {
 #page-body {
     background-color: #e5e9f0;
 }
+
+#avatar {
+    cursor: pointer;
+}
+
+.img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+}

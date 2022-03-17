@@ -194,7 +194,9 @@ return [
         'year'                  => 'year',
         'desc' => 'desc',
         'gender' => 'gender',
-        'thumbnail' => 'thumbnail'
+        'thumbnail' => 'thumbnail',
+        'category_post' => 'category_post',
+        'category_product_name' => 'category_product_name'
     ],
 
 ];

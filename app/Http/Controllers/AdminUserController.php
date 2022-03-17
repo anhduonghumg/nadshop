@@ -6,6 +6,7 @@ use App\Models\M_user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Constants\Constants;
 
 class AdminUserController extends Controller
 {
@@ -54,7 +55,7 @@ class AdminUserController extends Controller
             );
 
             M_user::create([
-                'name' => $request->input('name'),
+                'fullname' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
                 'phone' => $request->input('phone'),
@@ -84,7 +85,7 @@ class AdminUserController extends Controller
             );
 
             M_user::where('id', $id)->update([
-                'name' => $request->input('name'),
+                'fullname' => $request->input('name'),
                 'phone' => $request->input('phone')
             ]);
 
@@ -97,7 +98,6 @@ class AdminUserController extends Controller
         if (Auth::id() != $id) {
             $user = M_user::find($id);
             $user->delete();
-
             return redirect('admin/user/list')->with('status', 'Bạn đã xóa thành viên thành công');
         } else {
             return redirect('admin/user/list')->with('status', 'Bạn không thể xóa chính mình');
@@ -116,7 +116,7 @@ class AdminUserController extends Controller
 
             if (!empty($list_check)) {
                 $act = $request->input('act');
-                if ($act == 'delete') {
+                if ($act == Constants::DELETE) {
                     M_user::destroy($list_check);
                     return redirect('admin/user/list')->with('status', 'Bạn đã xóa thành công.');
                 } elseif ($act == 'restore') {
@@ -150,7 +150,7 @@ class AdminUserController extends Controller
             );
 
             M_user::where('id', $id)->update([
-                'name' => $request->input('name'),
+                'fullname' => $request->input('name'),
                 'phone' => $request->input('phone'),
             ]);
 
@@ -173,9 +173,7 @@ class AdminUserController extends Controller
             $request->validate(
                 [
                     'password' => 'required|string|min:8|confirmed|',
-
                 ],
-
             );
             $current_pass = Auth::user();
             if (Hash::check($request->password, $current_pass->password)) {
