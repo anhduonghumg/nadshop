@@ -50,7 +50,6 @@ class AdminUserController extends Controller
                     'username' => 'required|string|min:5|max:50|unique:m_users',
                     'phone' => 'required|numeric',
                     'password' => 'required|string|min:8|confirmed',
-
                 ],
             );
 
@@ -62,7 +61,7 @@ class AdminUserController extends Controller
                 'username' => $request->input('username')
             ]);
 
-            return redirect('admin/user/list')->with('status', 'Đã thêm thành viên thành công');
+            return redirect()->route('admin.user.list')->with('status', trans('notification.add_success'));
         }
     }
 
@@ -89,7 +88,7 @@ class AdminUserController extends Controller
                 'phone' => $request->input('phone')
             ]);
 
-            return redirect('admin/user/list')->with('status', 'Đã cập nhập thành viên thành công.');
+            return redirect()->route('admin.user.list')->with('status', trans('notification.update_success'));
         }
     }
 
@@ -98,9 +97,9 @@ class AdminUserController extends Controller
         if (Auth::id() != $id) {
             $user = M_user::find($id);
             $user->delete();
-            return redirect('admin/user/list')->with('status', 'Bạn đã xóa thành viên thành công');
+            return redirect()->route('admin.user.list')->with('status',  trans('notification.delete'));
         } else {
-            return redirect('admin/user/list')->with('status', 'Bạn không thể xóa chính mình');
+            return redirect()->route('admin.user.list')->with('status', trans('notification.delete_yourself'));
         }
     }
 
@@ -118,17 +117,17 @@ class AdminUserController extends Controller
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
                     M_user::destroy($list_check);
-                    return redirect('admin/user/list')->with('status', 'Bạn đã xóa thành công.');
-                } elseif ($act == 'restore') {
+                    return redirect()->route('admin.user.list')->with('status', trans('notification.delete_success'));
+                } elseif ($act == Constants::RESTORE) {
                     M_user::withTrashed()->whereIn('id', $list_check)->restore();
-                    return redirect('admin/user/list')->with('status', 'Bạn đã khôi phục thành công.');
+                    return redirect()->route('admin.user.list')->with('status', trans('notification.restore_success'));
                 } else {
-                    return redirect('admin/user/list')->with('status', 'Bạn cần chọn hành động để thực hiện.');
+                    return redirect()->route('admin.user.list')->with('status', trans('notification.not_action'));
                 }
             }
-            return redirect('admin/user/list')->with('status', 'Bạn không thể thao tác trên tài khoản của bạn.');
+            return redirect()->route('admin.user.list')->with('status', trans('notification.delete_yourself'));
         } else {
-            return redirect('admin/user/list')->with('status', 'Bạn cần chọn phần tử cần thực hiện.');
+            return redirect()->route('admin.user.list')->with('status', trans('notification.not_element'));
         }
     }
 
@@ -154,7 +153,7 @@ class AdminUserController extends Controller
                 'phone' => $request->input('phone'),
             ]);
 
-            return redirect('admin/user/list')->with('status', 'Bạn đã cập nhập thông tin thành công');
+            return redirect()->route('admin.user.list')->with('status', trans('notification.update_success'));
         } else {
             return redirect('dashboard');
         }
@@ -180,9 +179,9 @@ class AdminUserController extends Controller
                 M_user::where('id', $id)->update([
                     'password' => Hash::make($request->input('password')),
                 ]);
-                return redirect('admin/user/list')->with('status', 'Bạn đã thay đổi password thành công');
+                return redirect()->route('admin.user.list')->with('status', trans('notification.change_pass_success'));
             } else {
-                return redirect()->back()->with('status', 'Bạn không nên để mật khẩu mới giống mật khẩu cũ');
+                return redirect()->back()->with('status', trans('notification.change_pass_fail'));
             }
         } else {
             return redirect('dashboard');

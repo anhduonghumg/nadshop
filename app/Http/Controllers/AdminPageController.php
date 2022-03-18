@@ -66,7 +66,7 @@ class AdminPageController extends Controller
             ];
 
             Page::add_page($data);
-            return redirect('admin/page/list')->with('status', 'Đã thêm trang thành công.');
+            return redirect()->route('admin.page.list')->with('status', trans('notification.add_success'));
         }
     }
     // public function store(Request $request)
@@ -141,7 +141,7 @@ class AdminPageController extends Controller
                 ];
 
                 Page::update_page($data, $id);
-                return redirect('admin/page/list')->with('status', 'Đã cập nhập trang thành công.');
+                return redirect()->route('admin.page.list')->with('status', trans('notification.update_success'));
             }
         }
     }
@@ -150,9 +150,9 @@ class AdminPageController extends Controller
     {
         if ($id != null) {
             Page::delete_page($id);
-            return redirect('admin/page/list')->with('status', 'Xóa trang thành công.');
+            return redirect()->route('admin.page.list')->with('status', trans('notification.delete_success'));
         } else {
-            return redirect('admin/page/list')->with('status', 'Không có dữ liệu.');
+            return redirect()->route('admin.page.list')->with('status', trans('notification.no_data'));
         }
     }
 
@@ -164,21 +164,21 @@ class AdminPageController extends Controller
                 $act = $request->input('act');
                 if ($act == 'delete') {
                     Page::destroy($list_check);
-                    return redirect('admin/page/list')->with('status', 'Bạn đã xóa thành công.');
+                    return redirect()->route('admin.page.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == 'active') {
                     Page::whereIn('id', $list_check)->update(['status' => 'public']);
-                    return redirect('admin/page/list')->with('status', 'Bạn đã kích hoạt thành công.');
+                    return redirect()->route('admin.page.list')->with('status', trans('notification.active_success'));
                 } elseif ($act == 'restore') {
                     Page::withTrashed()->whereIn('id', $list_check)->restore();
-                    return redirect('admin/page/list')->with('status', 'Bạn đã khôi phục thành công.');
+                    return redirect()->route('admin.page.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == 'forceDelete') {
                     Page::withTrashed()->whereIn('id', $list_check)->forceDelete();
-                    return redirect('admin/page/list')->with('status', 'Bạn đã vĩnh viễn thành công.');
+                    return redirect()->route('admin.page.list')->with('status', trans('notification.force_delete_success'));
                 } else {
-                    return redirect('admin/page/list')->with('status', 'Bạn cần chọn tác vụ thực hiện.');
+                    return redirect()->route('admin.page.list')->with('status', trans('notification.not_action'));
                 }
             } else {
-                return redirect('admin/page/list')->with('status', 'Bạn cần chọn phần tử để thực thi');
+                return redirect()->route('admin.page.list')->with('status', trans('notification.not_element'));
             }
         }
     }

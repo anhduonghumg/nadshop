@@ -1,3 +1,6 @@
+@extends('layouts.admin')
+@section('title','Thương hiệu')
+@section('content')
 <div id="content" class="container-fluid">
     <div class="row">
         <div class="col-4">
@@ -36,9 +39,6 @@
                                 </label>
                             </div>
                         </div>
-
-
-
                         <button type="submit" class="btn btn-primary">Thêm mới</button>
                     </form>
                 </div>
@@ -84,5 +84,5 @@
             </div>
         </div>
     </div>
-
 </div>
+@endsection

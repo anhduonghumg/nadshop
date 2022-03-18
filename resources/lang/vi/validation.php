@@ -168,7 +168,8 @@ return [
         'gender' => 'giới tính',
         'thumbnail' => 'ảnh',
         'category_post' => 'danh mục bài viết',
-        'category_product_name' => 'tên danh mục'
+        'category_product_name' => 'tên danh mục',
+        'brand_name' => 'tên thương hiệu'
     ],
 
 ];

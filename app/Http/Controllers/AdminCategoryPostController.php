@@ -36,7 +36,7 @@ class AdminCategoryPostController extends Controller
 
             DB::table('category_posts')->insert($data);
 
-            return back()->with('status', 'Bạn đã thêm danh mục thành công');
+            return back()->with('status', trans('notification.add_success'));
         }
     }
 
@@ -77,7 +77,6 @@ class AdminCategoryPostController extends Controller
             }
         }
 
-
         $num_postCat_active = DB::table('category_posts')->where('status', '=', Constants::PUBLIC)->where('deleted_at', '=', Constants::EMPTY)->count();
         $num_postCat_trash = DB::table('category_posts')->where('deleted_at', '<>', Constants::EMPTY)->count();
         $num_postCat_pending = DB::table('category_posts')->where('status', '=', Constants::PENDING)->where('deleted_at', '=', Constants::EMPTY)->count();
@@ -111,7 +110,7 @@ class AdminCategoryPostController extends Controller
         ];
 
         DB::table('category_posts')->where('id', $id)->update($data);
-        return redirect()->route('admin.catPost.list')->with('status', 'Bạn đã cập nhật danh mục thành công');
+        return redirect()->route('admin.catPost.list')->with('status', trans('notification.update_success'));
     }
 
     public function delete($id)
@@ -121,13 +120,13 @@ class AdminCategoryPostController extends Controller
             if ($catPost->status == Constants::PENDING) {
                 DB::table('category_posts')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
             } elseif (CategoryPost::check_parent_post_cat($id)) {
-                return redirect('admin/post/cat/list')->with('status', 'Bạn phải xóa danh mục con trước.');
+                return  redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_cat_child'));
             } else {
                 DB::table('category_posts')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
             }
-            return redirect('admin/post/cat/list')->with('status', 'Xóa danh mục thành công.');
+            return redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_success'));
         } else {
-            return redirect('admin/post/cat/list')->with('status', 'Không có dữ liệu.');
+            return redirect()->route('admin.catPost.list')->with('status', trans('notification.no_data'));
         }
     }
 
@@ -135,9 +134,9 @@ class AdminCategoryPostController extends Controller
     {
         if ($id != null) {
             DB::table('category_posts')->where('id', $id)->delete();
-            return redirect('admin/post/cat/list')->with('status', 'Xóa vĩnh viễn bài viết thành công.');
+            return redirect()->route('admin.catPost.list')->with('status', trans('notification.force_delete_success'));
         } else {
-            return redirect('admin/post/cat/list')->with('status', 'Không có dữ liệu.');
+            return redirect()->route('admin.catPost.list')->with('status', trans('notification.no_data'));
         }
     }
 
@@ -149,21 +148,21 @@ class AdminCategoryPostController extends Controller
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
                     DB::table('category_posts')->whereIn('id', $list_check)->update(['deleted_at' => \Carbon\Carbon::now()]);
-                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã xóa thành công.');
+                    return redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
                     DB::table('category_posts')->whereIn('id', $list_check)->update(['status' => Constants::PUBLIC]);
-                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã kích hoạt thành công.');
+                    return redirect()->route('admin.catPost.list')->with('status',  trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
                     DB::table('category_posts')->whereIn('id', $list_check)->update(['deleted_at' => Constants::EMPTY]);
-                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã khôi phục thành công.');
+                    return redirect()->route('admin.catPost.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
                     DB::table('category_posts')->whereIn('id', $list_check)->delete();
-                    return redirect('admin/post/cat/list')->with('status', 'Bạn đã vĩnh viễn thành công.');
+                    return redirect()->route('admin.catPost.list')->with('status', trans('notification.force_delete_success'));
                 } else {
-                    return redirect('admin/post/cat/list')->with('status', 'Bạn cần chọn tác vụ thực hiện.');
+                    return redirect()->route('admin.catPost.list')->with('status', trans('notification.not_action'));
                 }
             } else {
-                return redirect('admin/post/cat/list')->with('status', 'Bạn cần chọn phần tử để thực thi');
+                return redirect()->route('admin.catPost.list')->with('status', trans('notification.not_element'));
             }
         }
     }

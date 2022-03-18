@@ -112,7 +112,7 @@ class AdminPostController extends Controller
             }
 
             DB::table('posts')->insert($data);
-            return redirect('admin/post/list')->with('status', 'Đã thêm bài viết thành công.');
+            return redirect()->route('admin.post.list')->with('status', trans('notification.add_success'));
         }
     }
 
@@ -129,7 +129,7 @@ class AdminPostController extends Controller
     public function update(Request $request, $id)
     {
         if (!isset($id) || $id == 0) {
-            return redirect('admin/post/list');
+            return redirect()->route('admin.post.list');
         } else {
             if ($request->has('btn_update')) {
 
@@ -161,7 +161,7 @@ class AdminPostController extends Controller
                     ->where('id', $id)
                     ->update($data);
 
-                return redirect('admin/post/list')->with('status', 'Bạn đã cập nhật bài viết thành công');
+                return redirect()->route('admin.post.list')->with('status', trans('notification.update_success'));
             }
         }
     }
@@ -173,9 +173,9 @@ class AdminPostController extends Controller
                 'deleted_at' => \Carbon\Carbon::now()
             ];
             DB::table('posts')->where('id', $id)->update($data);
-            return redirect('admin/post/list')->with('status', 'Xóa tạm thời bài viết thành công.');
+            return redirect()->route('admin.post.list')->with('status', trans('notification.delete_success'));
         } else {
-            return redirect('admin/post/list')->with('status', 'Không có dữ liệu.');
+            return redirect()->route('admin.post.list')->with('status', trans('notification.no_data'));
         }
     }
 
@@ -183,11 +183,12 @@ class AdminPostController extends Controller
     {
         if ($id != null) {
             DB::table('posts')->where('id', $id)->delete();
-            return redirect('admin/post/list')->with('status', 'Xóa vĩnh viễn bài viết thành công.');
+            return redirect()->route('admin.post.list')->with('status', trans('notification.force_delete_success'));
         } else {
-            return redirect('admin/post/list')->with('status', 'Không có dữ liệu.');
+            return redirect()->route('admin.post.list')->with('status', trans('notification.no_data'));
         }
     }
+
 
     public function action(Request $request)
     {
@@ -197,21 +198,21 @@ class AdminPostController extends Controller
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
                     DB::table('posts')->whereIn('id', $list_check)->update(['deleted_at' => \Carbon\Carbon::now()]);
-                    return redirect('admin/post/list')->with('status', 'Bạn đã xóa thành công.');
+                    return redirect()->route('admin.post.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
                     DB::table('posts')->whereIn('id', $list_check)->update(['status' => Constants::PUBLIC]);
-                    return redirect('admin/post/list')->with('status', 'Bạn đã kích hoạt thành công.');
+                    return redirect()->route('admin.post.list')->with('status', trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
                     DB::table('posts')->whereIn('id', $list_check)->update(['deleted_at' => Constants::EMPTY]);
-                    return redirect('admin/post/list')->with('status', 'Bạn đã khôi phục thành công.');
+                    return redirect()->route('admin.post.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
                     DB::table('posts')->whereIn('id', $list_check)->delete();
-                    return redirect('admin/post/list')->with('status', 'Bạn đã vĩnh viễn thành công.');
+                    return redirect()->route('admin.post.list')->with('status', trans('notification.force_delete_success'));
                 } else {
-                    return redirect('admin/post/list')->with('status', 'Bạn cần chọn tác vụ thực hiện.');
+                    return redirect()->route('admin.post.list')->with('status', trans('notification.not_action'));
                 }
             } else {
-                return redirect('admin/post/list')->with('status', 'Bạn cần chọn phần tử để thực thi');
+                return redirect()->route('admin.post.list')->with('status', trans('notification.not_element'));
             }
         }
     }

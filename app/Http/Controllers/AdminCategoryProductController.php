@@ -34,7 +34,7 @@ class AdminCategoryProductController extends Controller
             ];
 
             DB::table('category_products')->insert($data);
-            return back()->with('status', 'Bạn đã thêm danh mục thành công');
+            return back()->with('status', trans('notification.add_success'));
         }
     }
 
@@ -103,7 +103,7 @@ class AdminCategoryProductController extends Controller
             ];
 
             DB::table('category_products')->where('id', $id)->update($data);
-            return redirect()->route('admin.catProduct.list')->with('status', 'Bạn đã cập nhật danh mục thành công');
+            return redirect()->route('admin.catProduct.list')->with('status', trans('notification.update_success'));
         }
     }
 
@@ -114,23 +114,24 @@ class AdminCategoryProductController extends Controller
             if ($catProduct->category_product_status == Constants::PENDING) {
                 DB::table('category_posts')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
             } elseif ($this->check_parent_cat('category_products', $id)) {
-                return redirect()->route('admin.catProduct.list')->with('status', 'Bạn phải xóa danh mục con trước.');
+                return redirect()->route('admin.catProduct.list')->with('status', trans('notification.delete_cat_child'));
             } else {
                 DB::table('category_products')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
             }
-            return redirect()->route('admin.catProduct.list')->with('status', 'Xóa danh mục thành công.');
+            return redirect()->route('admin.catProduct.list')->with('status', trans('notification.delete_success'));
         } else {
-            return redirect()->route('admin.catProduct.list')->with('status', 'Không có dữ liệu.');
+            return redirect()->route('admin.catProduct.list')->with('status', trans('notification.no_data'));
         }
     }
+
 
     public function forceDelete($id)
     {
         if ($id != null) {
             DB::table('category_products')->where('id', $id)->delete();
-            return redirect()->route('admin.catProduct.list')->with('status', 'Xóa vĩnh viễn danh mục thành công.');
+            return redirect()->route('admin.catProduct.list')->with('status', trans('notification.force_delete_success'));
         } else {
-            return redirect()->route('admin.catProduct.list')->with('status', 'Không có dữ liệu.');
+            return redirect()->route('admin.catProduct.list')->with('status', trans('notification.no_data'));
         }
     }
 
@@ -142,22 +143,22 @@ class AdminCategoryProductController extends Controller
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
                     DB::table('category_products')->whereIn('id', $list_check)->update(['deleted_at' => \Carbon\Carbon::now()]);
-                    return redirect()->route('admin.catProduct.list')->with('status', 'Bạn đã xóa danh mục tạm thời thành công');
+                    return redirect()->route('admin.catProduct.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
                     DB::table('category_products')->whereIn('id', $list_check)->update(['category_product_status' => Constants::PUBLIC]);
-                    return redirect()->route('admin.catProduct.list')->with('status', 'Bạn đã duyệt danh mục tạm thời thành công');
+                    return redirect()->route('admin.catProduct.list')->with('status', trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
                     DB::table('category_products')->whereIn('id', $list_check)->update(['deleted_at' => Constants::EMPTY]);
-                    return redirect()->route('admin.catProduct.list')->with('status', 'Bạn đã khôi phục danh mục thành công');
+                    return redirect()->route('admin.catProduct.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
                     DB::table('category_products')->whereIn('id', $list_check)->delete();
-                    return redirect()->route('admin.catProduct.list')->with('status', 'Bạn đã xóa danh mục vĩnh viễn.');
+                    return redirect()->route('admin.catProduct.list')->with('status', trans('notification.force_delete_success'));
                 }
             } else {
-                return redirect()->route('admin.catProduct.list')->with('status', 'Bạn chưa chọn tác vụ để thực hiện');
+                return redirect()->route('admin.catProduct.list')->with('status', trans('notification.not_action'));
             }
         } else {
-            return redirect()->route('admin.catProduct.list')->with('status', 'Bạn cần chọn phần tử để thực thi');
+            return redirect()->route('admin.catProduct.list')->with('status', trans('notification.not_element'));
         }
     }
 }

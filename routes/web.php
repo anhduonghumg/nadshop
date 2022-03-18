@@ -78,4 +78,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/product/cat/delete/{id}', [App\Http\Controllers\AdminCategoryProductController::class, 'delete'])->name('admin.catProduct.delete');
     Route::get('/admin/product/cat/forceDelete/{id}', [App\Http\Controllers\AdminCategoryProductController::class, 'forceDelete'])->name('admin.catProduct.forceDelete');
     Route::post('/admin/product/cat/action', [App\Http\Controllers\AdminCategoryProductController::class, 'action'])->name('admin.catProduct.action');
+
+    // Admin/product
+    Route::get('/admin/product/list', [App\Http\Controllers\AdminProductController::class, 'list'])->name('admin.product.list');
+    Route::get('/admin/product/add', [App\Http\Controllers\AdminProductController::class, 'add'])->name('admin.product.add');
+    Route::post('/admin/product/store', [App\Http\Controllers\AdminProductController::class, 'store'])->name('admin.product.store');
+    Route::get('/admin/product/edit/{id}', [App\Http\Controllers\AdminProductController::class, 'edit'])->name('admin.product.edit');
+    Route::post('/admin/product/update/{id}', [App\Http\Controllers\AdminProductController::class, 'update'])->name('admin.product.update');
+    Route::get('/admin/product/delete/{id}', [App\Http\Controllers\AdminProductController::class, 'delete'])->name('admin.product.delete');
+    Route::get('/admin/product/forceDelete/{id}', [App\Http\Controllers\AdminProductController::class, 'forceDelete'])->name('admin.product.forceDelete');
+    Route::post('/admin/product/action', [App\Http\Controllers\AdminBrandController::class, 'action'])->name('admin.product.action');
+
+    // Admin/brand
+    Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
+    Route::post('/admin/brand/add', [App\Http\Controllers\AdminBrandController::class, 'add'])->name('admin.brand.add');
+    Route::get('/admin/brand/edit/{id}', [App\Http\Controllers\AdminBrandController::class, 'edit'])->name('admin.brand.edit');
+    Route::post('/admin/brand/update/{id}', [App\Http\Controllers\AdminBrandController::class, 'update'])->name('admin.brand.update');
+    Route::get('/admin/brand/delete/{id}', [App\Http\Controllers\AdminBrandController::class, 'delete'])->name('admin.brand.delete');
+    Route::get('/admin/brand/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.brand.forceDelete');
+    Route::post('/admin/brand/action', [App\Http\Controllers\AdminBrandController::class, 'action'])->name('admin.brand.action');
 });

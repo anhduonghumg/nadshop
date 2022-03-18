@@ -143,6 +143,7 @@
                             <li><a href="{{ url('admin/product/add') }}">Thêm mới</a></li>
                             <li><a href="{{ url('admin/product/list') }}">Danh sách</a></li>
                             <li><a href="{{ url('admin/product/cat/list') }}">Danh mục</a></li>
+                            <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
                         </ul>
                     </li>
                     <li class="nav-link">
