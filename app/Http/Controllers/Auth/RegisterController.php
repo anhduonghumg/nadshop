@@ -53,28 +53,12 @@ class RegisterController extends Controller
         return Validator::make(
             $data,
             [
-                'name' => ['required', 'string', 'max:255'],
+                'fullname' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255', 'unique:m_users'],
                 'phone' => ['required', 'numeric'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:m_users'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ],
-            [
-                'required' => ':attribute không được để trống',
-                'min' => ':attribute không được để trống có độ dài ít nhất :min kí tự',
-                'max' => ':attribute không được để trống có độ dài ít nhất :max kí tự',
-                'confirmed' => 'Xác nhận mật khẩu không thành công',
-                'numeric' => ':attribute phải là một chuối số.',
-                // 'size' => ':attribute phải là :size số.'
-
-            ],
-            [
-                'name' => 'Tên người dùng',
-                'password' => 'Mật khẩu',
-                'phone' => 'Số điện thoại',
-                'username' => 'Tên tài khoản',
-                'email' => 'Email'
-            ]
         );
     }
 
@@ -87,7 +71,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return M_user::create([
-            'name' => $data['name'],
+            'fullname' => $data['fullname'],
             'username' => $data['username'],
             'phone' => $data['phone'],
             'email' => $data['email'],

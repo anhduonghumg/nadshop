@@ -15,18 +15,18 @@ class AdminUserController extends Controller
         $status = $request->input('status');
 
         $list_act = ['delete' => 'Xóa tạm thời'];
-        if ($status == 'trash') {
+        if ($status == Constants::TRASH) {
             $list_act = [
                 'restore' => 'Khôi phục',
                 'forceDelete' => 'Xóa vĩnh viễn'
             ];
-            $users = M_user::onlyTrashed()->paginate(20);
+            $users = M_user::get_list_users_trash();
         } else {
             $kw = "";
             if ($request->has('keyword')) {
                 $kw = $request->input('keyword');
             }
-            $users = M_user::where('name', 'like', "%{$kw}%")->paginate(20);
+            $users = M_user::get_list_users($kw);
         }
         $count_user_active = M_user::count();
         $count_user_trash = M_user::onlyTrashed()->count();
@@ -45,7 +45,7 @@ class AdminUserController extends Controller
 
             $request->validate(
                 [
-                    'name' => 'required|string|max:255',
+                    'fullname' => 'required|string|max:255',
                     'email' => 'required|string|email|max:255|unique:m_users',
                     'username' => 'required|string|min:5|max:50|unique:m_users',
                     'phone' => 'required|numeric',
@@ -53,13 +53,15 @@ class AdminUserController extends Controller
                 ],
             );
 
-            M_user::create([
-                'fullname' => $request->input('name'),
+            $data = [
+                'fullname' => $request->input('fullname'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
                 'phone' => $request->input('phone'),
                 'username' => $request->input('username')
-            ]);
+            ];
+
+            M_user::add_user($data);
 
             return redirect()->route('admin.user.list')->with('status', trans('notification.add_success'));
         }
@@ -78,13 +80,13 @@ class AdminUserController extends Controller
 
             $request->validate(
                 [
-                    'name' => 'required|string|max:255',
+                    'fullname' => 'required|string|max:255',
                     'phone' => 'required|numeric'
                 ],
             );
 
             M_user::where('id', $id)->update([
-                'fullname' => $request->input('name'),
+                'fullname' => $request->input('fullname'),
                 'phone' => $request->input('phone')
             ]);
 
@@ -142,14 +144,13 @@ class AdminUserController extends Controller
         if (Auth::id() == $id) {
             $request->validate(
                 [
-                    'name' => 'required|string|max:255',
-                    'password' => 'required|string|min:8|confirmed',
+                    'fullname' => 'required|string|max:255',
                     'phone' => 'required|numeric',
                 ],
             );
 
             M_user::where('id', $id)->update([
-                'fullname' => $request->input('name'),
+                'fullname' => $request->input('fullname'),
                 'phone' => $request->input('phone'),
             ]);
 
@@ -176,12 +177,12 @@ class AdminUserController extends Controller
             );
             $current_pass = Auth::user();
             if (Hash::check($request->password, $current_pass->password)) {
+                return redirect()->back()->with('status', trans('notification.change_pass_fail'));
+            } else {
                 M_user::where('id', $id)->update([
                     'password' => Hash::make($request->input('password')),
                 ]);
                 return redirect()->route('admin.user.list')->with('status', trans('notification.change_pass_success'));
-            } else {
-                return redirect()->back()->with('status', trans('notification.change_pass_fail'));
             }
         } else {
             return redirect('dashboard');

@@ -74,7 +74,7 @@
                 <div class="btn-group">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                        {{ Auth::user()->name }}
+                        {{ Auth::user()->fullname }}
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="{{ route('admin.user.profile') }}">Thông tin tài

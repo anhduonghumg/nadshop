@@ -1,30 +1,41 @@
 @extends('layouts.admin')
 @section('title', 'Danh sách người dùng')
 @section('content')
-    <div id="content" class="container-fluid">
-        <div class="card">
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
-            <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-                <h5 class="m-0 ">Danh sách thành viên</h5>
-                <div class="form-search form-inline">
-                    <form action="" method="GET">
-                        <input type="text" class="form-control form-search" name="keyword"
-                            value="{{ request()->input('keyword') }}" placeholder="Tìm kiếm">
-                        <input type="submit" name="btn-search" value="Tìm kiếm" class="btn btn-primary">
-                    </form>
-                </div>
+<div id="content" class="container-fluid">
+    <div class="card">
+        @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+        @endif
+        <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
+            <h5 class="m-0 ">Danh sách thành viên</h5>
+            <div class="form-search form-inline">
+                <form action="" method="GET">
+                    <input type="text" class="form-control form-search" name="keyword"
+                        value="{{ request()->input('keyword') }}" placeholder="Tìm kiếm">
+                    <input type="submit" name="btn-search" value="Tìm kiếm" class="btn btn-primary">
+                </form>
             </div>
-            <div class="card-body">
-                <div class="analytic">
-                    {{-- <a href="" class="text-primary">Tất cả<span class="text-muted">(10) |</span></a> --}}
-                    <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
-                        hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
-                    <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
-                        hóa<span class="text-muted">({{ $count[1] }})</span></a>
+        </div>
+        <div class="card-body">
+            <div class="analytic">
+                {{-- <a href="" class="text-primary">Tất cả<span class="text-muted">(10) |</span></a> --}}
+                <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
+                    hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
+                <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
+                    hóa<span class="text-muted">({{ $count[1] }})</span></a>
+            </div>
+            <form action="{{ url('admin/page/action') }}" method="POST">
+                @csrf
+                <div class="form-action form-inline py-3">
+                    <select class="form-control mr-1" name="act" id="">
+                        <option>Chọn</option>
+                        @foreach ($list_act as $k => $v)
+                        <option value="{{ $k }}">{{ $v }}</option>
+                        @endforeach
+                    </select>
+                    <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary">
                 </div>
                 <table class="table table-striped table-checkall">
                     <thead>
@@ -55,7 +66,7 @@
                                 <input type="checkbox" name="list_check[]" value="{{ $user->id }}">
                             </td>
                             <th scope="row">{{ $temp }}</th>
-                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->fullname }}</td>
                             <td>{{ $user->email }}</td>
                             @if ($user->role_id == 1)
                             <td>Người dùng</td>
@@ -99,4 +110,4 @@
             {{ $users->links('layouts.paginationlink') }}
         </div>
     </div>
-@endsection
+    @endsection

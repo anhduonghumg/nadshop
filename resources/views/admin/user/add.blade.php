@@ -7,12 +7,12 @@
             Thêm người dùng
         </div>
         <div class="card-body">
-            <form action="{{ url('admin/user/store') }}" method="POST">
+            <form action="{{ route('admin.user.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="name">Họ và tên</label>
-                    <input class="form-control" type="text" name="name" id="name">
-                    @error('name')
+                    <label for="fullname">Họ và tên</label>
+                    <input class="form-control" type="text" name="fullname" id="fullname">
+                    @error('fullname')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
