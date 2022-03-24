@@ -33,91 +33,18 @@ class AdminPostController extends Controller
         if (!$status || $status == Constants::ACTIVE) {
             $list_act = ['delete' => 'Xóa'];
 
-            // ========Query thuần túy==========
-            #1: Đếm số lượng bản ghi của bảng posts có trạng thái là public với DB:raw
-            // $list_posts = DB::table('posts', 'baiviet')
-            //     ->select(DB::raw('count(*) as post,baiviet.status'))
-            //     ->where('baiviet.status', '=', 'public')
-            //     ->groupBy('baiviet.status')
-            //     ->get();
-
-            #2: Lấy tên danh mục,parent_id,lớn nhất với selectRaw
-            // $list_posts = DB::table('category_posts', 'danhmuc')
-            //     ->selectRaw('danhmuc.name as post_cat_name,max(parent_id) as max_id')
-            //     ->join('posts', 'posts.post_cat_id', '=', 'category_posts.id')
-            //     ->where('category_posts.status', '=', 'public')
-            //     ->groupBy('category_posts.name')
-            //     ->orderBy('category_posts.name')
-            //     ->get();
-
-            #3: Tính số ngày đã cập nhập bài viết với select Raw
-            // $list_posts = DB::table('posts', 'baiviet')
-            //     ->selectRaw('date(baiviet.updated_at) - date(baiviet.created_at) as num_day')
-            //     ->get();
-
-            #4: Nhóm ngày cập nhập với selectRawm,groupByRaw,havingRaw,orderByRa
-            // $list_posts = DB::table('category_posts', 'baiviet')
-            //     ->selectRaw("day(updated_at),count(id) as total_cat")
-            //     ->groupByRaw("day(updated_at)")
-            //     ->havingRaw("total_cat > 0")
-            //     ->orderByRaw("day(updated_at) desc")
-            //     ->get();
-
-            #5: Lấy tất cả các trường của các bảng posts,category_posts,m_users với Select
-            // $list_posts = DB::select("SELECT *
-            // FROM posts
-            //  JOIN category_posts on posts.post_cat_id = category_posts.id
-            //  JOIN m_users on posts.user_id = m_users.id");
-
-            // ========Query Builder==========
-            #1: Lấy tất cả các trường của các bảng posts,category_posts,m_users với dk status = 'public'
-            // sử dụng join
-            // $list_posts = DB::table('posts', 'baiviet')
-            //     ->join('M_users', 'M_users.id', '=', 'posts.user_id')
-            //     ->join('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-            //     ->select('baiviet.*', 'M_users.fullname', 'category_posts.name')
-            //     ->where("baiviet.status", "=", "public")
-            //     ->where("baiviet.deleted_at", "=", Constants::EMPTY)
-            //     ->where('baiviet.title', 'LIKE', "%{$key}%")
-            //     ->orderBy('baiviet.created_at', 'desc')
-            //     ->paginate(20);
-
-            // sử dụng left join
-            // $list_posts = DB::table('posts', 'baiviet')
-            //     ->leftjoin('M_users', 'M_users.id', '=', 'posts.user_id')
-            //     ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-            //     ->select('baiviet.*', 'M_users.fullname', 'category_posts.name')
-            //     ->where("baiviet.status", "=", "public")
-            //     ->where("baiviet.deleted_at", "=", Constants::EMPTY)
-            //     ->where('baiviet.title', 'LIKE', "%{$key}%")
-            //     ->orderBy('baiviet.created_at', 'desc')
-            //     ->paginate(20);
-
-            // sử dụng right join
-            // $list_posts = DB::table('posts','baiviet')
-            // ->rightjoin('M_users', 'M_users.id', '=', 'posts.user_id')
-            // ->rightjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-            // ->select('baiviet.*', 'M_users.fullname', 'category_posts.name')
-            // ->where("baiviet.status", "=", "public")
-            // ->where("baiviet.deleted_at", "=", Constants::EMPTY)
-            // ->where('baiviet.title', 'LIKE', "%{$key}%")
-            // ->orderBy('baiviet.created_at', 'desc')
-            // ->paginate(20);
-
-            #2. Lấy tổng số bài viết của tác giả
             $list_posts = DB::table('posts')
-                ->leftjoin('m_users', 'm_users.id', '=', 'posts.user_id')
+                ->leftjoin('M_users', 'M_users.id', '=', 'posts.user_id')
                 ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-                ->select('m_users.fullname as author', DB::raw('count(*) as total_post'))
-                ->groupBy('m_users.fullname')
-                ->having('total_post', '>', 1)
-                ->get();
-
-            dd($list_posts);
-            #3. Sử dụng whereor
-            // $list_posts = 
+                ->select('posts.*', 'M_users.fullname', 'category_posts.name')
+                ->where("posts.status", "=", "public")
+                ->where("posts.deleted_at", "=", Constants::EMPTY)
+                ->where('posts.title', 'LIKE', "%{$key}%")
+                ->orderBy('posts.created_at', 'desc')
+                ->paginate(20);
 
             // dd($list_posts->toSql());
+            // dd($list_posts);
         } else {
             if ($status == Constants::TRASH) {
                 $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];

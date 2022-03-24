@@ -32,14 +32,14 @@
             file_picker_callback : function(callback, value, meta) {
               var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
               var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
-        
+
               var cmsURL = editor_config.path_absolute + 'laravel-filemanager?editor=' + meta.fieldname;
               if (meta.filetype == 'image') {
                 cmsURL = cmsURL + "&type=Images";
               } else {
                 cmsURL = cmsURL + "&type=Files";
               }
-        
+
               tinyMCE.activeEditor.windowManager.openUrl({
                 url : cmsURL,
                 title : 'Filemanager',
@@ -53,7 +53,7 @@
               });
             }
           };
-        
+
           tinymce.init(editor_config);
     </script>
     <div id="warpper" class="nav-fixed">
@@ -141,6 +141,7 @@
                         <i class="arrow fas fa-angle-down"></i>
                         <ul class="sub-menu">
                             <li><a href="{{ url('admin/product/add') }}">Thêm mới</a></li>
+                            {{-- <li><a href="{{ url('admin/product/add') }}">Thêm sản phẩm chi tiết</a></li> --}}
                             <li><a href="{{ url('admin/product/list') }}">Danh sách</a></li>
                             <li><a href="{{ url('admin/product/cat/list') }}">Danh mục</a></li>
                             <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
@@ -192,7 +193,11 @@
             </div>
         </div>
     </div>
+    <script>
 
+
+
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{{ url('public/js/app.js') }}"></script>
     <script src="{{ asset('public/js/main.js') }}"></script>

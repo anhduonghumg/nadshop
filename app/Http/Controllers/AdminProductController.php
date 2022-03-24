@@ -20,6 +20,6 @@ class AdminProductController extends Controller
 
     public function add()
     {
-        return view('admin.product.add');
+        return view('admin.product.detail');
     }
 }

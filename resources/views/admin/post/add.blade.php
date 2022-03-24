@@ -33,10 +33,9 @@
                 </div>
                 <div class="form-group">
                     <label for="thumbnail">Ảnh bài viết</label>
-                    <input type="file" name="thumbnail" class="form-control" id="thumbnail">
-                    {{-- <input id="img" type="file" name="thumbnail" class="form-control d-none">
+                    <input id="img" type="file" name="thumbnail" class="form-control d-none" onchange="changeImg(this)">
                     <img id="avatar" class="img-thumbnail d-block" width="200px"
-                        src="{{ asset('storage/app/public/images/upload_img.png') }}"> --}}
+                        src="{{ asset('storage/app/public/images/upload_img.png') }}">
                     @error('thumbnail')
                     <small class=" text-danger">{{ $message }}</small>
                     @enderror
