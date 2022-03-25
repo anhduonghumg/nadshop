@@ -22,20 +22,24 @@ $(document).ready(function () {
     $("ul li a#add_work").click(function () {
         COUNT_TAB_WORK = COUNT_TAB_WORK + 1;
         var id = $(".nav-tabs").children().length;
-        if (id <= 9) {
-            var tabId = "no_" + id;
+        if (id <= 7) {
+            var tabId = "p_" + id;
             $(this)
                 .closest("li")
                 .before(
-                    `<li class='nav-item'><a class='nav-link' id='${tabId}' data-toggle='tab'href='#${tabId}' role='tab'aria-controls='${tabId}' aria-selected='true'>Product-${COUNT_TAB_WORK}</a><span><i class="fa fa-times" aria-hidden="true"></i></span></li>`
+                    `<li class="nav-item" role="presentation">
+                <a class="nav-link" id="${tabId}-tab" data-toggle="tab" href="#${tabId}" role="tab"
+                    aria-selected="true">Product-${COUNT_TAB_WORK}</a>
+                    <span class="remove-product-tab d-none"><i class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+            </li>`
                 );
             $(".tab-content").append(
-                `<div class="tab-pane fade" id="${tabId}" role="tabpanel" aria-labelledby="${tabId}"> ${CONTENT_FORM} </div>`
+                `<div class="tab-pane fade" id="${tabId}" role="tabpanel" aria-labelledby="${tabId}-tab">${CONTENT_FORM}</div>`
             );
             $(".nav-tabs li:nth-child(" + id + ") a").click();
             addAttrForItem(tabId);
         }
-        return false;
     });
 });
 

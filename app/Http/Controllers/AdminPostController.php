@@ -33,17 +33,41 @@ class AdminPostController extends Controller
         if (!$status || $status == Constants::ACTIVE) {
             $list_act = ['delete' => 'Xóa'];
 
-            $list_posts = DB::table('posts')
-                ->leftjoin('M_users', 'M_users.id', '=', 'posts.user_id')
-                ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-                ->select('posts.*', 'M_users.fullname', 'category_posts.name')
-                ->where("posts.status", "=", "public")
-                ->where("posts.deleted_at", "=", Constants::EMPTY)
-                ->where('posts.title', 'LIKE', "%{$key}%")
-                ->orderBy('posts.created_at', 'desc')
-                ->paginate(20);
+            // $list_posts = DB::table('posts')
+            //     ->leftjoin('M_users', 'M_users.id', '=', 'posts.user_id')
+            //     ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
+            //     ->select('posts.*', 'M_users.fullname', 'category_posts.name')
+            //     ->where("posts.status", "=", "public")
+            //     ->where("posts.deleted_at", "=", Constants::EMPTY)
+            //     ->where('posts.title', 'LIKE', "%{$key}%")
+            //     ->orderBy('posts.created_at', 'desc')
+            //     ->paginate(20);
 
-            // dd($list_posts->toSql());
+            #1. Lấy ra danh sách người dùng có quyền la admin và có sdt là 0967692222 hoặc 0967692111
+            // $list_posts = DB::table('m_users')
+            //     ->where('m_users.role_id', '=', 0)
+            //     ->where(function ($query) {
+            //         $query->where('m_users.phone', '=', '0967692222')
+            //             ->orWhere('m_users.phone', '=', '0967692111');
+            //     })
+            //     ->get();
+
+            #2. Lấy ra danh sách bài viết  và nguoi dùng sử dụng join nhiều điều kiện
+            // $list_posts = DB::table('posts')
+            //     ->join('m_users', function ($join) {
+            //         $join->on('m_users.id', '=', 'posts.user_id')
+            //             ->where('posts.user_id', '>', 7);
+            //     })
+            //     ->join('category_posts', function ($join) {
+            //         $join->on('category_post.id', '=', 'posts.post_cat_id')
+            //             ->where('posts.title', 'LIKE', 'test22');
+            //     });
+            // ->get();
+
+
+            // $list_posts = DB::table('posts')
+            // ->join('m_users')
+            dd($list_posts->toSql());
             // dd($list_posts);
         } else {
             if ($status == Constants::TRASH) {
