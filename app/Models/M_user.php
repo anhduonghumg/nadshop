@@ -11,8 +11,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\VerifyEmailNotification;
 use App\Notifications\ResetPasswordNotification;
-use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 class M_user extends Authenticatable implements MustVerifyEmail
 {
@@ -21,6 +24,7 @@ class M_user extends Authenticatable implements MustVerifyEmail
     protected $table = 'm_users';
 
     protected $fillable = [
+        'id',
         'fullname',
         'username',
         'phone',
@@ -40,27 +44,39 @@ class M_user extends Authenticatable implements MustVerifyEmail
 
     public static function get_list_users_trash()
     {
-        $result = DB::table('m_users')
-            ->where('deleted_at', '<>', Constants::EMPTY)
-            ->orderBy('deleted_at', 'desc')
+        $result = M_user::select('id', 'fullname', 'email', 'role_id', 'created_at')
+            ->onlyTrashed()
             ->paginate(20);
         return $result;
     }
 
     public static function get_list_users($keyword)
     {
-        $result = DB::table('m_users')
+
+        $result = M_user::select('id', 'fullname', 'email', 'role_id', 'created_at')
             ->where('deleted_at', '=', Constants::EMPTY)
-            ->where("fullname", "LIKE", "%{$keyword}%")
-            ->orderBy('created_at', 'desc')
+            ->where('fullname', 'LIKE', "%{$keyword}%")
+            ->orderByDesc('id')
             ->paginate(20);
         return $result;
     }
 
     public static function add_user($data)
     {
-        $result = DB::insert($data);
+        $result = M_user::create($data);
         return $result;
+    }
+
+    public static function yourself($data)
+    {
+        if ($data->isNotEmpty()) {
+            $data->each(function ($value, $key) use ($data) {
+                if ($data->contains(Auth::id())) {
+                    $data->forget($key);
+                }
+                return false;
+            });
+        }
     }
 
     // Thay đổi mail mặc định

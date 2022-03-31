@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Page extends Model
 {
-    use HasFactory, SoftDeletes, PageRelationship, PageQuery;
+    use HasFactory, PageRelationship, PageQuery;
     protected $table = 'pages';
     protected $fillable = [
         'page_name',

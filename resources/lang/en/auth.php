@@ -28,5 +28,7 @@ return [
     'Email Address' => 'Email Address',
     'Name' => 'Name',
     'Please confirm your password before continuing' => 'Please confirm your password before continuing',
-    'Reset Password' => 'Reset Password'
+    'Reset Password' => 'Reset Password',
+    'minutes_ago' => '{1} :value minute ago|[2,*] :value minutes ago',
+
 ];

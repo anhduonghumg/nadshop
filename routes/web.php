@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/user/edit/{id}', [App\Http\Controllers\AdminUserController::class, 'edit'])->name('admin.user.edit');
     Route::post('/admin/user/update/{id}', [App\Http\Controllers\AdminUserController::class, 'update'])->name('admin.user.update');
     Route::get('/admin/user/delete/{id}', [App\Http\Controllers\AdminUserController::class, 'delete'])->name('admin.user.delete');
+    Route::get('/admin/user/forceDelete/{id}', [App\Http\Controllers\AdminUserController::class, 'forceDelete'])->name('admin.user.forceDelete');
     Route::get('/admin/user/profile', [App\Http\Controllers\AdminUserController::class, 'profile'])->name('admin.user.profile');
     Route::post('/admin/user/profileUpdate/{id}', [App\Http\Controllers\AdminUserController::class, 'profileUpdate'])->name('admin.user.profileUpdate');
     Route::get('/admin/user/changePass', [App\Http\Controllers\AdminUserController::class, 'changePass'])->name('admin.user.changePass');
@@ -97,4 +98,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/brand/delete/{id}', [App\Http\Controllers\AdminBrandController::class, 'delete'])->name('admin.brand.delete');
     Route::get('/admin/brand/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.brand.forceDelete');
     Route::post('/admin/brand/action', [App\Http\Controllers\AdminBrandController::class, 'action'])->name('admin.brand.action');
+
+    // helper
+    Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
+    Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');
+    Route::get('/admin/helper/string', [App\Http\Controllers\AdminHelperController::class, 'string'])->name('admin.helper.string');
+    Route::get('/admin/helper/path', [App\Http\Controllers\AdminHelperController::class, 'path'])->name('admin.helper.path');
+    Route::get('/admin/helper/miscellaneous', [App\Http\Controllers\AdminHelperController::class, 'miscellaneous'])->name('admin.helper.miscellaneous');
 });

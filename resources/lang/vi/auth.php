@@ -28,6 +28,9 @@ return [
     'Email Address' => 'Email',
     'Name' => 'Họ và tên',
     'Please confirm your password before continuing'  => 'Làm ơn hãy xác nhận mật khẩu.',
-    'Reset Password' => 'Lấy lại mật khẩu'
+    'Reset Password' => 'Lấy lại mật khẩu',
+    'minutes_ago' => '{1} :value minute ago|[2,*] :value minutes ago',
+    'apples' => '{0} There are none|{1} There is one|[2,*] There are :count',
+
 
 ];

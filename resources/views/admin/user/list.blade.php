@@ -26,7 +26,7 @@
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
                     hóa<span class="text-muted">({{ $count[1] }})</span></a>
             </div>
-            <form action="{{ url('admin/page/action') }}" method="POST">
+            <form action="{{ url('admin/user/action') }}" method="POST">
                 @csrf
                 <div class="form-action form-inline py-3">
                     <select class="form-control mr-1" name="act" id="">
@@ -53,7 +53,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($users->total() > 0)
+                        @if ($users->isNotEmpty())
                         @php
                         $temp=0;
                         @endphp
@@ -93,6 +93,18 @@
                                     data-toggle="tooltip" data-placement="top" title="Delete"><i
                                         class="fa fa-trash"></i></a>
                                 @endif
+                            </td>
+                            @else
+                            <td>
+                                {{-- <a href="{{ route('admin.user.edit',$user->id) }}"
+                                    class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                    data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                        class="fa fa-edit"></i></a> --}}
+                                <a href="{{ route('admin.user.forceDelete',$user->id) }}"
+                                    onclick="return confirm('Bạn muốn xóa bản ghi này?')"
+                                    class="btn btn-danger btn-sm rounded-0 text-white" type="button"
+                                    data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                        class="fa fa-trash"></i></a>
                             </td>
                             @endif
                         </tr>

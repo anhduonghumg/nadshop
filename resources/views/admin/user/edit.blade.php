@@ -18,9 +18,10 @@
                 </div>
                 <div class="form-group">
                     <label for="username">Tên tài khoản</label>
-                    <input class="form-control" type="text" name="username" id="username" value="{{ $user->username }}" disabled>
+                    <input class="form-control" type="text" name="username" id="username" value="{{ $user->username }}"
+                        disabled>
                     @error('username')
-                    {{--  <small class="text-danger">{{ $message }}</small>  --}}
+                    {{-- <small class="text-danger">{{ $message }}</small> --}}
                     @enderror
                 </div>
                 <div class="form-group">

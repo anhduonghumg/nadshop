@@ -11,5 +11,5 @@ return [
     'delete_cat_child' => 'You must delete the subcategory first',
     'change_pass_fail' => 'You should not let the new password be the same as the old password',
     'change_pass_success' => "You have successfully changed your password",
-    'delete_yourself' => 'Bạn không thể xóa chính bạn'
+    'delete_yourself' => 'You cant delete yourself'
 ];
