@@ -8,39 +8,44 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Page\StorePageRequest;
+use App\Constants\Constants;
+use App\Repositories\Page\PageRepositoryInterface;
 
 class AdminPageController extends Controller
 {
-    public function __construct()
+    protected $pageRepo;
+
+    public function __construct(PageRepositoryInterface $pageRepo)
     {
-        $this->middleware(function (Request $request, $next) {
-            session(['module_active' => 'page']);
-            return $next($request);
-        });
+        $this->pageRepo = $pageRepo;
+        // $this->middleware(function (Request $request, $next) {
+        //     session(['module_active' => 'page']);
+        //     return $next($request);
+        // });
     }
 
     public function list(Request $request)
     {
         $status = $request->input('status');
-
-        if ($status == 'trash') {
-            $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
-            $pages = Page::onlyTrashed()->paginate(10);
-        } elseif ($status == 'pending') {
-            $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
-            $pages = Page::where('status', 'pending')->paginate(10);
-        } else {
-            $key = "";
-            $list_act = ['delete' => 'Xóa'];
-            if ($request->input('keyword')) {
-                $key = $request->input('keyword');
-            }
-            $pages = Page::list_page($key)->Paginate(10);
+        $key = "";
+        if ($request->has('keyword')) {
+            $key = $request->input('keyword');
         }
 
-        $num_page_active = Page::count();
-        $num_page_trash = Page::onlyTrashed()->count();
-        $num_page_pending = Page::where('status', 'pending')->count();
+        if ($status == Constants::TRASH) {
+            $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
+            $pages = Page::get_list_page_trash();
+        } elseif ($status == Constants::PENDING) {
+            $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
+            $pages = Page::get_list_page_by_status(Constants::PENDING, $key);
+        } else {
+            $list_act = ['delete' => 'Xóa'];
+            $pages = Page::get_list_page_by_status(Constants::PUBLIC, $key);
+        }
+
+        $num_page_active = Page::where('status', Constants::PUBLIC)->where('deleted_at', Constants::EMPTY)->count();
+        $num_page_trash = Page::where('deleted_at', '<>', Constants::EMPTY)->count();
+        $num_page_pending = Page::where('status', 'pending')->where('deleted_at', Constants::EMPTY)->count();
         $count = [$num_page_active, $num_page_trash, $num_page_pending];
 
         return view('admin.page.list', compact('pages', 'count', 'list_act'));
@@ -57,100 +62,73 @@ class AdminPageController extends Controller
         if ($request->has('btn_add')) {
             $request->validated();
             $data = [
-                'page_name' => $request->input('name'),
-                'slug' => Str::slug($request->input('name')),
+                'page_name' => $request->input('page_name'),
+                'slug' => Str::slug($request->input('page_name')),
                 'desc' => $request->input('desc'),
                 'status' => $request->input(('status')),
                 'content' => $request->input('content'),
                 'user_id' => Auth::id(),
             ];
 
-            Page::add_page($data);
+            $this->pageRepo->add($data);
             return redirect()->route('admin.page.list')->with('status', trans('notification.add_success'));
         }
     }
-    // public function store(Request $request)
-    // {
-    //     if ($request->has('btn_add')) {
-
-    //         // Validation logic
-    //         // $request->validate(
-    //         //     [
-    //         //         'name' => ['required', 'string', 'max:255', 'unique:pages'],
-    //         //         'desc' => ['required', 'string'],
-    //         //         'content' => ['required', 'string'],
-
-    //         //     ],
-    //         // );
-
-    //         // Validation thủ công
-    //         $validator = Validator::make($request->all(), [
-    //             'name' => ['required', 'string', 'max:255', 'unique:pages'],
-    //             'desc' => ['required', 'string'],
-    //             'content' => ['required', 'string'],
-    //         ]);
-
-    //         if ($validator->fails()) {
-    //             return back()->withErrors($validator);
-    //         }
-
-    //         $data = [
-    //             'name' => $request->input('name'),
-    //             'slug' => Str::slug($request->input('name')),
-    //             'desc' => $request->input('desc'),
-    //             'status' => $request->input(('status')),
-    //             'content' => $request->input('content'),
-    //             'user_id' => Auth::id(),
-    //         ];
-
-    //         Page::add_page($data);
-    //         return redirect('admin/page/list')->with('status', 'Đã thêm trang thành công.');
-    //     }
-    // }
 
     public function edit(Request $request, $id)
     {
-        if (!isset($id) || $id == 0) {
-            return redirect('admin/page/list');
+
+        if ($request->has($id) || $id != 0) {
+            $page = Page::get_page_by_id($id);
         } else {
-            $page = Page::find($id);
+            return redirect('admin/page/list');
         }
         return view('admin.page.edit', compact('page'));
     }
 
     public function update(Request $request, $id)
     {
-        if (!isset($id) || $id == 0) {
-            return redirect('admin/user/list');
-        } else {
+        if ($request->has($id)  || $id != 0) {
             if ($request->has('btn_update')) {
-
                 $request->validate(
                     [
-                        'name' => ['required', 'string', 'max:255', 'unique:pages,name,' . $id . ',id'],
+                        'page_name' => ['required', 'string', 'max:255', 'unique:pages,page_name,' . $id . ',id'],
                         'desc' => ['required', 'string'],
                         'content' => ['required', 'string']
                     ],
                 );
 
                 $data = [
-                    'page_name' => $request->input('name'),
+                    'page_name' => $request->input('page_name'),
                     'content' => $request->input('content'),
                     'desc' => $request->input('desc'),
-                    'slug' => Str::slug($request->input('name'))
+                    'slug' => Str::slug($request->input('page_name'))
                 ];
 
-                Page::update_page($data, $id);
+                $this->pageRepo->update($data, $id);
                 return redirect()->route('admin.page.list')->with('status', trans('notification.update_success'));
             }
+        } else {
+            return redirect()->route('admin.page.list');
         }
     }
 
     public function delete($id)
     {
         if ($id != null) {
-            Page::delete_page($id);
+            $data = ['deleted_at' => now()];
+            $this->pageRepo->delete($data, $id);
             return redirect()->route('admin.page.list')->with('status', trans('notification.delete_success'));
+        } else {
+            return redirect()->route('admin.page.list')->with('status', trans('notification.no_data'));
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        if ($id != null) {
+            $this->pageRepo->forceDelete($id);
+            return redirect()->route('admin.page.list')->with('status', trans('notification.force_delete_success'));
         } else {
             return redirect()->route('admin.page.list')->with('status', trans('notification.no_data'));
         }
@@ -159,20 +137,23 @@ class AdminPageController extends Controller
     public function action(Request $request)
     {
         if ($request->has('btn_action')) {
-            $list_check = $request->input('list_check');
-            if (!empty($list_check)) {
+            $list_check = collect($request->input('list_check'));
+            if ($list_check->isNotEmpty()) {
                 $act = $request->input('act');
-                if ($act == 'delete') {
-                    Page::destroy($list_check);
+                if ($act == Constants::DELETE) {
+                    $data = ['deleted_at' => now()];
+                    $this->pageRepo->delete($data, $list_check);
                     return redirect()->route('admin.page.list')->with('status', trans('notification.delete_success'));
-                } elseif ($act == 'active') {
-                    Page::whereIn('id', $list_check)->update(['status' => 'public']);
+                } elseif ($act == Constants::ACTIVE) {
+                    $data = ['status' => Constants::PUBLIC];
+                    $this->pageRepo->update($data, $list_check);
                     return redirect()->route('admin.page.list')->with('status', trans('notification.active_success'));
-                } elseif ($act == 'restore') {
-                    Page::withTrashed()->whereIn('id', $list_check)->restore();
+                } elseif ($act == Constants::RESTORE) {
+                    $data = ['deleted_at' => Constants::EMPTY];
+                    $this->update_model(new Page, $data, $list_check);
                     return redirect()->route('admin.page.list')->with('status', trans('notification.restore_success'));
-                } elseif ($act == 'forceDelete') {
-                    Page::withTrashed()->whereIn('id', $list_check)->forceDelete();
+                } elseif ($act == Constants::FORCE_DELETE) {
+                    $this->pageRepo->forceDelete($list_check);
                     return redirect()->route('admin.page.list')->with('status', trans('notification.force_delete_success'));
                 } else {
                     return redirect()->route('admin.page.list')->with('status', trans('notification.not_action'));

@@ -10,9 +10,10 @@
             <form action="{{ url("admin/page/update/$page->id") }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="name">Tiêu đề trang</label>
-                    <input class="form-control" type="text" name="name" id="name" value="{{ $page->name }}">
-                    @error('name')
+                    <label for="page_name">Tiêu đề trang</label>
+                    <input class="form-control" type="text" name="page_name" id="page_name"
+                        value="{{ $page->page_name }}">
+                    @error('page_name')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>

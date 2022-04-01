@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/page/edit/{id}', [App\Http\Controllers\AdminPageController::class, 'edit'])->name('admin.page.edit');
     Route::post('/admin/page/update/{id}', [App\Http\Controllers\AdminPageController::class, 'update'])->name('admin.page.update');
     Route::get('/admin/page/delete/{id}', [App\Http\Controllers\AdminPageController::class, 'delete'])->name('admin.page.delete');
+    Route::get('/admin/page/forceDelete/{id}', [App\Http\Controllers\AdminPageController::class, 'forceDelete'])->name('admin.page.forceDelete');
     Route::post('/admin/page/action', [App\Http\Controllers\AdminPageController::class, 'action'])->name('admin.page.action');
 
     // Admin/post/cat

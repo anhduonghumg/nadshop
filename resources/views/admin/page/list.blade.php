@@ -61,7 +61,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($pages->total() > 0)
+                        @if ($pages->isNotEmpty())
                         @php
                         $temp=0;
                         @endphp
@@ -80,15 +80,18 @@
                             @else
                             <td>Chờ duyệt</td>
                             @endif
-                            <td>{{ $page->user->name }}</td>
+                            <td>{{ $page->user->fullname }}</td>
                             <td>{{ $page->created_at }}</td>
-                            @if (request()->input('status') == 'trash')
+                            @if (request()->input('status') == Constants::TRASH)
                             <td>{{ $page->deleted_at }}</td>
                             <td>
-                                <a href="#" class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                <a href="{{ route('admin.page.edit', $page->id) }}"
+                                    class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                     data-toggle="tooltip" data-placement="top" title="Edit"><i
                                         class="fa fa-edit"></i></a>
-                                <a href="#" class="btn btn-danger btn-sm rounded-0 text-white" type="button"
+                                <a href="{{ route('admin.page.forceDelete', $page->id) }}"
+                                    onclick="return confirm('Bạn muốn xóa bản ghi này?')"
+                                    class="btn btn-danger btn-sm rounded-0 text-white" type="button"
                                     data-toggle="tooltip" data-placement="top" title="Delete"><i
                                         class="fa fa-trash"></i></a>
                             </td>

@@ -25,7 +25,7 @@ class StorePageRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:pages'],
+            'page_name' => ['required', 'string', 'max:255', 'unique:pages'],
             'desc' => ['required', 'string'],
             'content' => ['required', 'string'],
         ];

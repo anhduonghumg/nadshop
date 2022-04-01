@@ -10,9 +10,9 @@
             <form action="{{ url('admin/page/store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="name">Tên trang</label>
-                    <input class="form-control" type="text" name="name" id="name">
-                    @error('name')
+                    <label for="page_name">Tên trang</label>
+                    <input class="form-control" type="text" name="page_name" id="page_name">
+                    @error('page_name')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>

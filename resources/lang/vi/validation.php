@@ -169,7 +169,8 @@ return [
         'thumbnail' => 'ảnh',
         'category_post' => 'danh mục bài viết',
         'category_product_name' => 'tên danh mục',
-        'brand_name' => 'tên thương hiệu'
+        'brand_name' => 'tên thương hiệu',
+        'page_name' => 'tên trang'
     ],
 
 ];

@@ -197,7 +197,8 @@ return [
         'thumbnail' => 'thumbnail',
         'category_post' => 'category_post',
         'category_product_name' => 'category_product_name',
-        'brand_name' => 'brand_name'
+        'brand_name' => 'brand_name',
+        'page_name' => 'page_name'
     ],
 
 ];
