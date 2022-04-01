@@ -13,15 +13,16 @@ use App\Repositories\Page\PageRepositoryInterface;
 
 class AdminPageController extends Controller
 {
-    protected $pageRepo;
+    protected PageRepositoryInterface $pageRepo;
 
     public function __construct(PageRepositoryInterface $pageRepo)
     {
         $this->pageRepo = $pageRepo;
-        // $this->middleware(function (Request $request, $next) {
-        //     session(['module_active' => 'page']);
-        //     return $next($request);
-        // });
+
+        $this->middleware(function (Request $request, $next) {
+            session(['module_active' => 'page']);
+            return $next($request);
+        });
     }
 
     public function list(Request $request)
@@ -150,7 +151,7 @@ class AdminPageController extends Controller
                     return redirect()->route('admin.page.list')->with('status', trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
                     $data = ['deleted_at' => Constants::EMPTY];
-                    $this->update_model(new Page, $data, $list_check);
+                    $this->pageRepo->update($data, $list_check);
                     return redirect()->route('admin.page.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
                     $this->pageRepo->forceDelete($list_check);
