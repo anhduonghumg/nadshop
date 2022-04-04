@@ -12,14 +12,18 @@ use App\Constants\Constants;
 use App\Helpers\ImageUpload;
 use App\Helpers\Recursive;
 use App\Helpers\Number;
+use App\Repositories\Post\PostRepositoryInterface;
 
 
 class AdminPostController extends Controller
 {
     use ImageUpload, Recursive, Number;
 
-    public function __construct()
+    protected $postRepo;
+    public function __construct(PostRepositoryInterface $postRepo)
     {
+        $this->postRepo = $postRepo;
+
         $this->middleware(function (Request $request, $next) {
             session(['module_active' => 'post']);
             return $next($request);
@@ -32,39 +36,18 @@ class AdminPostController extends Controller
         $key = isset($request->kw) ? $request->kw : "";
         if (!$status || $status == Constants::ACTIVE) {
             $list_act = ['delete' => 'Xóa'];
-            $list_posts = Post::leftjoin('m_users', 'm_user.id', '=', 'posts.user_id')
-                ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-                ->select('posts.*', 'm_users.fullname', 'category_posts.name')
-                ->where('posts.title', 'LIKE', "%{$key}%")
-                ->where('posts.deleted_at', '<>', Constants::EMPTY)
-                ->orderByDesc('posts.id')
-                ->paginate(20);
+            $list_posts = $this->postRepo->get_list_posts_status(Constants::PUBLIC, $key, $paginate = 10, $orderBy = 'id');
         } elseif ($status == Constants::TRASH) {
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
-            $list_posts = DB::table('posts')
-                ->join('M_users', 'M_users.id', '=', 'posts.user_id')
-                ->join('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-                ->select('posts.*', 'M_users.fullname', 'category_posts.name')
-                ->where("posts.deleted_at", "<>", Constants::EMPTY)
-                ->where('posts.title', 'LIKE', "%{$key}%")
-                ->orderBy('posts.created_at', 'desc')
-                ->paginate(20);
+            $list_posts = $this->postRepo->get_list_posts_trash($key, $paginate = 10, $orderBy = "deleted_at");
         } elseif ($status == Constants::PENDING) {
             $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
-            $list_posts = DB::table('posts')
-                ->join('M_users', 'M_users.id', '=', 'posts.user_id')
-                ->join('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-                ->select('posts.*', 'M_users.fullname', 'category_posts.name')
-                ->where("posts.status", "=", "pending")
-                ->where("posts.deleted_at", "=", Constants::EMPTY)
-                ->where('posts.title', 'LIKE', "%{$key}%")
-                ->orderBy('posts.created_at', 'desc')
-                ->paginate(20);
+            $list_posts = $this->postRepo->get_list_posts_status(Constants::PENDING, $key, $paginate = 10, $orderBy = "id");
         }
 
-        $num_post_active = DB::table('posts')->where('status', '=', Constants::PUBLIC)->where('deleted_at', '=', Constants::EMPTY)->count();
-        $num_post_trash = DB::table('posts')->where('deleted_at', '<>', Constants::EMPTY)->count();
-        $num_post_pending = DB::table('posts')->where('status', '=', Constants::PENDING)->where('deleted_at', '=', Constants::EMPTY)->count();
+        $num_post_active = $this->postRepo->get_num_post_active();
+        $num_post_trash = $this->postRepo->get_num_post_trash();
+        $num_post_pending = $this->postRepo->get_num_post_pending();
         $count = [$num_post_active, $num_post_trash, $num_post_pending];
 
         return view('admin.post.list', compact('list_posts', 'count', 'list_act'));
@@ -97,8 +80,8 @@ class AdminPostController extends Controller
                 'content' => $request->input('content'),
                 'user_id' => Auth::id(),
                 'post_cat_id' => $request->input('category_post'),
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" => \Carbon\Carbon::now(),
+                "created_at" => now(),
+                "updated_at" => now(),
             ];
 
             if ($request->hasFile('thumbnail')) {
@@ -106,16 +89,14 @@ class AdminPostController extends Controller
                 $data['thumbnail'] = $dataImg['file_path'];
             }
 
-            DB::table('posts')->insert($data);
+            $this->postRepo->add($data);
             return redirect()->route('admin.post.list')->with('status', trans('notification.add_success'));
         }
     }
 
     public function edit(Request $request, $id)
     {
-        $post = DB::table('posts')
-            ->where('id', '=', $id)
-            ->first();
+        $post = $this->postRepo->get_post_by_id($id);
 
         $data_cat_post = $this->dataSelect(new CategoryPost);
         return view('admin.post.edit', compact('post', 'data_cat_post'));
@@ -152,9 +133,7 @@ class AdminPostController extends Controller
                     $data['thumbnail'] = $dataImg['file_path'];
                 }
 
-                DB::table('posts')
-                    ->where('id', $id)
-                    ->update($data);
+                $this->postRepo->update($data, $id);
 
                 return redirect()->route('admin.post.list')->with('status', trans('notification.update_success'));
             }
@@ -165,9 +144,9 @@ class AdminPostController extends Controller
     {
         if ($id != null) {
             $data = [
-                'deleted_at' => \Carbon\Carbon::now()
+                'deleted_at' => now()
             ];
-            DB::table('posts')->where('id', $id)->update($data);
+            $this->postRepo->delete($data, $id);
             return redirect()->route('admin.post.list')->with('status', trans('notification.delete_success'));
         } else {
             return redirect()->route('admin.post.list')->with('status', trans('notification.no_data'));
@@ -177,7 +156,7 @@ class AdminPostController extends Controller
     public function forceDelete($id)
     {
         if ($id != null) {
-            DB::table('posts')->where('id', $id)->delete();
+            $this->postRepo->forceDelete($id);
             return redirect()->route('admin.post.list')->with('status', trans('notification.force_delete_success'));
         } else {
             return redirect()->route('admin.post.list')->with('status', trans('notification.no_data'));
@@ -192,7 +171,10 @@ class AdminPostController extends Controller
             if (!empty($list_check)) {
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
-                    DB::table('posts')->whereIn('id', $list_check)->update(['deleted_at' => \Carbon\Carbon::now()]);
+                    $data = [
+                        'deleted_at' => now()
+                    ];
+                    $this->postRepo->delete($data, $list_check);
                     return redirect()->route('admin.post.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
                     DB::table('posts')->whereIn('id', $list_check)->update(['status' => Constants::PUBLIC]);

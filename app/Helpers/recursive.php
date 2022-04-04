@@ -30,7 +30,7 @@ trait Recursive
         $dataModels = $this->recursive($dataModels);
 
         foreach ($dataModels as $data) {
-            if ($data[$column] == Constants::PUBLIC)
+            if ($data[$column] == Constants::PUBLIC && $data['deleted_at'] == Constants::EMPTY)
                 $data_select[$data->id] = str_repeat('|---', $data->level) . $data->$field_name;
         }
 

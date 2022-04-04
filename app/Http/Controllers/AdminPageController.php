@@ -13,7 +13,7 @@ use App\Repositories\Page\PageRepositoryInterface;
 
 class AdminPageController extends Controller
 {
-    protected PageRepositoryInterface $pageRepo;
+    protected  $pageRepo;
 
     public function __construct(PageRepositoryInterface $pageRepo)
     {
@@ -35,18 +35,18 @@ class AdminPageController extends Controller
 
         if ($status == Constants::TRASH) {
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
-            $pages = Page::get_list_page_trash();
+            $pages = $this->pageRepo->get_list_pages_trash($key, $paginate = 10, $orderBy = 'deleted_at');
         } elseif ($status == Constants::PENDING) {
             $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
-            $pages = Page::get_list_page_by_status(Constants::PENDING, $key);
+            $pages = $this->pageRepo->get_list_pages_status(Constants::PENDING, $key, $paginate = 10, $orderBy = "id");
         } else {
             $list_act = ['delete' => 'Xóa'];
-            $pages = Page::get_list_page_by_status(Constants::PUBLIC, $key);
+            $pages = $this->pageRepo->get_list_pages_status(Constants::PUBLIC, $key, $paginate = 10, $orderBy = "id");
         }
 
-        $num_page_active = Page::where('status', Constants::PUBLIC)->where('deleted_at', Constants::EMPTY)->count();
-        $num_page_trash = Page::where('deleted_at', '<>', Constants::EMPTY)->count();
-        $num_page_pending = Page::where('status', 'pending')->where('deleted_at', Constants::EMPTY)->count();
+        $num_page_active = $this->pageRepo->get_num_page_active();
+        $num_page_trash = $this->pageRepo->get_num_page_trash();
+        $num_page_pending = $this->pageRepo->get_num_page_pending();
         $count = [$num_page_active, $num_page_trash, $num_page_pending];
 
         return view('admin.page.list', compact('pages', 'count', 'list_act'));
@@ -80,7 +80,7 @@ class AdminPageController extends Controller
     {
 
         if ($request->has($id) || $id != 0) {
-            $page = Page::get_page_by_id($id);
+            $page = $this->pageRepo->get_page_by_id($id);
         } else {
             return redirect('admin/page/list');
         }

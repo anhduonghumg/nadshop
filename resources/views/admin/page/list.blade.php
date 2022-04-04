@@ -80,7 +80,7 @@
                             @else
                             <td>Chờ duyệt</td>
                             @endif
-                            <td>{{ $page->user->fullname }}</td>
+                            <td>{{ $page->fullname }}</td>
                             <td>{{ $page->created_at }}</td>
                             @if (request()->input('status') == Constants::TRASH)
                             <td>{{ $page->deleted_at }}</td>

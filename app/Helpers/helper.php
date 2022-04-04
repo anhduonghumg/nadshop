@@ -6,12 +6,9 @@ use Illuminate\Support\Facades\DB;
 
 class Helpers
 {
-    public static function get_name_parent_cat($table, $column, $name)
+    public static function get_name_parent_category($table, $column)
     {
-        $result = DB::table($table)->get();
-        foreach ($result as $item) {
-            if ($column == $item->id)
-                return $item->$name;
-        }
+        $result = DB::table($table)->select('name')->where('id', $column)->first();
+        return $result;
     }
 }

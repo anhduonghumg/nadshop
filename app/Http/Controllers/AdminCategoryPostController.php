@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CategoryPost\CategoryPostRepositoryInterface;
 use App\Models\CategoryPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,12 @@ use App\Constants\Constants;
 class AdminCategoryPostController extends Controller
 {
     use Recursive;
+    protected CategoryPostRepositoryInterface $cpostRepo;
+
+    public function __construct(CategoryPostRepositoryInterface $cpostRepo)
+    {
+        $this->cpostRepo = $cpostRepo;
+    }
 
     public function add(Request $request)
     {
@@ -30,12 +37,11 @@ class AdminCategoryPostController extends Controller
                 'status' => $request->input('status'),
                 'parent_id' => $request->input('parent_id'),
                 'user_id' => Auth::id(),
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" => \Carbon\Carbon::now(),
+                "created_at" => now(),
+                "updated_at" => now(),
             ];
 
-            DB::table('category_posts')->insert($data);
-
+            $this->cpostRepo->add($data);
             return back()->with('status', trans('notification.add_success'));
         }
     }
@@ -43,43 +49,20 @@ class AdminCategoryPostController extends Controller
     public function list(Request $request)
     {
         $status = $request->input('status');
-        $key = isset($request->kw) ? $request->kw : "";
-        if (!$status || $status == Constants::ACTIVE) {
-            $list_act = ['delete' => 'Xóa'];
-            $category_post = DB::table('category_posts')
-                ->join('M_users', 'M_users.id', '=', 'category_posts.user_id')
-                ->select('category_posts.*', 'M_users.fullname')
-                ->where("category_posts.status", "=", Constants::PUBLIC)
-                ->where("category_posts.deleted_at", "=", Constants::EMPTY)
-                ->where('category_posts.name', 'LIKE', "%{$key}%")
-                ->orderBy('category_posts.created_at', 'desc')
-                ->paginate(20);
+        if ($status == Constants::TRASH) {
+            $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
+            $category_post = $this->cpostRepo->get_list_cat_post_trash($paginate = 10, $orderBy = 'deleted_at');
+        } elseif ($status == Constants::PENDING) {
+            $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
+            $category_post = $this->cpostRepo->get_list_cat_post_status(Constants::PENDING, $paginate = 10, $orderBy = "id");
         } else {
-            if ($status == Constants::TRASH) {
-                $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
-                $category_post = DB::table('category_posts')
-                    ->join('M_users', 'M_users.id', '=', 'category_posts.user_id')
-                    ->select('category_posts.*', 'M_users.fullname')
-                    ->where("category_posts.deleted_at", "<>", Constants::EMPTY)
-                    ->where('category_posts.name', 'LIKE', "%{$key}%")
-                    ->orderBy('category_posts.created_at', 'desc')
-                    ->paginate(20);
-            } elseif ($status == Constants::PENDING) {
-                $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
-                $category_post = DB::table('category_posts')
-                    ->join('M_users', 'M_users.id', '=', 'category_posts.user_id')
-                    ->select('category_posts.*', 'M_users.fullname')
-                    ->where("category_posts.status", "=", Constants::PENDING)
-                    ->where("category_posts.deleted_at", "=", Constants::EMPTY)
-                    ->where('category_posts.name', 'LIKE', "%{$key}%")
-                    ->orderBy('category_posts.created_at', 'desc')
-                    ->paginate(20);
-            }
+            $list_act = ['delete' => 'Xóa'];
+            $category_post = $this->cpostRepo->get_list_cat_post_status(Constants::PUBLIC, $paginate = 10, $orderBy = "id");
         }
 
-        $num_postCat_active = DB::table('category_posts')->where('status', '=', Constants::PUBLIC)->where('deleted_at', '=', Constants::EMPTY)->count();
-        $num_postCat_trash = DB::table('category_posts')->where('deleted_at', '<>', Constants::EMPTY)->count();
-        $num_postCat_pending = DB::table('category_posts')->where('status', '=', Constants::PENDING)->where('deleted_at', '=', Constants::EMPTY)->count();
+        $num_postCat_active = $this->cpostRepo->get_num_cat_post_active();
+        $num_postCat_trash = $this->cpostRepo->get_num_cat_post_trash();
+        $num_postCat_pending = $this->cpostRepo->get_num_cat_post_pending();
         $count = [$num_postCat_active, $num_postCat_trash, $num_postCat_pending];
         $data_cat_post = $this->dataSelect(new CategoryPost);
 
@@ -89,7 +72,7 @@ class AdminCategoryPostController extends Controller
 
     public function edit($id)
     {
-        $catPost = DB::table('category_posts')->where('id', $id)->first();
+        $catPost = $this->cpostRepo->get_cat_post_by_id($id, ['id', 'name']);
         $data_cat_post = $this->dataSelect(new CategoryPost);
         return view('admin.catPost.edit', compact('catPost', 'data_cat_post'));
     }
@@ -109,20 +92,22 @@ class AdminCategoryPostController extends Controller
             "updated_at" => \Carbon\Carbon::now(),
         ];
 
-        DB::table('category_posts')->where('id', $id)->update($data);
+        $this->cpostRepo->update($data, $id);
         return redirect()->route('admin.catPost.list')->with('status', trans('notification.update_success'));
     }
 
     public function delete($id)
     {
         if ($id != null) {
-            $catPost = DB::table('category_posts')->where('id', $id)->first();
+            $catPost = $this->cpostRepo->get_cat_post_by_id($id, ['status']);
             if ($catPost->status == Constants::PENDING) {
-                DB::table('category_posts')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
-            } elseif (CategoryPost::check_parent_post_cat($id)) {
+                $data = ['deleted_at' => now()];
+                $this->cpostRepo->update($data, $id);
+            } elseif ($this->cpostRepo->check_parent_cat($id)) {
                 return  redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_cat_child'));
             } else {
-                DB::table('category_posts')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
+                $data = ['deleted_at' => now()];
+                $this->cpostRepo->update($data, $id);
             }
             return redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_success'));
         } else {
@@ -133,7 +118,7 @@ class AdminCategoryPostController extends Controller
     public function forceDelete($id)
     {
         if ($id != null) {
-            DB::table('category_posts')->where('id', $id)->delete();
+            $this->cpostRepo->forceDelete($id);
             return redirect()->route('admin.catPost.list')->with('status', trans('notification.force_delete_success'));
         } else {
             return redirect()->route('admin.catPost.list')->with('status', trans('notification.no_data'));
@@ -143,20 +128,23 @@ class AdminCategoryPostController extends Controller
     public function action(Request $request)
     {
         if ($request->has('btn_action')) {
-            $list_check = $request->input('list_check');
-            if (!empty($list_check)) {
+            $list_check = collect($request->input('list_check'));
+            if ($list_check->isNotEmpty()) {
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
-                    DB::table('category_posts')->whereIn('id', $list_check)->update(['deleted_at' => \Carbon\Carbon::now()]);
+                    $data = ['deleted_at' => now()];
+                    $this->cpostRepo->update($data, $list_check);
                     return redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
-                    DB::table('category_posts')->whereIn('id', $list_check)->update(['status' => Constants::PUBLIC]);
+                    $data = ['status' => Constants::PUBLIC];
+                    $this->cpostRepo->update($data, $list_check);
                     return redirect()->route('admin.catPost.list')->with('status',  trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
-                    DB::table('category_posts')->whereIn('id', $list_check)->update(['deleted_at' => Constants::EMPTY]);
+                    $data = ['deleted_at' => Constants::EMPTY];
+                    $this->cpostRepo->update($data, $list_check);
                     return redirect()->route('admin.catPost.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
-                    DB::table('category_posts')->whereIn('id', $list_check)->delete();
+                    $this->cpostRepo->forceDelete($list_check);
                     return redirect()->route('admin.catPost.list')->with('status', trans('notification.force_delete_success'));
                 } else {
                     return redirect()->route('admin.catPost.list')->with('status', trans('notification.not_action'));

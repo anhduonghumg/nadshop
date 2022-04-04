@@ -89,7 +89,7 @@
                                     <th scope="col">Tên</th>
                                     {{-- <th scope="col">Slug</th> --}}
                                     <th scope="col">Danh mục cha</th>
-                                    @if (request()->input('status') == 'trash')
+                                    @if (request()->input('status') == Constants::TRASH)
                                     <th scope="col">Ngày xóa</th>
                                     @else
                                     <th scope="col">Trạng thái</th>
@@ -111,20 +111,21 @@
                                     <th scope="row">{{ $t++ }}</th>
                                     {{-- <td>{{ str_repeat('---', $item->level) . $item->name }}</td> --}}
                                     <td>{{ $item->name }}</td>
-                                    @if ($item->parent_id == 0)
+                                    @if($item->parent_id == 0)
                                     <td>Không có</td>
                                     @else
-                                    <td>{{ Helpers::get_name_parent_cat('category_posts',$item->parent_id,'name')}}</td>
+                                    <td>{{ $item->catPostParent->name}}
+                                    </td>
                                     @endif
-                                    @if(request()->input('status') == 'trash')
+                                    @if(request()->input('status') == Constants::TRASH)
                                     <td>{{ $item->deleted_at }}</td>
-                                    @elseif ($item->status == 'public')
+                                    @elseif ($item->status == Constants::PUBLIC)
                                     <td>Công khai</td>
                                     @else
                                     <td>Chờ duyệt</td>
                                     @endif
                                     <td>{{ $item->fullname }}</td>
-                                    @if (request()->input('status') == 'trash')
+                                    @if (request()->input('status') == Constants::TRASH)
                                     <td>
                                         <a href="{{ route('admin.catPost.edit', ['id' => $item->id]) }}"
                                             class="btn btn-success btn-sm rounded-0 text-white" type="button"

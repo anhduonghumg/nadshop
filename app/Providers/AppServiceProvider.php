@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Page;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,15 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(
             \App\Repositories\Page\PageRepositoryInterface::class,
-            \App\Repositories\page\PageRepository::class
+            \App\Repositories\Page\PageRepository::class,
+        );
+        $this->app->singleton(
+            \App\Repositories\CategoryPost\CategoryPostRepositoryInterface::class,
+            \App\Repositories\CategoryPost\CategoryPostRepository::class,
+        );
+        $this->app->singleton(
+            \App\Repositories\Post\PostRepositoryInterface::class,
+            \App\Repositories\Post\PostRepository::class,
         );
     }
 

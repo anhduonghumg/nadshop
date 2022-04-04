@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryPost extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    protected $table = 'category_posts';
     protected $guarded = [];
 
     function catPostChild()
@@ -32,14 +33,14 @@ class CategoryPost extends Model
         return $this->hasMany('App\models\Post');
     }
 
-    public static function check_parent_post_cat($id)
-    {
-        $postCatALL = CategoryPost::all();
-        $postCat = CategoryPost::find($id);
-        foreach ($postCatALL as $pc) {
-            if ($postCat->id == $pc->parent_id)
-                return true;
-        }
-        return false;
-    }
+    // public static function check_parent_post_cat($id)
+    // {
+    //     $postCatALL = CategoryPost::all();
+    //     $postCat = CategoryPost::find($id);
+    //     foreach ($postCatALL as $pc) {
+    //         if ($postCat->id == $pc->parent_id)
+    //             return true;
+    //     }
+    //     return false;
+    // }
 }
