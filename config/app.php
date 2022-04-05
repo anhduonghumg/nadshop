@@ -232,7 +232,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Constants' => App\Constants\Constants::class,
-        'Helpers' => App\Helpers\Helpers::class,
+        'Category' => App\Helpers\Category::class,
 
     ],
 

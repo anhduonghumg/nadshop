@@ -9,11 +9,18 @@ use Illuminate\Support\Str;
 use App\Constants\Constants;
 use App\Models\CategoryProduct;
 use App\Helpers\Recursive;
-use App\Helpers\Check;
+use App\Helpers\Category;
+use App\Repositories\CategoryProduct\CategoryProductRepositoryInterface;
 
 class AdminCategoryProductController extends Controller
 {
-    use Recursive, Check;
+    use Recursive;
+    protected $cproductRepo;
+
+    public function __construct(CategoryProductRepositoryInterface $cproductRepo)
+    {
+        $this->cproductRepo = $cproductRepo;
+    }
 
     public function add(Request $request)
     {
@@ -29,11 +36,11 @@ class AdminCategoryProductController extends Controller
                 'category_product_status' => $request->input('status'),
                 'parent_id' => $request->input('parent_id'),
                 'user_id' => Auth::id(),
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" => \Carbon\Carbon::now(),
+                "created_at" => now(),
+                "updated_at" => now(),
             ];
 
-            DB::table('category_products')->insert($data);
+            $this->cproductRepo->add($data);
             return back()->with('status', trans('notification.add_success'));
         }
     }
@@ -43,36 +50,19 @@ class AdminCategoryProductController extends Controller
         $status = $request->input('status');
         if (!$status || $status == Constants::ACTIVE) {
             $list_act = ['delete' => 'Xóa'];
-            $category_product = DB::table('category_products')
-                ->join('M_users', 'M_users.id', '=', 'category_products.user_id')
-                ->select('category_products.*', 'm_users.fullname')
-                ->where("category_products.category_product_status", "=", Constants::PUBLIC)
-                ->where("category_products.deleted_at", '=', Constants::EMPTY)
-                ->orderBy('category_products.created_at', 'desc')
-                ->paginate(20);
+            $category_product = $this->cproductRepo->get_list_cat_product_status(Constants::PUBLIC, $paginate = 10, $orderBy = "id");
         } elseif ($status == Constants::TRASH) {
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
-            $category_product = DB::table('category_products')
-                ->join('m_users', 'm_users.id', '=', 'category_products.user_id')
-                ->select('category_products.*', 'm_users.fullname')
-                ->where("category_products.deleted_at", "<>", Constants::EMPTY)
-                ->orderBy('category_products.created_at', 'desc')
-                ->paginate(20);
+            $category_product = $this->cproductRepo->get_list_cat_product_trash($paginate = 10, $orderBy = 'deleted_at');
         } elseif ($status == Constants::PENDING) {
             $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
-            $category_product = DB::table('category_products')
-                ->join('m_users', 'm_users.id', '=', 'category_products.user_id')
-                ->select('category_products.*', 'm_users.fullname')
-                ->where("category_products.category_product_status", "=", Constants::PENDING)
-                ->where("category_products.deleted_at", "=", Constants::EMPTY)
-                ->orderBy('category_products.created_at', 'desc')
-                ->paginate(20);
+            $category_product = $this->cproductRepo->get_list_cat_product_status(Constants::PENDING, $paginate = 10, $orderBy = "id");
         }
 
-        $num_productCat_active = DB::table('category_products')->where('category_product_status', '=', Constants::PUBLIC)->where('deleted_at', '=', Constants::EMPTY)->count();
-        $num_productCat_trash = DB::table('category_products')->where('deleted_at', '<>', Constants::EMPTY)->count();
-        $num_productCat_pending = DB::table('category_products')->where('category_product_status', '=', Constants::PENDING)->where('deleted_at', '=', Constants::EMPTY)->count();
-        $count = [$num_productCat_active, $num_productCat_trash, $num_productCat_pending];
+        $num_productCat_active = $this->cproductRepo->get_num_cat_product_active();
+        $num_productCat_pending = $this->cproductRepo->get_num_cat_product_pending();
+        $num_productCat_trash = $this->cproductRepo->get_num_cat_product_trash();
+        $count = [$num_productCat_active, $num_productCat_pending, $num_productCat_trash];
         $data_cat_product = $this->dataSelect(new CategoryProduct, 'category_product_status', 'category_product_name');
         return view('admin.catProduct.list', compact('list_act', 'category_product', 'count', 'data_cat_product'));
     }
@@ -80,7 +70,7 @@ class AdminCategoryProductController extends Controller
     public function edit($id)
     {
         if ($id != null) {
-            $catProduct = DB::table('category_products')->where('id', $id)->first();
+            $catProduct = $this->cproductRepo->get_cat_product_by_id($id, ['id', 'category_product_name', 'parent_id']);
             $data_cat_product = $this->dataSelect(new CategoryProduct, 'category_product_status', 'category_product_name');
             return view('admin.catProduct.edit', compact('catProduct', 'data_cat_product'));
         }
@@ -99,10 +89,10 @@ class AdminCategoryProductController extends Controller
                 'category_product_name' => $request->category_product_name,
                 'slug' => Str::slug($request->category_product_name),
                 'parent_id' => $request->parent_id,
-                "updated_at" => \Carbon\Carbon::now(),
+                "updated_at" => now(),
             ];
 
-            DB::table('category_products')->where('id', $id)->update($data);
+            $this->cproductRepo->update($data, $id);
             return redirect()->route('admin.catProduct.list')->with('status', trans('notification.update_success'));
         }
     }
@@ -110,25 +100,18 @@ class AdminCategoryProductController extends Controller
     public function delete($id)
     {
         if ($id != null) {
-            $catProduct = DB::table('category_products')->where('id', $id)->first();
-            if ($catProduct->category_product_status == Constants::PENDING) {
-                DB::table('category_posts')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
-            } elseif ($this->check_parent_cat('category_products', $id)) {
-                return redirect()->route('admin.catProduct.list')->with('status', trans('notification.delete_cat_child'));
-            } else {
-                DB::table('category_products')->where('id', $id)->update(['deleted_at' => \Carbon\Carbon::now()]);
-            }
+            $data = ['deleted_at' => now()];
+            $this->cproductRepo->delete($data, $id);
             return redirect()->route('admin.catProduct.list')->with('status', trans('notification.delete_success'));
         } else {
             return redirect()->route('admin.catProduct.list')->with('status', trans('notification.no_data'));
         }
     }
 
-
     public function forceDelete($id)
     {
         if ($id != null) {
-            DB::table('category_products')->where('id', $id)->delete();
+            $this->cproductRepo->forceDelete($id);
             return redirect()->route('admin.catProduct.list')->with('status', trans('notification.force_delete_success'));
         } else {
             return redirect()->route('admin.catProduct.list')->with('status', trans('notification.no_data'));
@@ -139,26 +122,29 @@ class AdminCategoryProductController extends Controller
     {
         if ($request->has('btn_action')) {
             $list_check = $request->input('list_check');
-            if (!empty($list_check)) {
+            if ($list_check != null) {
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
-                    DB::table('category_products')->whereIn('id', $list_check)->update(['deleted_at' => \Carbon\Carbon::now()]);
+                    $data = ['deleted_at' => now()];
+                    $this->cproductRepo->update($data, $list_check);
                     return redirect()->route('admin.catProduct.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
-                    DB::table('category_products')->whereIn('id', $list_check)->update(['category_product_status' => Constants::PUBLIC]);
-                    return redirect()->route('admin.catProduct.list')->with('status', trans('notification.active_success'));
+                    $data = ['category_product_status' => Constants::PUBLIC];
+                    $this->cproductRepo->update($data, $list_check);
+                    return redirect()->route('admin.catProduct.list')->with('status',  trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
-                    DB::table('category_products')->whereIn('id', $list_check)->update(['deleted_at' => Constants::EMPTY]);
+                    $data = ['deleted_at' => Constants::EMPTY];
+                    $this->cproductRepo->update($data, $list_check);
                     return redirect()->route('admin.catProduct.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
-                    DB::table('category_products')->whereIn('id', $list_check)->delete();
+                    $this->cproductRepo->forceDelete($list_check);
                     return redirect()->route('admin.catProduct.list')->with('status', trans('notification.force_delete_success'));
+                } else {
+                    return redirect()->route('admin.catProduct.list')->with('status', trans('notification.not_action'));
                 }
             } else {
-                return redirect()->route('admin.catProduct.list')->with('status', trans('notification.not_action'));
+                return redirect()->route('admin.catProduct.list')->with('status', trans('notification.not_element'));
             }
-        } else {
-            return redirect()->route('admin.catProduct.list')->with('status', trans('notification.not_element'));
         }
     }
 }

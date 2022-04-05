@@ -89,7 +89,7 @@
                             @endif
                             <td>{{ $item->fullname }}</td>
                             <td>{{ $item->created_at }}</td>
-                            @if (request()->input('status') == 'trash')
+                            @if (request()->input('status') == Constants::TRASH)
                             <td>
                                 <a href="{{ route('admin.post.edit', ['id' => $item->id]) }}"
                                     class="btn btn-success btn-sm rounded-0 text-white" type="button"

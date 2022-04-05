@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-
 trait ImageUpload
 {
     public function ImageUpload($file, $folderName)

@@ -8,44 +8,33 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Constants\Constants;
 use App\Models\Brand;
+use App\Repositories\Brand\BrandRepositoryInterface;
 
 class AdminBrandController extends Controller
 {
+    protected $brandRepo;
+    public function __construct(BrandRepositoryInterface $brandRepo)
+    {
+        $this->brandRepo = $brandRepo;
+    }
 
     public function list(Request $request)
     {
         $status = $request->input('status');
         if (!$status || $status == Constants::ACTIVE) {
             $list_act = ['delete' => 'Xóa'];
-            $list_brands = DB::table('brands')
-                ->join('m_users', 'm_users.id', '=', 'brands.user_id')
-                ->select('brands.*', 'm_users.fullname')
-                ->where('brands.status', '=', Constants::PUBLIC)
-                ->where('brands.deleted_at', '=', Constants::EMPTY)
-                ->orderBy('created_at', 'desc')
-                ->paginate(20);
+            $list_brands = $this->brandRepo->get_list_brands_status(Constants::PUBLIC, $paginate = 10, $orderBy = "id");
         } elseif ($status == Constants::PENDING) {
             $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
-            $list_brands = DB::table('brands')
-                ->join('m_users', 'm_users.id', '=', 'brands.user_id')
-                ->select('brands.*', 'm_users.fullname')
-                ->where('brands.status', '=', Constants::PENDING)
-                ->where('brands.deleted_at', '=', Constants::EMPTY)
-                ->orderBy('created_at', 'desc')
-                ->paginate(20);
+            $list_brands = $this->brandRepo->get_list_brands_status(Constants::PENDING, $paginate = 10, $orderBy = "id");
         } elseif ($status == Constants::TRASH) {
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
-            $list_brands = DB::table('brands')
-                ->join('m_users', 'm_users.id', '=', 'brands.user_id')
-                ->select('brands.*', 'm_users.fullname')
-                ->where('brands.deleted_at', '<>', Constants::EMPTY)
-                ->orderBy('created_at', 'desc')
-                ->paginate(20);
+            $list_brands = $this->brandRepo->get_list_brands_trash($paginate = 10, $orderBy = 'deleted_at');
         }
 
-        $num_brand_active = DB::table('brands')->where('status', '=', Constants::PUBLIC)->where('deleted_at', '=', Constants::EMPTY)->count();
-        $num_brand_trash = DB::table('brands')->where('deleted_at', '<>', Constants::EMPTY)->count();
-        $num_brand_pending = DB::table('brands')->where('status', '=', Constants::PENDING)->where('deleted_at', '=', Constants::EMPTY)->count();
+        $num_brand_active = $this->brandRepo->get_num_brand_active();
+        $num_brand_trash = $this->brandRepo->get_num_brand_trash();
+        $num_brand_pending = $this->brandRepo->get_num_brand_pending();
         $count = [$num_brand_active, $num_brand_trash, $num_brand_pending];
 
         return view('admin.brand.list', compact('list_brands', 'count', 'list_act'));
@@ -64,11 +53,11 @@ class AdminBrandController extends Controller
                 'slug' => Str::slug($request->input('brand_name')),
                 'status' => $request->input('status'),
                 'user_id' => Auth::id(),
-                "created_at" =>  \Carbon\Carbon::now(),
-                "updated_at" => \Carbon\Carbon::now(),
+                "created_at" =>  now(),
+                "updated_at" => now(),
             ];
 
-            DB::table('brands')->insert($data);
+            $this->brandRepo->add($data);
             return back()->with('status', trans('notification.add_success'));
         }
     }
@@ -76,7 +65,7 @@ class AdminBrandController extends Controller
     public function edit($id)
     {
         if ($id != null) {
-            $brand = DB::table('brands')->where('id', $id)->first();
+            $brand = $this->brandRepo->get_brand_by_id($id, ['id', 'brand_name']);
             return view('admin.brand.edit', compact('brand'));
         }
     }
@@ -92,10 +81,10 @@ class AdminBrandController extends Controller
             $data = [
                 'brand_name' => $request->input('brand_name'),
                 'slug' => Str::slug($request->input('brand_name')),
-                "updated_at" => \Carbon\Carbon::now(),
+                "updated_at" => now(),
             ];
 
-            DB::table('brands')->where('id', $id)->update($data);
+            $this->brandRepo->update($data, $id);
             return redirect()->route('admin.brand.list')->with('status', trans('notification.update_success'));
         }
     }
@@ -104,30 +93,44 @@ class AdminBrandController extends Controller
     {
         if ($id != null) {
             $data = [
-                'deleted_at' => \Carbon\Carbon::now(),
+                'deleted_at' => now(),
             ];
 
-            DB::table('brands')->where('id', $id)->update($data);
+            $this->brandRepo->update($data, $id);
             return redirect()->route('admin.brand.list')->with('status', trans('notification.delete_success'));
         }
     }
+
+    public function forceDelete($id)
+    {
+        if ($id != null) {
+            $this->brandRepo->forceDelete($id);
+            return back()->with('status', trans('notification.force_delete_success'));
+        } else {
+            return back()->with('status', trans('notification.no_data'));
+        }
+    }
+
     public function action(Request $request)
     {
         if ($request->has('btn_action')) {
             $list_check = $request->input('list_check');
-            if (!empty($list_check)) {
+            if ($list_check != null) {
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
-                    DB::table('brands')->whereIn('id', $list_check)->update(['deleted_at' => \Carbon\Carbon::now()]);
+                    $data = ['deleted_at' => now()];
+                    $this->brandRepo->update($data, $list_check);
                     return back()->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
-                    DB::table('brands')->whereIn('id', $list_check)->update(['status' => Constants::PUBLIC]);
+                    $data = ['status' => Constants::PUBLIC];
+                    $this->brandRepo->update($data, $list_check);
                     return back()->with('status', trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
-                    DB::table('brands')->whereIn('id', $list_check)->update(['deleted_at' => Constants::EMPTY]);
+                    $data = ['deleted_at' => Constants::EMPTY];
+                    $this->brandRepo->update($data, $list_check);
                     return back()->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
-                    DB::table('brands')->whereIn('id', $list_check)->delete();
+                    $this->brandRepo->forceDelete($list_check);
                     return back()->with('status', trans('notification.force_delete_success'));
                 } else {
                     return back()->with('status', trans('notification.not_action'));

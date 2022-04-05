@@ -6,7 +6,6 @@ use App\Constants\Constants;
 
 trait Recursive
 {
-
     public function recursive($data, $parent_id = 0, $level = 0)
     {
         $result = [];
@@ -31,7 +30,7 @@ trait Recursive
 
         foreach ($dataModels as $data) {
             if ($data[$column] == Constants::PUBLIC && $data['deleted_at'] == Constants::EMPTY)
-                $data_select[$data->id] = str_repeat('|---', $data->level) . $data->$field_name;
+                $data_select[$data->id] = str_repeat('|---', $data->level) . $data[$field_name];
         }
 
         return $data_select;

@@ -101,14 +101,14 @@
                                     <td scope>{{ $item->brand_name }}</td>
                                     <td>{{ $item->fullname }}</td>
                                     <td>{{ $item->created_at }}</td>
-                                    @if(request()->input('status') == 'trash')
+                                    @if(request()->input('status') == Constants::TRASH)
                                     <td>{{ $item->deleted_at }}</td>
                                     @elseif ($item->status == 'public')
                                     <td>Công khai</td>
                                     @else
                                     <td>Chờ duyệt</td>
                                     @endif
-                                    @if (request()->input('status') == 'trash')
+                                    @if (request()->input('status') == Constants::TRASH)
                                     <td>
                                         <a href="{{ route('admin.brand.edit', ['id' => $item->id]) }}"
                                             class="btn btn-success btn-sm rounded-0 text-white" type="button"

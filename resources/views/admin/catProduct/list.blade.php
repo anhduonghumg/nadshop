@@ -64,9 +64,9 @@
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
                             hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chờ
-                            duyệt<span class="text-muted">({{ $count[2] }}) |</span></a>
+                            duyệt<span class="text-muted">({{ $count[1] }}) |</span></a>
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
-                            hóa<span class="text-muted">({{ $count[1] }})</span></a>
+                            hóa<span class="text-muted">({{ $count[2] }})</span></a>
                     </div>
                     <form action="{{ url('admin/product/cat/action') }}" method="POST">
                         @csrf
@@ -89,7 +89,7 @@
                                     <th scope="col">Tên</th>
                                     {{-- <th scope="col">Slug</th> --}}
                                     <th scope="col">Danh mục cha</th>
-                                    @if (request()->input('status') == 'trash')
+                                    @if (request()->input('status') == Constants::TRASH)
                                     <th scope="col">Ngày xóa</th>
                                     @else
                                     <th scope="col">Trạng thái</th>
@@ -97,7 +97,7 @@
                                     <th scope="col">Người tạo</th>
                                     <th scope="col">Tác vụ</th>
                                 </tr>
-                            </thead>
+                            </thead
                             <tbody>
                                 @if ($category_product->total() > 0)
                                 @php
@@ -115,18 +115,19 @@
                                     <td>Không có</td>
                                     @else
                                     <td>{{
-                                        Helpers::get_name_parent_cat('category_products',$item->parent_id,'category_product_name')}}
+                                        Category::getNameParent('category_products',"{$item->parent_id}","category_product_name")
+                                        }}
                                     </td>
                                     @endif
-                                    @if(request()->input('status') == 'trash')
+                                    @if(request()->input('status') == Constants::TRASH)
                                     <td>{{ $item->deleted_at }}</td>
-                                    @elseif ($item->category_product_status == 'public')
+                                    @elseif ($item->category_product_status == Constants::PUBLIC)
                                     <td>Công khai</td>
                                     @else
                                     <td>Chờ duyệt</td>
                                     @endif
                                     <td>{{ $item->fullname }}</td>
-                                    @if (request()->input('status') == 'trash')
+                                    @if (request()->input('status') == Constants::TRASH)
                                     <td>
                                         <a href="{{ route('admin.catProduct.edit', ['id' => $item->id]) }}"
                                             class="btn btn-success btn-sm rounded-0 text-white" type="button"
@@ -164,7 +165,7 @@
                             </tbody>
                         </table>
                     </form>
-                    {{-- {{ $category_post->links('layouts.paginationlink') }} --}}
+                    {{ $category_product->links('layouts.paginationlink') }}
                 </div>
             </div>
         </div>

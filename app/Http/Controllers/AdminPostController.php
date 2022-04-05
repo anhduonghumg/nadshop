@@ -17,7 +17,7 @@ use App\Repositories\Post\PostRepositoryInterface;
 
 class AdminPostController extends Controller
 {
-    use ImageUpload, Recursive, Number;
+    use ImageUpload, Recursive;
 
     protected $postRepo;
     public function __construct(PostRepositoryInterface $postRepo)
@@ -96,7 +96,7 @@ class AdminPostController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $post = $this->postRepo->get_post_by_id($id);
+        $post = $this->postRepo->get_post_by_id($id, ['title', 'desc', 'content', 'thumbnail', 'post_cat_id']);
 
         $data_cat_post = $this->dataSelect(new CategoryPost);
         return view('admin.post.edit', compact('post', 'data_cat_post'));
@@ -125,7 +125,7 @@ class AdminPostController extends Controller
                     'desc' => $request->input('desc'),
                     'content' => $request->input('content'),
                     'post_cat_id' => $request->input('category_post'),
-                    'updated_at' => \Carbon\Carbon::now(),
+                    'updated_at' => now(),
                 ];
 
                 if ($request->hasFile('thumbnail')) {
@@ -163,27 +163,26 @@ class AdminPostController extends Controller
         }
     }
 
-
     public function action(Request $request)
     {
         if ($request->has('btn_action')) {
             $list_check = $request->input('list_check');
-            if (!empty($list_check)) {
+            if ($list_check != null) {
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
-                    $data = [
-                        'deleted_at' => now()
-                    ];
-                    $this->postRepo->delete($data, $list_check);
+                    $data = ['deleted_at' => now()];
+                    $this->postRepo->update($data, $list_check);
                     return redirect()->route('admin.post.list')->with('status', trans('notification.delete_success'));
                 } elseif ($act == Constants::ACTIVE) {
-                    DB::table('posts')->whereIn('id', $list_check)->update(['status' => Constants::PUBLIC]);
+                    $data = ['status' => Constants::PUBLIC];
+                    $this->postRepo->update($data, $list_check);
                     return redirect()->route('admin.post.list')->with('status', trans('notification.active_success'));
                 } elseif ($act == Constants::RESTORE) {
-                    DB::table('posts')->whereIn('id', $list_check)->update(['deleted_at' => Constants::EMPTY]);
+                    $data = ['deleted_at' => Constants::EMPTY];
+                    $this->postRepo->update($data, $list_check);
                     return redirect()->route('admin.post.list')->with('status', trans('notification.restore_success'));
                 } elseif ($act == Constants::FORCE_DELETE) {
-                    DB::table('posts')->whereIn('id', $list_check)->delete();
+                    $this->postRepo->forceDelete($list_check);
                     return redirect()->route('admin.post.list')->with('status', trans('notification.force_delete_success'));
                 } else {
                     return redirect()->route('admin.post.list')->with('status', trans('notification.not_action'));

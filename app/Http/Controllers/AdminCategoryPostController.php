@@ -72,7 +72,7 @@ class AdminCategoryPostController extends Controller
 
     public function edit($id)
     {
-        $catPost = $this->cpostRepo->get_cat_post_by_id($id, ['id', 'name']);
+        $catPost = $this->cpostRepo->get_cat_post_by_id($id, ['id', 'name', 'parent_id']);
         $data_cat_post = $this->dataSelect(new CategoryPost);
         return view('admin.catPost.edit', compact('catPost', 'data_cat_post'));
     }
@@ -89,7 +89,7 @@ class AdminCategoryPostController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'parent_id' => $request->parent_id,
-            "updated_at" => \Carbon\Carbon::now(),
+            "updated_at" => now(),
         ];
 
         $this->cpostRepo->update($data, $id);
@@ -128,8 +128,8 @@ class AdminCategoryPostController extends Controller
     public function action(Request $request)
     {
         if ($request->has('btn_action')) {
-            $list_check = collect($request->input('list_check'));
-            if ($list_check->isNotEmpty()) {
+            $list_check = $request->input('list_check');
+            if ($list_check != null) {
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
                     $data = ['deleted_at' => now()];

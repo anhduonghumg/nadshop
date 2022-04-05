@@ -26,6 +26,18 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Post\PostRepositoryInterface::class,
             \App\Repositories\Post\PostRepository::class,
         );
+        $this->app->singleton(
+            \App\Repositories\CategoryProduct\CategoryProductRepositoryInterface::class,
+            \App\Repositories\CategoryProduct\CategoryProductRepository::class,
+        );
+        $this->app->singleton(
+            \App\Repositories\Brand\BrandRepositoryInterface::class,
+            \App\Repositories\Brand\BrandRepository::class,
+        );
+        $this->app->singleton(
+            \App\Repositories\User\UserRepositoryInterface::class,
+            \App\Repositories\User\UserRepository::class,
+        );
     }
 
     /**

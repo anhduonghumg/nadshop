@@ -12,9 +12,9 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         return \App\Models\Post::class;
     }
 
-    public function get_post_by_id($id)
+    public function get_post_by_id($id, $select = ['*'])
     {
-        $post = $this->model->select('id', 'title', 'desc', 'content', 'thumbnail')
+        $post = $this->model->select($select)
             ->firstWhere('id', $id);
         return $post;
     }
@@ -23,8 +23,8 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     {
         $post = $this->model
             ->leftjoin('m_users', 'm_users.id', '=', 'posts.user_id')
-            ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.user_id')
-            ->select('posts.id', 'posts.title', 'posts.status', 'm_users.fullname', 'category_posts.name', 'posts.deleted_at')
+            ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
+            ->select('posts.id', 'posts.title', 'posts.status', 'posts.thumbnail', 'm_users.fullname', 'category_posts.name', 'posts.deleted_at')
             ->where('posts.deleted_at', '<>', Constants::EMPTY)
             ->where('posts.title', 'LIKE', "%{$key}%")
             ->orderByDesc("posts.{$orderBy}")
@@ -34,16 +34,16 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
 
     public function get_list_posts_status($status, $key = "", $paginate = 10, $orderBy = 'id')
     {
-        $page = $this->model
+        $post = $this->model
             ->leftjoin('m_users', 'm_users.id', '=', 'posts.user_id')
-            ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.user_id')
-            ->select('posts.id', 'posts.title', 'posts.status', 'm_users.fullname', 'category_posts.name', 'posts.created_at')
+            ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
+            ->select('posts.id', 'posts.title', 'posts.status', 'posts.thumbnail', 'm_users.fullname', 'category_posts.name', 'posts.created_at')
             ->where('posts.status', "{$status}")
             ->where('posts.deleted_at', '=', Constants::EMPTY)
             ->where('posts.title', 'LIKE', "%{$key}%")
             ->orderByDesc("posts.{$orderBy}")
             ->paginate($paginate);
-        return $page;
+        return $post;
     }
 
     public function get_num_post_active()

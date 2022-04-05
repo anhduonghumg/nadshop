@@ -14,7 +14,7 @@
                 </div>
                 @endif
                 <div class="card-body">
-                    <form action="{{ url("admin/product/cat/update/$catProduct->id") }}" method="POST">
+                    <form action="{{ route('admin.catProduct.update',['id' => $catProduct->id]) }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label for="category_product_name">Tên danh mục</label>

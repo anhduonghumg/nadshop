@@ -34,8 +34,7 @@
                 <div class="form-group">
                     <label for="thumbnail">Ảnh bài viết</label>
                     <input id="img" type="file" name="thumbnail" class="form-control d-none" onchange="changeImg(this)">
-                    <img id="avatar" class="img-thumbnail d-block" width="200px"
-                        src="{{ asset('storage/app/public/images/upload_img.png') }}">
+                    <img id="avatar" class="img-thumbnail d-block" width="200px" src="{{ asset($post->thumbnail) }}">
                     @error('thumbnail')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror

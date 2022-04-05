@@ -138,8 +138,8 @@ class AdminPageController extends Controller
     public function action(Request $request)
     {
         if ($request->has('btn_action')) {
-            $list_check = collect($request->input('list_check'));
-            if ($list_check->isNotEmpty()) {
+            $list_check = $request->input('list_check');
+            if ($list_check != null) {
                 $act = $request->input('act');
                 if ($act == Constants::DELETE) {
                     $data = ['deleted_at' => now()];
