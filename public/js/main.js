@@ -30,7 +30,7 @@ $(document).ready(function () {
                     `<li class="nav-item" role="presentation">
                 <a class="nav-link" id="${tabId}-tab" data-toggle="tab" href="#${tabId}" role="tab"
                     aria-selected="true">Product-${COUNT_TAB_WORK}</a>
-                    <span class="remove-product-tab d-none"><i class="fa fa-times" aria-hidden="true"></i>
+                    <span class="remove-product-tab"><i class="fa fa-times" aria-hidden="true"></i>
                     </span>
             </li>`
                 );
@@ -40,6 +40,21 @@ $(document).ready(function () {
             $(".nav-tabs li:nth-child(" + id + ") a").click();
             addAttrForItem(tabId);
         }
+    });
+
+    $(".nav-tabs").on("click", "span", function () {
+        var anchor = $(this).siblings('a');
+        $(anchor.attr('href')).remove();
+        $(this).parent().remove();
+        $(".nav-tabs li").children('a').first().click();
+    });
+
+    $('#myModal').on('hidden.bs.modal', function () {
+        $('#myModal form')[0].reset();
+    });
+
+    $('.modal-dialog').draggable({
+        handle: ".modal-header"
     });
 });
 

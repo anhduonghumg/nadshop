@@ -72,7 +72,7 @@ class AdminUserController extends Controller
     public function edit(Request $request, $id)
     {
         $id = $request->id;
-        $user = $this->userRepo->get_user_by_id($id, ['id', 'fullname', 'username', 'phone', 'email', 'role_id', 'created_at']);
+        $user = $this->userRepo->get_user_by_id($id, ['id', 'fullname', 'username', 'phone', 'email', 'role_id', 'password', 'created_at']);
         return view('admin.user.edit', compact('user'));
     }
 
@@ -100,7 +100,7 @@ class AdminUserController extends Controller
         if (Auth::id() != $id) {
             $data = ['deleted_at' => now()];
             $this->userRepo->delete($data, $id);
-            return redirect()->route('admin.user.list')->with('status',  trans('notification.delete'));
+            return redirect()->route('admin.user.list')->with('status',  trans('notification.delete_success'));
         } else {
             return redirect()->route('admin.user.list')->with('status', trans('notification.delete_yourself'));
         }
@@ -110,7 +110,7 @@ class AdminUserController extends Controller
     {
         if (Auth::id() != $id) {
             $this->userRepo->forceDelete($id);
-            return redirect()->route('admin.user.list')->with('status', trans('notification.forceDelete'));
+            return redirect()->route('admin.user.list')->with('status', trans('notification.force_delete_success'));
         }
         return redirect()->route('admin.user.list')->with('status', trans('notification.delete_yourself'));
     }
@@ -141,7 +141,7 @@ class AdminUserController extends Controller
     public function profile()
     {
         $id = Auth::id();
-        $user = M_user::find($id);
+        $user = $this->userRepo->get_user_by_id($id, ['id', 'fullname', 'username', 'email', 'phone', 'created_at']);
         return view('admin.user.profile', compact('user'));
     }
     public function profileUpdate(Request $request, $id)
@@ -154,21 +154,20 @@ class AdminUserController extends Controller
                 ],
             );
 
-            M_user::where('id', $id)->update([
+            $data = [
                 'fullname' => $request->input('fullname'),
                 'phone' => $request->input('phone'),
-            ]);
-
+            ];
+            $this->userRepo->update($data, $id);
             return redirect()->route('admin.user.list')->with('status', trans('notification.update_success'));
-        } else {
-            return redirect('dashboard');
         }
+        return redirect('dashboard');
     }
 
     public function changePass(Request $request)
     {
         $id = Auth::id();
-        $user = M_user::find($id);
+        $user = $this->userRepo->get_user_by_id($id, ['id', 'password']);
         return view('admin.user.changePass', compact('user'));
     }
 
@@ -184,9 +183,10 @@ class AdminUserController extends Controller
             if (Hash::check($request->password, $current_pass->password)) {
                 return redirect()->back()->with('status', trans('notification.change_pass_fail'));
             } else {
-                M_user::where('id', $id)->update([
+                $data = [
                     'password' => Hash::make($request->input('password')),
-                ]);
+                ];
+                $this->userRepo->update($data, $id);
                 return redirect()->route('admin.user.list')->with('status', trans('notification.change_pass_success'));
             }
         } else {

@@ -12,5 +12,5 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function get_list_users_status($key, $paginate, $orderBy);
     public function get_num_user_trash();
     public function get_num_user_active();
-    public function get_num_user_pending();
+    // public function get_num_user_pending();
 }

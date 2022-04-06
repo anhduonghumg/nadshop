@@ -12,5 +12,5 @@ class Constants
     const DELETE = 'delete';
     const RESTORE = 'restore';
     const FORCE_DELETE = 'forceDelete';
-    const EMPTY = null;
+    const EMPTY = NULL;
 }
