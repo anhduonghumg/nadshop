@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/product/update/{id}', [App\Http\Controllers\AdminProductController::class, 'update'])->name('admin.product.update');
     Route::get('/admin/product/delete/{id}', [App\Http\Controllers\AdminProductController::class, 'delete'])->name('admin.product.delete');
     Route::get('/admin/product/forceDelete/{id}', [App\Http\Controllers\AdminProductController::class, 'forceDelete'])->name('admin.product.forceDelete');
-    Route::post('/admin/product/action', [App\Http\Controllers\AdminBrandController::class, 'action'])->name('admin.product.action');
+    Route::post('/admin/product/action', [App\Http\Controllers\AdminProductController::class, 'action'])->name('admin.product.action');
 
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
@@ -99,6 +99,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/brand/delete/{id}', [App\Http\Controllers\AdminBrandController::class, 'delete'])->name('admin.brand.delete');
     Route::get('/admin/brand/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.brand.forceDelete');
     Route::post('/admin/brand/action', [App\Http\Controllers\AdminBrandController::class, 'action'])->name('admin.brand.action');
+
+    // Admin/color
+    Route::get('/admin/color/list', [App\Http\Controllers\AdminColorController::class, 'list'])->name('admin.color.list');
+    Route::post('/admin/color/add', [App\Http\Controllers\AdminColorController::class, 'add'])->name('admin.color.add');
+    Route::get('/admin/color/edit/{id}', [App\Http\Controllers\AdminColorController::class, 'edit'])->name('admin.color.edit');
+    Route::post('/admin/color/update/{id}', [App\Http\Controllers\AdminColorController::class, 'update'])->name('admin.color.update');
+    Route::get('/admin/color/delete/{id}', [App\Http\Controllers\AdminColorController::class, 'delete'])->name('admin.color.delete');
+    // Route::get('/admin/brand/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.brand.forceDelete');
+    Route::post('/admin/color/action', [App\Http\Controllers\AdminColorController::class, 'action'])->name('admin.color.action');
+
+    // Admin/size
+    Route::get('/admin/size/list', [App\Http\Controllers\AdminSizeController::class, 'list'])->name('admin.size.list');
+    Route::post('/admin/size/add', [App\Http\Controllers\AdminSizeController::class, 'add'])->name('admin.size.add');
+    Route::get('/admin/sỉze/edit/{id}', [App\Http\Controllers\AdminSizeController::class, 'edit'])->name('admin.size.edit');
+    Route::post('/admin/size/update/{id}', [App\Http\Controllers\AdminSizeController::class, 'update'])->name('admin.size.update');
+    Route::get('/admin/size/delete/{id}', [App\Http\Controllers\AdminSizeController::class, 'delete'])->name('admin.size.delete');
+    // Route::get('/admin/size/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.color.forceDelete');
+    Route::post('/admin/size/action', [App\Http\Controllers\AdminSizeController::class, 'action'])->name('admin.size.action');
+
 
     // helper
     Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');

@@ -140,11 +140,12 @@
                         </a>
                         <i class="arrow fas fa-angle-down"></i>
                         <ul class="sub-menu">
-                            <li><a href="{{ url('admin/product/add') }}">Thêm mới</a></li>
-                            {{-- <li><a href="{{ url('admin/product/add') }}">Thêm sản phẩm chi tiết</a></li> --}}
-                            <li><a href="{{ url('admin/product/list') }}">Danh sách</a></li>
-                            <li><a href="{{ url('admin/product/cat/list') }}">Danh mục</a></li>
+                            <li><a href="{{ route('admin.product.add') }}">Thêm mới</a></li>
+                            <li><a href="{{ route('admin.product.list') }}">Danh sách</a></li>
+                            <li><a href="{{ route('admin.catProduct.list') }}">Danh mục</a></li>
                             <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
+                            <li><a href="{{ route('admin.color.list') }}">Màu</a></li>
+                            <li><a href="{{ route('admin.size.list') }}">Size</a></li>
                         </ul>
                     </li>
                     <li class="nav-link">

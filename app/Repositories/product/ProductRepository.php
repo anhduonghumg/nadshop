@@ -21,36 +21,37 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function get_list_products_trash($key = "", $paginate = 10, $orderBy = 'deleted_at')
     {
-        // $post = $this->model
-        //     ->leftjoin('m_users', 'm_users.id', '=', 'products.user_id')
-        //     ->leftjoin('brands', 'brands.id', '=', 'products.brand_id')
-        //     ->leftJoin('category_products', 'category_products.id', '=', 'products.product_cat_id')
-        //     ->select('products.id', 'products.title', 'posts.status', 'posts.thumbnail', 'm_users.fullname', 'category_posts.name', 'posts.deleted_at')
-        //     ->where('posts.deleted_at', '<>', Constants::EMPTY)
-        //     ->where('posts.title', 'LIKE', "%{$key}%")
-        //     ->orderByDesc("posts.{$orderBy}")
-        //     ->paginate($paginate);
-        // return $post;
+        $product = $this->model
+            ->leftjoin('m_users', 'm_users.id', '=', 'products.user_id')
+            ->leftjoin('brands', 'brands.id', '=', 'products.brand_id')
+            ->leftJoin('category_products', 'category_products.id', '=', 'products.product_cat_id')
+            ->select('products.id', 'products.product_name', 'products.product_status', 'products.product_thumb', 'm_users.fullname', 'category_products.category_product_name', 'products.created_at', 'products.deleted_at')
+            ->where('products.deleted_at', '<>', Constants::EMPTY)
+            ->where('products.product_name', 'LIKE', "%{$key}%")
+            ->orderByDesc("products.{$orderBy}")
+            ->paginate($paginate);
+        return $product;
     }
 
     public function get_list_products_status($status, $key = "", $paginate = 10, $orderBy = 'id')
     {
-        // $post = $this->model
-        //     ->leftjoin('m_users', 'm_users.id', '=', 'posts.user_id')
-        //     ->leftjoin('category_posts', 'category_posts.id', '=', 'posts.post_cat_id')
-        //     ->select('posts.id', 'posts.title', 'posts.status', 'posts.thumbnail', 'm_users.fullname', 'category_posts.name', 'posts.created_at')
-        //     ->where('posts.status', "{$status}")
-        //     ->where('posts.deleted_at', '=', Constants::EMPTY)
-        //     ->where('posts.title', 'LIKE', "%{$key}%")
-        //     ->orderByDesc("posts.{$orderBy}")
-        //     ->paginate($paginate);
-        // return $post;
+        $product = $this->model
+            ->leftjoin('m_users', 'm_users.id', '=', 'products.user_id')
+            ->leftjoin('brands', 'brands.id', '=', 'products.brand_id')
+            ->leftJoin('category_products', 'category_products.id', '=', 'products.product_cat_id')
+            ->select('products.id', 'products.product_name', 'products.product_status', 'products.product_thumb', 'm_users.fullname', 'category_products.category_product_name', 'products.created_at')
+            ->where('products.product_status', "{$status}")
+            ->where('products.deleted_at', '=', Constants::EMPTY)
+            ->where('products.product_name', 'LIKE', "%{$key}%")
+            ->orderByDesc("products.{$orderBy}")
+            ->paginate($paginate);
+        return $product;
     }
 
     public function get_num_product_active()
     {
         $num = $this->model
-            ->where('status', Constants::PUBLIC)
+            ->where('product_status', Constants::PUBLIC)
             ->where('deleted_at', Constants::EMPTY)
             ->count();
         return $num;
@@ -64,7 +65,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function get_num_product_pending()
     {
-        $num = $this->model->where('status', Constants::PENDING)->where('deleted_at', Constants::EMPTY)->count();
+        $num = $this->model->where('product_status', Constants::PENDING)->where('deleted_at', Constants::EMPTY)->count();
         return $num;
     }
 }

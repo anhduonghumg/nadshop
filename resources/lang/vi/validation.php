@@ -170,7 +170,12 @@ return [
         'category_post' => 'danh mục bài viết',
         'category_product_name' => 'tên danh mục',
         'brand_name' => 'tên thương hiệu',
-        'page_name' => 'tên trang'
+        'page_name' => 'tên trang',
+        'product_name' => 'tên sản phẩm',
+        'product_desc' => 'mô tả sản phẩm',
+        'product_content' => 'nội dung sản phẩm',
+        'brand' => 'nhãn hàng',
+        'category_product' => 'danh mục sản phẩm',
+        'product_thumb' => 'ảnh sản phẩm'
     ],
-
 ];

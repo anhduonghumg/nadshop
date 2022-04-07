@@ -7,7 +7,7 @@
             Thêm bài viết
         </div>
         <div class="card-body">
-            <form action="{{ url('admin/post/store') }}" method='POST' enctype='multipart/form-data'>
+            <form action="{{ route('admin.post.store') }}" method='POST' enctype='multipart/form-data'>
                 @csrf
                 <div class="form-group">
                     <label for="title">Tiêu đề bài viết</label>

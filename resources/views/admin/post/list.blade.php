@@ -55,7 +55,7 @@
                             <th scope="col">Danh mục</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Người tạo</th>
-                            @if(request()->input('status') == 'trash')
+                            @if(request()->input('status') == Constants::TRASH)
                             <th scope="col">Ngày xóa</th>
                             @else
                             <th scope="col">Ngày tạo</th>

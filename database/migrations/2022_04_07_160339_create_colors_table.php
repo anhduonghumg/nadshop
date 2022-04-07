@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserIdToBrandTable extends Migration
+class CreateColorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddUserIdToBrandTable extends Migration
      */
     public function up()
     {
-        Schema::table('brands', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->after('status');
+        Schema::create('colors', function (Blueprint $table) {
+            $table->id();
+            $table->string('color_name', 50);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AddUserIdToBrandTable extends Migration
      */
     public function down()
     {
-        Schema::table('brands', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('colors');
     }
 }
