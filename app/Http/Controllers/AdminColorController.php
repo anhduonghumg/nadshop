@@ -93,6 +93,4 @@ class AdminColorController extends Controller
             }
         }
     }
-
-    
 }

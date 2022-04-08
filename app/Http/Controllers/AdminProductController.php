@@ -9,6 +9,8 @@ use App\Models\Brand;
 use App\Helpers\ImageUpload;
 use App\Helpers\Recursive;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Color\ColorRepositoryInterface;
+use App\Repositories\Size\SizeRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -16,10 +18,14 @@ class AdminProductController extends Controller
 {
     use ImageUpload, Recursive;
     protected $productRepo;
+    protected $colorRepo;
+    protected $sizeRepo;
 
-    public function __construct(ProductRepositoryInterface $productRepo)
+    public function __construct(ProductRepositoryInterface $productRepo, ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo)
     {
         $this->productRepo = $productRepo;
+        $this->colorRepo = $colorRepo;
+        $this->sizeRepo = $sizeRepo;
 
         $this->middleware(function (Request $request, $next) {
             session(['module_active' => 'product']);
@@ -45,9 +51,10 @@ class AdminProductController extends Controller
         $num_product_active = $this->productRepo->get_num_product_active();
         $num_product_trash = $this->productRepo->get_num_product_trash();
         $num_product_pending = $this->productRepo->get_num_product_pending();
+        $list_product_color = $this->colorRepo->get_list_color_product();
+        $list_product_size = $this->sizeRepo->get_list_size_product();
         $count = [$num_product_active, $num_product_trash, $num_product_pending];
-
-        return view('admin.product.list', compact('list_products', 'count', 'list_act'));
+        return view('admin.product.list', compact('list_products', 'count', 'list_act', 'list_product_size', 'list_product_color'));
     }
 
     public function add()

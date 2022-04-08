@@ -90,6 +90,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/product/delete/{id}', [App\Http\Controllers\AdminProductController::class, 'delete'])->name('admin.product.delete');
     Route::get('/admin/product/forceDelete/{id}', [App\Http\Controllers\AdminProductController::class, 'forceDelete'])->name('admin.product.forceDelete');
     Route::post('/admin/product/action', [App\Http\Controllers\AdminProductController::class, 'action'])->name('admin.product.action');
+    Route::get('/admin/product/list', [App\Http\Controllers\AdminProductController::class, 'list'])->name('admin.product.list');
+
+
+    // Admin/product/detail
+    Route::get('/admin/product/detail/add', [App\Http\Controllers\AdminProductDetailController::class, 'add'])->name('admin.product.detail.add');
+    // Route::post('/admin/product/detail/store/{id}', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
 
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');

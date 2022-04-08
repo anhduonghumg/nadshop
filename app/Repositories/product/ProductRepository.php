@@ -4,6 +4,8 @@ namespace App\Repositories\Product;
 
 use App\Repositories\BaseRepository;
 use App\Constants\Constants;
+use App\Models\Color;
+use App\Models\Size;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {

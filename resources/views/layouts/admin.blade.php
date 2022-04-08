@@ -186,7 +186,6 @@
                     <li class="nav-link"><a>Sản phẩm</a></li>
                     <li class="nav-link"><a>Đơn hàng</a></li>
                     <li class="nav-link"><a>Hệ thống</a></li> -->
-
                 </ul>
             </div>
             <div id="wp-content">
@@ -194,11 +193,9 @@
             </div>
         </div>
     </div>
-    <script>
-
-
-
-    </script>
+    <div class="loadajax">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{{ url('public/js/app.js') }}"></script>
     <script src="{{ asset('public/js/main.js') }}"></script>

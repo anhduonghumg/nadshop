@@ -23,10 +23,19 @@ class SizeRepository extends BaseRepository implements SizeRepositoryInterface
 
     public function get_list_size($paginate = 10, $orderBy = "id")
     {
-        $color = $this->model
+        $size = $this->model
             ->select('id', 'size_name', 'created_at')
             ->orderByDesc($orderBy)
             ->paginate($paginate);
-        return $color;
+        return $size;
+    }
+
+    public function get_list_size_product()
+    {
+        $size = $this->model
+            ->select('id', 'size_name')
+            ->orderByDesc('id')
+            ->get();
+        return $size;
     }
 }

@@ -29,4 +29,13 @@ class ColorRepository extends BaseRepository implements ColorRepositoryInterface
             ->paginate($paginate);
         return $color;
     }
+
+    public function get_list_color_product()
+    {
+        $color = $this->model
+            ->select('id', 'color_name')
+            ->orderByDesc('id')
+            ->get();
+        return $color;
+    }
 }
