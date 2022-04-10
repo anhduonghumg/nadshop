@@ -22,7 +22,7 @@ class AdminProductDetailController extends Controller
 
     public function add(Request $request)
     {
-        $id = $request->id;
+        $id = $request->proId;
         $list_product_color = $this->colorRepo->get_list_color_product();
         $list_product_size = $this->sizeRepo->get_list_size_product();
         $result = [
@@ -30,7 +30,6 @@ class AdminProductDetailController extends Controller
             'list_product_size' => $list_product_size,
             'id' => $id
         ];
-        $show_data = json_encode($result);
-        return $show_data;
+        return response()->json($result);
     }
 }

@@ -54,6 +54,7 @@ a:hover {
     min-height: 100vh;
     padding-top: 3.625rem;
     padding-left: 15rem;
+    display: none;
 }
 
 #content {
@@ -191,7 +192,7 @@ a#add_work:hover {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 99999999999999999;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -200,5 +201,22 @@ a#add_work:hover {
 }
 
 .loadajax i {
+    font-size: 34px
+}
+
+.loader {
+    background: rgba(255, 255, 255, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999999999999999;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 25%;
+    display: block;
+}
+
+.loader i {
     font-size: 34px
 }

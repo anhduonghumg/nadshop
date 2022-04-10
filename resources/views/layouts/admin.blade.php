@@ -16,46 +16,51 @@
     <title>@yield('title')</title>
 </head>
 
-<body>
+<body class="preloading">
     <script>
         var editor_config = {
-            path_absolute : "http://localhost:8080/nadshop/",
+            path_absolute: "http://localhost/nadshop/",
             selector: 'textarea',
             relative_urls: false,
             plugins: [
-              "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-              "searchreplace wordcount visualblocks visualchars code fullscreen",
-              "insertdatetime media nonbreaking save table directionality",
-              "emoticons template paste textpattern"
+                "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                "searchreplace wordcount visualblocks visualchars code fullscreen",
+                "insertdatetime media nonbreaking save table directionality",
+                "emoticons template paste textpattern"
             ],
             toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
-            file_picker_callback : function(callback, value, meta) {
-              var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-              var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
+            file_picker_callback: function(callback, value, meta) {
+                var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName(
+                    'body')[0].clientWidth;
+                var y = window.innerHeight || document.documentElement.clientHeight || document
+                    .getElementsByTagName('body')[0].clientHeight;
 
-              var cmsURL = editor_config.path_absolute + 'laravel-filemanager?editor=' + meta.fieldname;
-              if (meta.filetype == 'image') {
-                cmsURL = cmsURL + "&type=Images";
-              } else {
-                cmsURL = cmsURL + "&type=Files";
-              }
-
-              tinyMCE.activeEditor.windowManager.openUrl({
-                url : cmsURL,
-                title : 'Filemanager',
-                width : x * 0.8,
-                height : y * 0.8,
-                resizable : "yes",
-                close_previous : "no",
-                onMessage: (api, message) => {
-                  callback(message.content);
+                var cmsURL = editor_config.path_absolute + 'laravel-filemanager?editor=' + meta.fieldname;
+                if (meta.filetype == 'image') {
+                    cmsURL = cmsURL + "&type=Images";
+                } else {
+                    cmsURL = cmsURL + "&type=Files";
                 }
-              });
-            }
-          };
 
-          tinymce.init(editor_config);
+                tinyMCE.activeEditor.windowManager.openUrl({
+                    url: cmsURL,
+                    title: 'Filemanager',
+                    width: x * 0.8,
+                    height: y * 0.8,
+                    resizable: "yes",
+                    close_previous: "no",
+                    onMessage: (api, message) => {
+                        callback(message.content);
+                    }
+                });
+            }
+        };
+
+        tinymce.init(editor_config);
     </script>
+    <div class="loader">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
     <div id="warpper" class="nav-fixed">
         <nav class="topnav shadow navbar-light bg-white d-flex">
             <div class="navbar-brand"><a href="{{ url('dashboard') }}">ADMIN</a></div>
@@ -79,7 +84,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="{{ route('admin.user.profile') }}">Thông tin tài
                             khoản</a>
-                        <a class="dropdown-item" href="{{ route('admin.user.changePass')}}">Thay đổi mật khẩu</a>
+                        <a class="dropdown-item" href="{{ route('admin.user.changePass') }}">Thay đổi mật khẩu</a>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
                             {{ __('auth.Logout') }}
@@ -198,7 +203,7 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{{ url('public/js/app.js') }}"></script>
-    <script src="{{ asset('public/js/main.js') }}"></script>
+    <script src="{{ url('public/js/main.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
     </script>
