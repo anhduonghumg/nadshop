@@ -66,7 +66,7 @@ $(document).ready(function () {
                 $list_product_size = $.each(data.list_product_size, function (value) {
                     return `<option value="${value['id']}">${value['size_name']}</option>`
                 });
-                $output += ` <div class="modal fade draggable detail-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby=""
+                $output += `<div class="modal fade draggable detail-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby=""
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg ui-draggable" role="document">
                     <div class="modal-content p-3">

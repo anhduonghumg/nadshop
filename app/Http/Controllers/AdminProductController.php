@@ -76,7 +76,7 @@ class AdminProductController extends Controller
                     'product_thumb' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                     'category_product' => ['required'],
                     'brand' => ['required'],
-                ]
+                ]   
             );
 
             $data = [
