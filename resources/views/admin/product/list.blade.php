@@ -1,7 +1,6 @@
 @extends('layouts.admin')
-@section('title','Danh sách bài viết')
+@section('title', 'Danh sách bài viết')
 @section('content')
-
 <div id="content" class="container-fluid">
     <div class="card">
         @if (session('status'))
@@ -28,8 +27,8 @@
             <div class="analytic">
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
                     hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
-                <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chờ duyệt<span
-                        class="text-muted">({{ $count[2] }}) |</span></a>
+                <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chờ
+                    duyệt<span class="text-muted">({{ $count[2] }}) |</span></a>
                 <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
                     hóa<span class="text-muted">({{ $count[1] }})</span></a>
             </div>
@@ -48,7 +47,7 @@
                     <thead>
                         <tr>
                             <th scope="col">
-                                <input name="checkall" type="checkbox">
+                                <input id="checkall" name="checkall" type="checkbox">
                             </th>
                             <th scope="col">STT</th>
                             <th scope="col">Ảnh</th>
@@ -56,7 +55,7 @@
                             <th scope="col">Danh mục</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Người tạo</th>
-                            @if(request()->input('status') == Constants::TRASH)
+                            @if (request()->input('status') == Constants::TRASH)
                             <th scope="col">Ngày xóa</th>
                             @else
                             <th scope="col">Ngày tạo</th>
@@ -67,7 +66,7 @@
                     <tbody>
                         @if ($list_products->total() > 0)
                         @php
-                        $temp=0;
+                        $temp = 0;
                         @endphp
                         @foreach ($list_products as $item)
                         @php
@@ -78,9 +77,10 @@
                                 <input type="checkbox" name="list_check[]" value="{{ $item->id }}">
                             </td>
                             <th scope="row">{{ $temp }}</th>
-                            <td><img src="{{ asset($item->product_thumb) }}" height="80" width="150" alt=""></td>
+                            <td><img src="{{ asset($item->product_thumb) }}" height="80" width="150" alt="">
+                            </td>
                             <td>{{ $item->product_name }}</td>
-                            <td>{{ $item->category_product_name}}</td>
+                            <td>{{ $item->category_product_name }}</td>
                             @if ($item->product_status == Constants::PUBLIC)
                             <td>Công khai</td>
                             @elseif($item->product_status == Constants::PENDING)
@@ -105,10 +105,13 @@
                             </td>
                             @else
                             <td>
+                                <input type="hidden" class='data-img'
+                                    data-img="{{ asset('storage/app/public/images/upload_img.png') }}">
                                 <button id="add_product_detail" type="button"
                                     class="btn btn-primary btn-sm rounded-0 text-white" data-toggle="modal"
-                                    data-id="{{ $item->id }}" data-placement="top" title="Add product detail">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    data-id="{{ $item->id }}" data-url="{{ route('admin.product.detail.add') }}"
+                                    data-placement="top" title="Add product detail" data-token="{{ csrf_token() }}">
+                                    <i class="  fa fa-plus" aria-hidden="true"></i>
                                 </button>
                                 <a href="{{ route('admin.product.edit', ['id' => $item->id]) }}"
                                     class="btn btn-success btn-sm rounded-0 text-white" type="button"
@@ -203,7 +206,8 @@
                                             <select class="form-control" id="color" name="product_color[]">
                                                 <option selected>Chọn màu</option>
                                                 @foreach ($list_product_color as $item)
-                                                <option value="{{ $item->id }}">{{ $item->color_name }}</option>
+                                                <option value="{{ $item->id }}">{{ $item->color_name }}
+                                                </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -215,7 +219,8 @@
                                             <select class="form-control" id="size_ver" name="product_size[]">
                                                 <option selected>Chọn kích cỡ/phiên bản</option>
                                                 @foreach ($list_product_size as $item)
-                                                <option value="{{ $item->id }}">{{ $item->size_name }}</option>
+                                                <option value="{{ $item->id }}">{{ $item->size_name }}
+                                                </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -243,5 +248,6 @@
             </div>
         </div>
     </div>
+
 </div>
 @endsection

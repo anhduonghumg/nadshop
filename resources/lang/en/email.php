@@ -57,6 +57,7 @@ return [
     "Verify Your Email Address" => "Verify Your Email Address",
     "You are receiving this email because we received a password reset request for your account." => "You are receiving this email because we received a password reset request for your account.",
     "Whoops!" => "Whoops!",
-    "Whoops, something went wrong on our servers." => "Whoops, something went wrong on our servers."
+    "Whoops, something went wrong on our servers." => "Whoops, something went wrong on our servers.",
+    "click here to request another." => "click here to request another."
 
 ];

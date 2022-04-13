@@ -83,7 +83,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">
-                                        <input name="checkall" type="checkbox">
+                                        <input id="checkall" name="checkall" type="checkbox">
                                     </th>
                                     <th scope="col">STT</th>
                                     <th scope="col">Tên</th>
@@ -114,7 +114,8 @@
                                     @if($item->parent_id == 0)
                                     <td>Không có</td>
                                     @else
-                                    <td>{{ $item->catPostParent->name}}
+                                    <td>
+                                        {{ Category::getNameParent('category_posts',"{$item->parent_id}","name")}}
                                     </td>
                                     @endif
                                     @if(request()->input('status') == Constants::TRASH)

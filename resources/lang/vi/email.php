@@ -58,6 +58,6 @@ return [
     "Verify Your Email Address" => "Xác Minh Địa Chỉ Email Của Bạn",
     "You are receiving this email because we received a password reset request for your account." => "Bạn nhận được email này vì chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.",
     "Whoops!" => "Rất tiếc!",
-    "Whoops, something went wrong on our servers." => "Rất tiếc, đã có sự cố xảy ra trên máy chủ của chúng tôi."
-
+    "Whoops, something went wrong on our servers." => "Rất tiếc, đã có sự cố xảy ra trên máy chủ của chúng tôi.",
+    "click here to request another." => "Click ở đây để xác thực email."
 ];

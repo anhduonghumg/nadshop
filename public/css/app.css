@@ -50,10 +50,10 @@ a:hover {
 
 #wp-content {
     flex: auto;
-    /* height: calc(100vh - 58px); */
     min-height: 100vh;
     padding-top: 3.625rem;
     padding-left: 15rem;
+    display: none;
 }
 
 #content {
@@ -88,12 +88,12 @@ ul#sidebar-menu * {
     position: relative;
 }
 
-.nav-link.active>a,
-.nav-link:hover>li>a {
+.nav-link.active > a,
+.nav-link:hover > li > a {
     color: #0061f2;
 }
 
-.nav-link>li>a>i {
+.nav-link > li > a > i {
     color: #787272;
     font-size: 18px;
 }
@@ -130,27 +130,27 @@ ul#sidebar-menu * {
     object-fit: cover;
 }
 
-.nav-tabs>li {
+.nav-tabs > li {
     position: relative;
 }
 
-.nav-tabs>li {
+.nav-tabs > li {
     float: left;
     margin-bottom: -1px;
 }
 
-.nav-tabs>li>a {
+.nav-tabs > li > a {
     color: #3c8dbc;
 }
 
-.nav>li {
+.nav > li {
     position: relative;
     display: block;
 }
 
-.nav-tabs>li.active>a,
-.nav-tabs>li.active>a:focus,
-.nav-tabs>li.active>a:hover {
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover {
     color: #555;
     cursor: default;
     background-color: #fff;
@@ -170,11 +170,11 @@ a#add_work:hover {
     cursor: pointer;
 }
 
-.nav-tabs>li>a {
+.nav-tabs > li > a {
     display: inline-block;
 }
 
-.nav-tabs>li>span {
+.nav-tabs > li > span {
     display: none;
     position: absolute;
     color: red;
@@ -182,7 +182,7 @@ a#add_work:hover {
     right: 5px;
 }
 
-.nav-tabs>li:hover>span {
+.nav-tabs > li:hover > span {
     display: inline-block;
 }
 
@@ -191,7 +191,7 @@ a#add_work:hover {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 99999999999999999;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -200,5 +200,22 @@ a#add_work:hover {
 }
 
 .loadajax i {
-    font-size: 34px
+    font-size: 34px;
+}
+
+.loader {
+    background: rgba(255, 255, 255, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999999999999999;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 25%;
+    display: block;
+}
+
+.loader i {
+    font-size: 34px;
 }

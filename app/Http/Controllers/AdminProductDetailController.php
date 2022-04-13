@@ -10,27 +10,30 @@ class AdminProductDetailController extends Controller
 {
     public function __construct(ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo)
     {
-        // $this->productRepo = $productRepo;
+
         $this->colorRepo = $colorRepo;
         $this->sizeRepo = $sizeRepo;
-
-        $this->middleware(function (Request $request, $next) {
-            session(['module_active' => 'product']);
-            return $next($request);
-        });
     }
 
     public function add(Request $request)
     {
-        $id = $request->id;
+        // $id = $request->proId;
         $list_product_color = $this->colorRepo->get_list_color_product();
         $list_product_size = $this->sizeRepo->get_list_size_product();
+        $url_add_product_detail = route('admin.product.detail.store');
+        $data_image = asset('storage/app/public/images/upload_img.png');
         $result = [
             'list_product_color' => $list_product_color,
             'list_product_size' => $list_product_size,
-            'id' => $id
+            'url_add_product' => $url_add_product_detail,
+            'data_image' => $data_image
         ];
-        $show_data = json_encode($result);
-        return $show_data;
+        return response()->json($result);
+    }
+
+    public function store(Request $request)
+    {
+        if ($request->has('btn_store')) {
+        }
     }
 }

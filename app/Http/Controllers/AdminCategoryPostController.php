@@ -99,16 +99,8 @@ class AdminCategoryPostController extends Controller
     public function delete($id)
     {
         if ($id != null) {
-            $catPost = $this->cpostRepo->get_cat_post_by_id($id, ['status']);
-            if ($catPost->status == Constants::PENDING) {
-                $data = ['deleted_at' => now()];
-                $this->cpostRepo->update($data, $id);
-            } elseif ($this->cpostRepo->check_parent_cat($id)) {
-                return  redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_cat_child'));
-            } else {
-                $data = ['deleted_at' => now()];
-                $this->cpostRepo->update($data, $id);
-            }
+            $data = ['deleted_at' => now()];
+            $this->cpostRepo->delete($data, $id);
             return redirect()->route('admin.catPost.list')->with('status', trans('notification.delete_success'));
         } else {
             return redirect()->route('admin.catPost.list')->with('status', trans('notification.no_data'));

@@ -31,7 +31,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::DASHBOARD;
     /**
      * Create a new controller instance.
      *
@@ -42,25 +42,15 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    // Ghi đè email trong AuthenticatesUsers:
-    // Sử dụng username để đăng nhập
     public function username()
     {
         return 'username';
     }
 
+
     public function logout(Request $request)
     {
         $this->performLogout($request);
         return redirect()->route('login');
-    }
-
-    protected function redirectTo()
-    {
-        if (Auth::user()->role_id == Constants::ADMIN) {
-            return '/dashboard';
-        } else {
-            return '/home';
-        }
     }
 }

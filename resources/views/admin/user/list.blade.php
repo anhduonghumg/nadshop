@@ -41,7 +41,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" name="checkall">
+                                <input id="checkall" name="checkall" type="checkbox">
                             </th>
                             <th scope="col">STT</th>
                             <th scope="col">Họ tên</th>

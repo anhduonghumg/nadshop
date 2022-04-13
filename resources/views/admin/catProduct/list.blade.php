@@ -83,7 +83,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">
-                                        <input name="checkall" type="checkbox">
+                                        <input id="checkall" name="checkall" type="checkbox">
                                     </th>
                                     <th scope="col">STT</th>
                                     <th scope="col">Tên</th>
@@ -97,71 +97,70 @@
                                     <th scope="col">Người tạo</th>
                                     <th scope="col">Tác vụ</th>
                                 </tr>
-                            </thead
-                            <tbody>
-                                @if ($category_product->total() > 0)
-                                @php
-                                $t = 1;
-                                @endphp
-                                @foreach ($category_product as $item)
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" name="list_check[]" value="{{ $item->id }}">
-                                    </td>
-                                    <th scope="row">{{ $t++ }}</th>
-                                    {{-- <td>{{ str_repeat('---', $item->level) . $item->name }}</td> --}}
-                                    <td>{{ $item->category_product_name }}</td>
-                                    @if ($item->parent_id == 0)
-                                    <td>Không có</td>
-                                    @else
-                                    <td>{{
-                                        Category::getNameParent('category_products',"{$item->parent_id}","category_product_name")
-                                        }}
-                                    </td>
-                                    @endif
-                                    @if(request()->input('status') == Constants::TRASH)
-                                    <td>{{ $item->deleted_at }}</td>
-                                    @elseif ($item->category_product_status == Constants::PUBLIC)
-                                    <td>Công khai</td>
-                                    @else
-                                    <td>Chờ duyệt</td>
-                                    @endif
-                                    <td>{{ $item->fullname }}</td>
-                                    @if (request()->input('status') == Constants::TRASH)
-                                    <td>
-                                        <a href="{{ route('admin.catProduct.edit', ['id' => $item->id]) }}"
-                                            class="btn btn-success btn-sm rounded-0 text-white" type="button"
-                                            data-toggle="tooltip" data-placement="top" title="Edit"><i
-                                                class="fa fa-edit"></i></a>
-                                        <a href="{{ route('admin.catProduct.forceDelete', ['id' => $item->id]) }}"
-                                            onclick="return confirm('Bạn muốn xóa bản ghi này?')"
-                                            class="btn btn-danger btn-sm rounded-0 text-white" type="button"
-                                            data-toggle="tooltip" data-placement="top" title="Delete"><i
-                                                class="fa fa-trash"></i></a>
-                                    </td>
-                                    @else
-                                    <td>
-                                        <a href="{{ route('admin.catProduct.edit', ['id' => $item->id]) }}"
-                                            class="btn btn-success btn-sm rounded-0 text-white" type="button"
-                                            data-toggle="tooltip" data-placement="top" title="Edit"><i
-                                                class="fa fa-edit"></i></a>
-                                        <a href="{{ route('admin.catProduct.delete', ['id' => $item->id]) }}"
-                                            onclick="return confirm('Bạn muốn xóa bản ghi này?')"
-                                            data-url="{{ route('admin.catPost.delete', ['id' => $item->id]) }}"
-                                            class="btn btn-danger btn-sm rounded-0 text-white action_delete"
-                                            type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i
-                                                class="fa fa-trash"></i></a>
-                                    </td>
-                                    @endif
-                                </tr>
-                                @endforeach
+                            </thead <tbody>
+                            @if ($category_product->total() > 0)
+                            @php
+                            $t = 1;
+                            @endphp
+                            @foreach ($category_product as $item)
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="list_check[]" value="{{ $item->id }}">
+                                </td>
+                                <th scope="row">{{ $t++ }}</th>
+                                {{-- <td>{{ str_repeat('---', $item->level) . $item->name }}</td> --}}
+                                <td>{{ $item->category_product_name }}</td>
+                                @if ($item->parent_id == 0)
+                                <td>Không có</td>
                                 @else
-                                <tr>
-                                    <td colspan='7' class="bg-white">
-                                        <p>Không có bản ghi nào.</p>
-                                    </td>
-                                </tr>
+                                <td>{{
+                                    Category::getNameParent('category_products',"{$item->parent_id}","category_product_name")
+                                    }}
+                                </td>
                                 @endif
+                                @if(request()->input('status') == Constants::TRASH)
+                                <td>{{ $item->deleted_at }}</td>
+                                @elseif ($item->category_product_status == Constants::PUBLIC)
+                                <td>Công khai</td>
+                                @else
+                                <td>Chờ duyệt</td>
+                                @endif
+                                <td>{{ $item->fullname }}</td>
+                                @if (request()->input('status') == Constants::TRASH)
+                                <td>
+                                    <a href="{{ route('admin.catProduct.edit', ['id' => $item->id]) }}"
+                                        class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                        data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                            class="fa fa-edit"></i></a>
+                                    <a href="{{ route('admin.catProduct.forceDelete', ['id' => $item->id]) }}"
+                                        onclick="return confirm('Bạn muốn xóa bản ghi này?')"
+                                        class="btn btn-danger btn-sm rounded-0 text-white" type="button"
+                                        data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                            class="fa fa-trash"></i></a>
+                                </td>
+                                @else
+                                <td>
+                                    <a href="{{ route('admin.catProduct.edit', ['id' => $item->id]) }}"
+                                        class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                        data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                            class="fa fa-edit"></i></a>
+                                    <a href="{{ route('admin.catProduct.delete', ['id' => $item->id]) }}"
+                                        onclick="return confirm('Bạn muốn xóa bản ghi này?')"
+                                        data-url="{{ route('admin.catPost.delete', ['id' => $item->id]) }}"
+                                        class="btn btn-danger btn-sm rounded-0 text-white action_delete" type="button"
+                                        data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                            class="fa fa-trash"></i></a>
+                                </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan='7' class="bg-white">
+                                    <p>Không có bản ghi nào.</p>
+                                </td>
+                            </tr>
+                            @endif
                             </tbody>
                         </table>
                     </form>

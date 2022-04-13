@@ -27,7 +27,7 @@ Auth::routes(['verify' => true]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // verified
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     // Admin/user
     Route::get('/admin/user/list', [App\Http\Controllers\AdminUserController::class, 'list'])->name('admin.user.list');
@@ -95,7 +95,7 @@ Route::middleware('auth')->group(function () {
 
     // Admin/product/detail
     Route::get('/admin/product/detail/add', [App\Http\Controllers\AdminProductDetailController::class, 'add'])->name('admin.product.detail.add');
-    // Route::post('/admin/product/detail/store/{id}', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
+    Route::post('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
 
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
@@ -131,4 +131,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/helper/string', [App\Http\Controllers\AdminHelperController::class, 'string'])->name('admin.helper.string');
     Route::get('/admin/helper/path', [App\Http\Controllers\AdminHelperController::class, 'path'])->name('admin.helper.path');
     Route::get('/admin/helper/miscellaneous', [App\Http\Controllers\AdminHelperController::class, 'miscellaneous'])->name('admin.helper.miscellaneous');
+
+    // upload file
+    Route::get('/admin/file/view', [App\Http\Controllers\AdminFileController::class, 'view'])->name('admin.file.view');
+    Route::post('/admin/file/upload', [App\Http\Controllers\AdminFileController::class, 'upload'])->name('admin.file.upload');
+    Route::get('/admin/file/multiple', [App\Http\Controllers\AdminFileController::class, 'multiple'])->name('admin.file.multiple');
+    Route::post('/admin/file/multipleUpload', [App\Http\Controllers\AdminFileController::class, 'multipleUpload'])->name('admin.file.multipleUpload');
 });
