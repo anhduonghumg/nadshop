@@ -13,4 +13,5 @@ class Constants
     const RESTORE = 'restore';
     const FORCE_DELETE = 'forceDelete';
     const EMPTY = NULL;
+    const PATH_IMAGE = 'storage/app/public/images/';
 }

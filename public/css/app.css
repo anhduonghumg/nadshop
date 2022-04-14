@@ -123,12 +123,12 @@ ul#sidebar-menu * {
 #avatar {
     cursor: pointer;
 }
-
+/*
 .img {
     width: 150px;
     height: 100px;
     object-fit: cover;
-}
+} */
 
 .nav-tabs > li {
     position: relative;
@@ -219,3 +219,25 @@ a#add_work:hover {
 .loader i {
     font-size: 34px;
 }
+
+/* .show_list_thumb {
+    height: 120px;
+    width: 200px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.show_list_thumb img {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+}
+
+.show_list_thumb span {
+    top: -9px;
+    right: 85px;
+    color: red;
+    font-size: 28px;
+    font-weight: normal;
+    cursor: pointer;
+} */

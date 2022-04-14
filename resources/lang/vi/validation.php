@@ -176,6 +176,7 @@ return [
         'product_content' => 'nội dung sản phẩm',
         'brand' => 'nhãn hàng',
         'category_product' => 'danh mục sản phẩm',
-        'product_thumb' => 'ảnh sản phẩm'
+        'product_thumb' => 'ảnh sản phẩm',
+        'list_product_thumb' => 'ảnh chi tiết sản phẩm'
     ],
 ];

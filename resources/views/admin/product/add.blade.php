@@ -37,12 +37,19 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="">Ảnh bài viết</label>
+                            <label for="">Ảnh đại diện sản phẩm</label>
                             <input id="img" type="file" name="product_thumb" class="form-control d-none"
                                 onchange="changeImg(this)">
                             <img id="avatar" class="img-thumbnail d-block" width="200px"
                                 src="{{ asset('storage/app/public/images/upload_img.png') }}">
                             @error('product_thumb')
+                            <small class=" text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="">Ảnh chi tiết sản phẩm</label>
+                            <input class="form-control" type="file" id="images" name="list_product_thumb[]" multiple>
+                            @error('list_product_thumb')
                             <small class=" text-danger">{{ $message }}</small>
                             @enderror
                         </div>

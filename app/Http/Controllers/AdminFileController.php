@@ -37,20 +37,28 @@ class AdminFileController extends Controller
 
     public function multipleUpload(Request $request)
     {
-        if ($request->has('btn_upload')) {
-            $request->validate(
-                [
-                    'image' => ['required']
-                ]
-            );
+        $validated = $request->validate([
+            // 'title' => 'required',
+            'images.*' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
 
-            if ($request->hasFile('image')) {
-                foreach ($request->image as $item) {
-                    dd($item);
-                }
-            }
-            // return $upload;
-        }
+        $image_names = [];
+        // loop through images and save to /uploads directory
+        // foreach ($request->file('images') as $image) {
+        //     $name = $image->getClientOriginalName();
+        //     $image->move(public_path() . '/uploads/', $name);
+        //     $image_names[] = $name;
+        // }
+
+        // $post = new Post();
+        // $post->title = $request->title;
+        // $post->images = json_encode($image_names);
+
+        // $post->save();
+
+        // return redirect()
+        //     ->back()
+        //     ->with('success', 'Post created successfully.');
     }
 
 

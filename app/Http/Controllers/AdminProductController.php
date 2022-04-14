@@ -11,6 +11,7 @@ use App\Helpers\Recursive;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Size\SizeRepositoryInterface;
+use App\Repositories\Image\ImageRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -20,12 +21,15 @@ class AdminProductController extends Controller
     protected $productRepo;
     protected $colorRepo;
     protected $sizeRepo;
+    protected $imageRepo;
 
-    public function __construct(ProductRepositoryInterface $productRepo, ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo)
+    public function __construct(ProductRepositoryInterface $productRepo, ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo, ImageRepositoryInterface $imageRepo)
     {
         $this->productRepo = $productRepo;
         $this->colorRepo = $colorRepo;
         $this->sizeRepo = $sizeRepo;
+        $this->imageRepo = $imageRepo;
+
 
         $this->middleware(function (Request $request, $next) {
             session(['module_active' => 'product']);
@@ -76,7 +80,9 @@ class AdminProductController extends Controller
                     'product_thumb' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                     'category_product' => ['required'],
                     'brand' => ['required'],
-                ]   
+                    'list_product_thumb' => ['required'],
+                    'product_status' => ['required']
+                ]
             );
 
             $data = [
@@ -93,11 +99,25 @@ class AdminProductController extends Controller
             ];
 
             if ($request->hasFile('product_thumb')) {
-                $dataImg = $this->ImageUpload($request->product_thumb, 'product');
-                $data['product_thumb'] = $dataImg['file_path'];
+                $file = $request->product_thumb;
+                $dataImg = $this->uploadImage($file, 'product', Auth::id());
+                $data['product_thumb'] = $dataImg;
             }
 
-            $this->productRepo->add($data);
+            $product = $this->productRepo->add($data);
+
+            if ($request->hasFile('list_product_thumb')) {
+                $file = $request->list_product_thumb;
+                $list_thumb = $this->uploadMultipleImage($file, 'product_variant', Auth::id());
+                foreach ($list_thumb as $item) {
+                    $data_image = [
+                        'image' => $item,
+                        'img_name' => $request->product_name,
+                        'product_id' => $product->id,
+                    ];
+                    $this->imageRepo->add($data_image);
+                }
+            }
             return redirect()->route('admin.product.list')->with('status', trans('notification.add_success'));
         }
     }

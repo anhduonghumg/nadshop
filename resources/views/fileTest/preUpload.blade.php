@@ -40,17 +40,22 @@
         <div class="card shadow-sm w-100">
             <div class="card-header d-flex justify-content-between">
                 <h4>Image Uploading</h4>
-                @error('image')
-                <small class=" text-danger">{{ $message }}</small>
-                @enderror
-                <form class="form" action="{{ route('admin.file.multipleUpload') }}" method="post"
-                    enctype="multipart/form-data" id="form">
+                @if(count($errors) > 0)
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <form method="post" action="{{  route('admin.file.multipleUpload') }}" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" multiple="">
-                    <input type="file" class="d-none" name="image[]" id="image" onchange="image_select()" multiple>
+                    <input class="form-control d-none" type="file" id="image" name="image[]" onchange=(image_select())
+                        multiple>
                     <button class="btn btn-sm btn-primary" type="button"
                         onclick="document.getElementById('image').click()">Choose Images</button>
-                    <input type="submit" name="btn_upload">
+                    {{--  <input type="submit" name="btn_upload">  --}}
                 </form>
             </div>
             <div class="card-body d-flex flex-wrap justify-content-start" id="container">
@@ -85,8 +90,8 @@
         var image = "";
         images.forEach((i) => {
              image += `<div class="image_container d-flex justify-content-center position-relative">
-                    <img src="`+ i.url +`" alt="Image">
-                    <span class="position-absolute" onclick="delete_image(`+ images.indexOf(i) +`)">&times;</span>
+                    <img src="`+ i.url +`" alt="Image" data_name="`+i.name+`">
+                    <span class="position-absolute delete_image" onclick="delete_image(`+ images.indexOf(i) +`)">&times;</span>
               </div>`;
         })
         return image;
