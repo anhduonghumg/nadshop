@@ -16,8 +16,8 @@
                             aria-selected="true">Product</a>
                         <span class="remove-product-tab"><i class="fa fa-times" aria-hidden="true"></i>
                         </span>
-                    <li class="nav-item"><a class="nav-link" href="#" id="add_work"><i
-                                class="fa fa-plus" aria-hidden="true"></i></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="add_work"><i class="fa fa-plus"
+                                aria-hidden="true"></i></a></li>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -62,8 +62,8 @@
                                         <select class="form-control" id="color" name="product_color[]">
                                             <option selected>Chọn màu</option>
                                             @foreach ($list_product_color as $item)
-                                                <option value="{{ $item->id }}">{{ $item->color_name }}
-                                                </option>
+                                            <option value="{{ $item->id }}">{{ $item->color_name }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -75,8 +75,8 @@
                                         <select class="form-control" id="size_ver" name="product_size[]">
                                             <option selected>Chọn kích cỡ/phiên bản</option>
                                             @foreach ($list_product_size as $item)
-                                                <option value="{{ $item->id }}">{{ $item->size_name }}
-                                                </option>
+                                            <option value="{{ $item->id }}">{{ $item->size_name }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -86,9 +86,13 @@
                                 <div class="form-group row ">
                                     <label for="" class="col-sm-4 control-label">Ảnh:</label>
                                     <div class="col-sm-8">
-                                        <input id="img" type="file" name="thumbnail[]" class="form-control d-none"
-                                            onchange="changeImg(this)">
-                                        <img id="avatar" class="img-thumbnail d-block" width="300px" src="">
+                                        <select class="form-control" id="thumbnail" name="product_thumbnail[]">
+                                            <option selected>Chọn ảnh chi tiết</option>
+                                            @foreach ($list_image as $item)
+                                            <option value="{{ $item->image }}"><img src="" alt="">
+                                            </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -103,3 +107,4 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="url_product_detail" data-url ="" data-id="">

@@ -95,7 +95,7 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
 
     // Admin/product/detail
     Route::get('/admin/product/detail/add', [App\Http\Controllers\AdminProductDetailController::class, 'add'])->name('admin.product.detail.add');
-    Route::post('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
+    Route::GET('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
 
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
@@ -126,15 +126,19 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
 
 
     // helper
-    Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
-    Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');
-    Route::get('/admin/helper/string', [App\Http\Controllers\AdminHelperController::class, 'string'])->name('admin.helper.string');
-    Route::get('/admin/helper/path', [App\Http\Controllers\AdminHelperController::class, 'path'])->name('admin.helper.path');
-    Route::get('/admin/helper/miscellaneous', [App\Http\Controllers\AdminHelperController::class, 'miscellaneous'])->name('admin.helper.miscellaneous');
+    // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
+    // Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');
+    // Route::get('/admin/helper/string', [App\Http\Controllers\AdminHelperController::class, 'string'])->name('admin.helper.string');
+    // Route::get('/admin/helper/path', [App\Http\Controllers\AdminHelperController::class, 'path'])->name('admin.helper.path');
+    // Route::get('/admin/helper/miscellaneous', [App\Http\Controllers\AdminHelperController::class, 'miscellaneous'])->name('admin.helper.miscellaneous');
 
     // upload file
-    Route::get('/admin/file/view', [App\Http\Controllers\AdminFileController::class, 'view'])->name('admin.file.view');
-    Route::post('/admin/file/upload', [App\Http\Controllers\AdminFileController::class, 'upload'])->name('admin.file.upload');
-    Route::get('/admin/file/multiple', [App\Http\Controllers\AdminFileController::class, 'multiple'])->name('admin.file.multiple');
-    Route::post('/admin/file/multipleUpload', [App\Http\Controllers\AdminFileController::class, 'multipleUpload'])->name('admin.file.multipleUpload');
+    // Route::get('/admin/file/view', [App\Http\Controllers\AdminFileController::class, 'view'])->name('admin.file.view');
+    // Route::post('/admin/file/upload', [App\Http\Controllers\AdminFileController::class, 'upload'])->name('admin.file.upload');
+    // Route::get('/admin/file/multiple', [App\Http\Controllers\AdminFileController::class, 'multiple'])->name('admin.file.multiple');
+    // Route::post('/admin/file/multipleUpload', [App\Http\Controllers\AdminFileController::class, 'multipleUpload'])->name('admin.file.multipleUpload');
+
+    // resize image
+    // Route::get('/image/resize',  [App\Http\Controllers\ImageController::class, 'resize'])->name('image.resize');
+    // Route::get('/{imagePath}/{size}', [App\Http\Controllers\ImageController::class, 'flyResize'])->where('imagePath', '(.*)');
 });

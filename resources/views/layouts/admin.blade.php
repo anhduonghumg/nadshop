@@ -4,15 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/solid.min.css">
+    <link rel="stylesheet" href="{{ url('public/css/fm.selectator.jquery.css') }}" />
     <link rel="stylesheet" href="{{ url('public/css/style.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/app.css') }}">
     <script src="https://cdn.tiny.cloud/1/numi57lzygq762f9vfvkurk8qjdqln3t6lun4y16ql5iho4u/tinymce/5/tinymce.min.js"
         referrerpolicy="origin"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="fm.selectator.jquery.js"></script>
+    <script src="{{ url('public/js/app.js') }}"></script>
+    <script src="{{ url('public/js/main.js') }}"></script>
+    <script src="{{ url('public/js/fm.selectator.jquery.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
     <title>@yield('title')</title>
 </head>
 
@@ -201,20 +213,12 @@
     <div class="loadajax">
         <i class="fa fa-spinner fa-spin"></i>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="{{ url('public/js/app.js') }}"></script>
-    <script src="{{ url('public/js/main.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
     <script>
         setTimeout(function(){
             $('.loader').hide();
             $('#wp-content').show();
        },500);
+      // ("#myModal .thumbnail").selectator();
     </script>
 </body>
 
