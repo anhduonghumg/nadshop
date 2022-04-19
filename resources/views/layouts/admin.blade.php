@@ -15,7 +15,6 @@
     <script src="https://cdn.tiny.cloud/1/numi57lzygq762f9vfvkurk8qjdqln3t6lun4y16ql5iho4u/tinymce/5/tinymce.min.js"
         referrerpolicy="origin"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="fm.selectator.jquery.js"></script>
     <script src="{{ url('public/js/app.js') }}"></script>
     <script src="{{ url('public/js/main.js') }}"></script>
     <script src="{{ url('public/js/fm.selectator.jquery.js') }}"></script>

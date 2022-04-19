@@ -22,8 +22,9 @@ $(document).ready(function () {
         $("#img").click();
     });
 
-    var url = $('#add_product_detail').attr('data-url');
+    // add product detail
     $(document).on("click", "#add_product_detail", function () {
+        var url = $('#add_product_detail').attr('data-url');
         var proId = $(this).attr('data-id');
         var output = ``;
         $('.loadajax').css('display', 'block');
@@ -39,7 +40,7 @@ $(document).ready(function () {
                                 aria-hidden="true">
                                 <div class="modal-dialog modal-lg ui-draggable" role="document">
                                     <div class="modal-content p-3">
-                                        <form id="fm_detail_product" action>
+                                        <form id="fm_detail_product" method="POST">
                                             <div class="modal-header ui-dranggale-handle" style="cursor: move;">
                                                 <h5 class="modal-title" id="exampleModalLabel">Thêm chi tiết sản phẩm</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -64,8 +65,9 @@ $(document).ready(function () {
                                                                 <label for="product_name" class="col-sm-4 control-label">Tên sản
                                                                     phẩm:</label>
                                                                 <div class="col-sm-8">
-                                                                    <input type="text" class="form-control product_name"
+                                                                    <input type="text" class="form-control product_detail_name"
                                                                         placeholder="Tên sản phẩm" name="product_detail_name[]">
+                                                                        <p class="error_msg" id="product_detail_name"></p>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row ">
@@ -120,13 +122,17 @@ $(document).ready(function () {
                 output += `</select></div></div></div></div></div></div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                <button type="button" id="btn_save" name="btn_save" class="btn btn-primary">Lưu</button>
+                                <input type="button" id="btn_save" name="btn_save" class="btn btn-primary" value="Lưu">
                             </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="url_product_detail" data-url ="${resp.url_add_product}" data-id="${resp.id_product}">`;
+                    <input type="hidden" id="url_product_detail" data-url ="${resp.url_add_product}" data-id="${resp.id_product}">
+                    <div class="print-error-msg">
+                    <ul>
+                    </ul>
+                    </div>`;
                 $('.loadajax').css('display', 'none');
                 $('#modalPopup').empty().html(output);
                 $('.detail-modal').modal('show');
@@ -134,6 +140,78 @@ $(document).ready(function () {
             }, error: function () {
                 $('.loadajax').css('display', 'none');
                 alert("error!!!!");
+            }
+        });
+    });
+
+    // save product detail
+    $(document).on('click', '#btn_save', function () {
+        $('.loadajax').show();
+        let url_save = $('#url_product_detail').attr('data-url');
+        let id = $('#url_product_detail').attr('data-id');
+        let product_detail_name = [];
+        let product_price = [];
+        let prdocut_color = [];
+        let product_size = [];
+        let product_details_thumb = [];
+        let product_qty_stock = [];
+        let product_discount = [];
+
+        $(".product_detail_name").each(function () {
+            product_detail_name.push($(this).val());
+        });
+        $(".product_price").each(function () {
+            product_price.push($(this).val());
+        });
+        $(".product_discount").each(function () {
+            product_discount.push($(this).val());
+        });
+        $(".stock").each(function () {
+            product_qty_stock.push($(this).val());
+        });
+        $(".color").each(function () {
+            prdocut_color.push($(this).val());
+        });
+        $(".size_ver").each(function () {
+            product_size.push($(this).val());
+        });
+        $(".thumbnail").each(function () {
+            product_details_thumb.push($(this).val());
+        });
+
+        console.log(prdocut_color);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: url_save,
+            data: {
+                id: id,
+                name: product_detail_name,
+                price: product_price,
+                color: prdocut_color,
+                size: product_size,
+                thumb: product_details_thumb,
+                qty: product_qty_stock,
+                discount: product_discount,
+            },
+            dataType: "json",
+            success: function (data) {
+                $('.loadajax').hide();
+                if ($.isEmptyObject(data.errors)) {
+                    $(".error_msg").html('');
+                    alert(data.success);
+                    $('.close').click();
+                } else {
+                    let resp = data.errors;
+                    for (index in resp) {
+                        console.log(resp[index]);
+                    }
+
+                }
             }
         });
     });

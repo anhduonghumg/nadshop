@@ -220,6 +220,14 @@ a#add_work:hover {
     font-size: 34px;
 }
 
+.print-error-msg {
+    position: absolute;
+    top: 220px;
+    left: 640px;
+    z-index: 99999;
+    display: none;
+}
+
 /* .show_list_thumb {
     height: 120px;
     width: 200px;

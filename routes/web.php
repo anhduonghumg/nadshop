@@ -95,7 +95,7 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
 
     // Admin/product/detail
     Route::get('/admin/product/detail/add', [App\Http\Controllers\AdminProductDetailController::class, 'add'])->name('admin.product.detail.add');
-    Route::GET('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
+    Route::post('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
 
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
@@ -123,7 +123,6 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     Route::get('/admin/size/delete/{id}', [App\Http\Controllers\AdminSizeController::class, 'delete'])->name('admin.size.delete');
     // Route::get('/admin/size/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.color.forceDelete');
     Route::post('/admin/size/action', [App\Http\Controllers\AdminSizeController::class, 'action'])->name('admin.size.action');
-
 
     // helper
     // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');

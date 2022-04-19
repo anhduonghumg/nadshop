@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Size\SizeRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class AdminProductDetailController extends Controller
 {
+    protected $productVariantRepo;
     public function __construct(ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo, ImageRepositoryInterface $imgRepo)
     {
         $this->colorRepo = $colorRepo;
@@ -35,7 +40,51 @@ class AdminProductDetailController extends Controller
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'product_detail_name' => 'email',
+            'product_price' => 'required',
+            'product_discount' => 'required',
+            'product_qty_stock' => 'required',
+            'product_color' => 'required',
+            'product_size' => 'required',
+            'product_details_thumb' => 'required',
+        ]);
 
-        dd($request->fm_data);
+        if ($validator->passes()) {
+            return response()->json(['success' => 'Added new records.']);
+        }
+
+        return response()->json(['errors' => $validator->errors()]);
+
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()]);
+        // } else {
+        //     $id = $request->id;
+        //     $name = $request->name;
+        //     $price = $request->price;
+        //     $color = $request->color;
+        //     $size = $request->size;
+        //     $thumb = $request->thumb;
+        //     $qty = $request->qty;
+        //     $discount = $request->discount;
+        //     foreach ($name as $key => $value) {
+        //         $saveData = [
+        //             'product_detail_name' => $name[$key],
+        //             'product_detail_slug' => Str::slug($name[$key]),
+        //             'product_details_thumb' => $thumb[$key],
+        //             'product_price' => $price[$key],
+        //             'product_discount' => $discount[$key],
+        //             'product_qty_stock' => $qty[$key],
+        //             'color_id' => $color[$key],
+        //             'size_id' => $size[$key],
+        //             'user_id' => Auth::id(),
+        //             'product_id' => $id,
+        //             'created_at' => now(),
+        //             'updated_at' => now()
+        //         ];
+        //         DB::table('product_details')->insert($saveData);
+        //     }
+        //     return response()->json(['success' => 'Added new records.']);
+        // }
     }
 }

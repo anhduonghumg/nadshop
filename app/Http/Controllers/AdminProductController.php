@@ -9,6 +9,7 @@ use App\Models\Brand;
 use App\Helpers\ImageUpload;
 use App\Helpers\Recursive;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Image\ImageRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -16,9 +17,10 @@ class AdminProductController extends Controller
 {
     use ImageUpload, Recursive;
     protected $productRepo;
-    public function __construct(ProductRepositoryInterface $productRepo)
+    public function __construct(ProductRepositoryInterface $productRepo, ImageRepositoryInterface $imageRepo)
     {
         $this->productRepo = $productRepo;
+        $this->imageRepo = $imageRepo;
         $this->middleware(function (Request $request, $next) {
             session(['module_active' => 'product']);
             return $next($request);

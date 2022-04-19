@@ -143,28 +143,9 @@
 </div>
 {{-- modal add product detail --}}
 <div id="modalPopup">
+  
 </div>
 <script type="text/javascript">
-    $(document).on('click','#btn_save',function(){
-        $('.loadajax').css('display', 'block');
-        var url = $('#url_product_detail').attr('data-url');
-        var id = $('#url_product_detail').attr('data-id');
-        var fm_data =$('#fm_detail_product').serializeArray();
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: {
-                    id: id,
-                    fm_data:fm_data,
-                },
-                dataType: "json",
-                success: function (resp) {
-                    $('.loadajax').css('display', 'none');
-                }, error: function () {
-                    $('.loadajax').css('display', 'none');
-                    alert("error!!!!");
-                }
-            });
-        });
+
 </script>
 @endsection
