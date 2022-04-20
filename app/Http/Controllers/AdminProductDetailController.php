@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Size\SizeRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
+use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -13,9 +14,10 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminProductDetailController extends Controller
 {
-    protected $productVariantRepo;
-    public function __construct(ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo, ImageRepositoryInterface $imgRepo)
+    protected $productDetailRepo;
+    public function __construct(ProductDetailRepositoryInterface $productDetailRepo, ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo, ImageRepositoryInterface $imgRepo)
     {
+        $this->productDetailRepo = $productDetailRepo;
         $this->colorRepo = $colorRepo;
         $this->sizeRepo = $sizeRepo;
         $this->imgRepo = $imgRepo;
@@ -41,50 +43,38 @@ class AdminProductDetailController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_detail_name' => 'email',
-            'product_price' => 'required',
-            'product_discount' => 'required',
-            'product_qty_stock' => 'required',
-            'product_color' => 'required',
-            'product_size' => 'required',
-            'product_details_thumb' => 'required',
+            'product_detail_name.*' => 'bail|required',
+            'product_price.*' => 'bail|required|numeric',
+            'product_discount.*' => 'bail|required|numeric',
+            'product_qty_stock.*' => 'bail|required|numeric',
+            'product_color.*' => 'bail|required',
+            'product_size.*' => 'bail|required',
+            'product_details_thumb.*' => 'bail|required',
         ]);
 
-        if ($validator->passes()) {
-            return response()->json(['success' => 'Added new records.']);
+        if ($validator->fails()) {
+            $error = collect($validator->errors())->unique()->first();
+            return response()->json(['errors' => $error]);
         }
 
-        return response()->json(['errors' => $validator->errors()]);
+        foreach ($request->product_detail_name as $key => $value) {
+            $saveData = [
+                'product_detail_name' => $request->product_detail_name[$key],
+                'product_detail_slug' => Str::slug($request->product_detail_name[$key]),
+                'product_details_thumb' => $request->product_details_thumb[$key],
+                'product_price' => $request->product_price[$key],
+                'product_discount' => $request->product_discount[$key],
+                'product_qty_stock' => $request->product_qty_stock[$key],
+                'color_id' => $request->product_color[$key],
+                'size_id' => $request->product_size[$key],
+                'user_id' => Auth::id(),
+                'product_id' => $request->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
 
-        // if ($validator->fails()) {
-        //     return response()->json(['errors' => $validator->errors()]);
-        // } else {
-        //     $id = $request->id;
-        //     $name = $request->name;
-        //     $price = $request->price;
-        //     $color = $request->color;
-        //     $size = $request->size;
-        //     $thumb = $request->thumb;
-        //     $qty = $request->qty;
-        //     $discount = $request->discount;
-        //     foreach ($name as $key => $value) {
-        //         $saveData = [
-        //             'product_detail_name' => $name[$key],
-        //             'product_detail_slug' => Str::slug($name[$key]),
-        //             'product_details_thumb' => $thumb[$key],
-        //             'product_price' => $price[$key],
-        //             'product_discount' => $discount[$key],
-        //             'product_qty_stock' => $qty[$key],
-        //             'color_id' => $color[$key],
-        //             'size_id' => $size[$key],
-        //             'user_id' => Auth::id(),
-        //             'product_id' => $id,
-        //             'created_at' => now(),
-        //             'updated_at' => now()
-        //         ];
-        //         DB::table('product_details')->insert($saveData);
-        //     }
-        //     return response()->json(['success' => 'Added new records.']);
-        // }
+            $this->productDetailRepo->add($saveData);
+        }
+        return response()->json(['success' => trans('notification.add_success')]);
     }
 }

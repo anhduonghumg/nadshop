@@ -177,6 +177,14 @@ return [
         'brand' => 'nhãn hàng',
         'category_product' => 'danh mục sản phẩm',
         'product_thumb' => 'ảnh sản phẩm',
-        'list_product_thumb' => 'ảnh chi tiết sản phẩm'
+        'list_product_thumb' => 'ảnh chi tiết sản phẩm',
+        'product_detail_name.*' => 'tên sản phẩm chi tiết',
+        'product_price.*' => 'giá',
+        'product_discount.*' => 'khuyến mãi',
+        'product_qty_stock.*' => 'số lượng',
+        'product_color.*' => 'màu',
+        'product_size.*' => 'kich cỡ/bản',
+        'product_details_thumb.*' => 'ảnh chi tiét'
+
     ],
 ];

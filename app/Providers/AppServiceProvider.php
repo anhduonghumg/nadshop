@@ -54,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\Image\ImageRepositoryInterface::class,
             \App\Repositories\Image\ImageRepository::class,
         );
+        $this->app->singleton(
+            \App\Repositories\ProductDetail\ProductDetailRepositoryInterface::class,
+            \App\Repositories\ProductDetail\ProductDetailRepository::class,
+        );
     }
 
     /**

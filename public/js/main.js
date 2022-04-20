@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
 
+    var COUNT_TAB_WORK = 1;
+
     $(".nav-link.active .sub-menu").slideDown();
 
     $(document).on('click', '#sidebar-menu .arrow', function () {
@@ -24,6 +26,7 @@ $(document).ready(function () {
 
     // add product detail
     $(document).on("click", "#add_product_detail", function () {
+        COUNT_TAB_WORK = 1;
         var url = $('#add_product_detail').attr('data-url');
         var proId = $(this).attr('data-id');
         var output = ``;
@@ -50,7 +53,7 @@ $(document).ready(function () {
                                             <ul class="nav nav-tabs mt-3 mb-3" id="myTab" role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <a class="nav-link active" id="p_1-tab" data-toggle="tab" href="#p_1" role="tab"
-                                                        aria-selected="true">Product</a>
+                                                        aria-selected="true">Tab</a>
                                                     <span class="remove-product-tab"><i class="fa fa-times" aria-hidden="true"></i>
                                                     </span>
                                                 <li class="nav-item"><a class="nav-link" href="#" id="add_work"><i
@@ -97,7 +100,7 @@ $(document).ready(function () {
                                 <label for="color" class="col-sm-4 control-label">Màu:</label>
                                 <div class="col-sm-8">
                                     <select class="form-control color" name="product_color[]">
-                                        <option selected>Chọn màu</option>`;
+                                        <option value="" selected>Chọn màu</option>`;
                 $.each(resp.list_product_color, function (key, value) {
                     output += `<option value="${value.id}">${value.color_name}</option>`;
                 });
@@ -105,7 +108,7 @@ $(document).ready(function () {
                 cỡ/bản:</label>
                 <div class="col-sm-8">
                 <select class="form-control size_ver" name="product_size[]">
-                <option selected>Chọn kích cỡ/phiên bản</option>`;
+                <option value="" selected>Chọn kích cỡ/phiên bản</option>`;
                 $.each(resp.list_product_size, function (key, value) {
                     output += `<option value="${value.id}">${value.size_name}</option>`;
                 });
@@ -115,9 +118,9 @@ $(document).ready(function () {
                 <label for="" class="col-sm-4 control-label">Ảnh chi tiết:</label>
                 <div class="col-sm-8">
                     <select id="selectBox" class="form-control thumbnail" name="product_details_thumb[]">
-                        <option selected>Chọn ảnh chi tiết</option>`;
+                        <option value="" selected>Chọn ảnh chi tiết</option>`;
                 $.each(resp.list_image, function (key, value) {
-                    output += `<option value="${value.image}" data-left="http://localhost:8080/nadshop/${value.image}">${value.img_name}</option>`;
+                    output += `<option data-img_src="http://localhost:8080/nadshop/${value.image}" value="${value.image}"></option>`;
                 });
                 output += `</select></div></div></div></div></div></div>
                             <div class="modal-footer">
@@ -147,15 +150,16 @@ $(document).ready(function () {
     // save product detail
     $(document).on('click', '#btn_save', function () {
         $('.loadajax').show();
-        let url_save = $('#url_product_detail').attr('data-url');
-        let id = $('#url_product_detail').attr('data-id');
-        let product_detail_name = [];
-        let product_price = [];
-        let prdocut_color = [];
-        let product_size = [];
-        let product_details_thumb = [];
-        let product_qty_stock = [];
-        let product_discount = [];
+        var url_save = $('#url_product_detail').attr('data-url');
+        // var fm_data = $('#fm_detail_product').serialize();
+        var id = $('#url_product_detail').attr('data-id');
+        var product_detail_name = [];
+        var product_price = [];
+        var product_color = [];
+        var product_size = [];
+        var product_details_thumb = [];
+        var product_qty_stock = [];
+        var product_discount = [];
 
         $(".product_detail_name").each(function () {
             product_detail_name.push($(this).val());
@@ -170,7 +174,7 @@ $(document).ready(function () {
             product_qty_stock.push($(this).val());
         });
         $(".color").each(function () {
-            prdocut_color.push($(this).val());
+            product_color.push($(this).val());
         });
         $(".size_ver").each(function () {
             product_size.push($(this).val());
@@ -178,8 +182,6 @@ $(document).ready(function () {
         $(".thumbnail").each(function () {
             product_details_thumb.push($(this).val());
         });
-
-        console.log(prdocut_color);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -190,33 +192,28 @@ $(document).ready(function () {
             url: url_save,
             data: {
                 id: id,
-                name: product_detail_name,
-                price: product_price,
-                color: prdocut_color,
-                size: product_size,
-                thumb: product_details_thumb,
-                qty: product_qty_stock,
-                discount: product_discount,
+                product_detail_name: product_detail_name,
+                product_price: product_price,
+                product_color: product_color,
+                product_size: product_size,
+                product_details_thumb: product_details_thumb,
+                product_qty_stock: product_qty_stock,
+                product_discount: product_discount,
             },
             dataType: "json",
             success: function (data) {
                 $('.loadajax').hide();
                 if ($.isEmptyObject(data.errors)) {
-                    $(".error_msg").html('');
-                    alert(data.success);
+                    confirm_success(data.success);
                     $('.close').click();
                 } else {
-                    let resp = data.errors;
-                    for (index in resp) {
-                        console.log(resp[index]);
-                    }
-
+                    confirm_warning(data.errors);
                 }
             }
         });
     });
 
-    var COUNT_TAB_WORK = 1;
+
     $(document).on("click", "ul li a#add_work", function () {
         COUNT_TAB_WORK = COUNT_TAB_WORK + 1;
         var CONTENT_FORM = $(".tab-pane").html();
@@ -228,7 +225,7 @@ $(document).ready(function () {
                 .before(
                     `<li class="nav-item" role="presentation">
                         <a class="nav-link" id="${tabId}-tab" data-toggle="tab" href="#${tabId}" role="tab"
-                            aria-selected="true">Product-${COUNT_TAB_WORK}</a>
+                            aria-selected="true">Tab - ${COUNT_TAB_WORK}</a>
                             <span class="remove-product-tab"><i class="fa fa-times" aria-hidden="true"></i>
                             </span>
                     </li>`
@@ -241,14 +238,29 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", ".nav-tabs span", function () {
+        var id = $("#myTab").children().length;
+        var anchor = $(this).siblings('a');
+        if (id > 2) {
+            $(anchor.attr('href')).remove();
+            $(this).parent().remove();
+            $(".nav-tabs li").children('a').first().click();
+        }
+    });
+
+    var options = {
+        'templateSelection': custom_template,
+        'templateResult': custom_template,
+    }
+
+    $('#selectBox').select2(options[0]);
+    $('.select2-container--default .select2-selection--single').css({ 'height': '220px' });
+
 });
 
-$(document).on("click", ".nav-tabs span", function () {
-    var anchor = $(this).siblings('a');
-    $(anchor.attr('href')).remove();
-    $(this).parent().remove();
-    $(".nav-tabs li").children('a').first().click();
-});
+
+
+
 function changeImg(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -279,4 +291,49 @@ function addAttrForItem(parentID) {
         parentID + "_size_ver"
     );
     $("#myModal #" + parentID + " .thumbnail").attr("id", parentID + "_select_image");
+}
+
+function confirm_warning(data) {
+    Swal.fire({
+        icon: 'warning',
+        text: data
+    });
+}
+
+function confirm_success(data) {
+    Swal.fire({
+        icon: "success",
+        title: data,
+        showConfirmButton: false,
+        timer: 1500
+    })
+}
+
+function notification(icon = "success", data) {
+    const Toast = Swal.mixin({
+        showCloseButton: true,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+    Toast.fire({
+        icon: icon,
+        title: data
+    });
+}
+
+function custom_template(obj) {
+    var data = $(obj.element).data();
+    var text = $(obj.element).text();
+    if (data && data['img_src']) {
+        img_src = data['img_src'];
+        template = $("<div><img src=\"" + img_src + "\" style=\"width:100%;height:150px;\"/><p style=\"font-weight: 700;font-size:14pt;text-align:center;\">" + text + "</p></div>");
+        return template;
+    }
 }
