@@ -17,6 +17,7 @@ class AdminProductController extends Controller
 {
     use ImageUpload, Recursive;
     protected $productRepo;
+
     public function __construct(ProductRepositoryInterface $productRepo, ImageRepositoryInterface $imageRepo)
     {
         $this->productRepo = $productRepo;

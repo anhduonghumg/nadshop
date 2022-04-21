@@ -262,7 +262,6 @@ function ajaxGetServerWithLoader(url, method, data, fncSuccess, funcErr) {
     return ajaxServer(url, method, data, function (rst) {
 
         $('.loadajax').hide();
-
         if (IsFunction(fncSuccess)) {
             fncSuccess(rst);
         }

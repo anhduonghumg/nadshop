@@ -12,12 +12,21 @@ class ProductDetailRepository extends BaseRepository implements ProductDetailRep
         return \App\Models\ProductDetail::class;
     }
 
-    // public function get_product_by_id($id, $select = ['*'])
-    // {
-    //     $product = $this->model->select($select)
-    //         ->firstWhere('id', $id);
-    //     return $product;
-    // }
+    public function get_list_product_details($orderBy = "id", $paginate = 15)
+    {
+        $product =  $this->model
+            ->select('id', 'product_detail_name', 'product_details_thumb', 'product_price', 'product_qty_stock', 'created_at')
+            ->orderByDesc("product_details.{$orderBy}")
+            ->paginate($paginate);
+        return $product;
+    }
+
+    public function get_product_detail_by_id($id, $select = ['*'])
+    {
+        $product = $this->model->select($select)
+            ->firstWhere('id', $id);
+        return $product;
+    }
 
     // public function get_list_products_trash($key = "", $paginate = 10, $orderBy = 'deleted_at')
     // {

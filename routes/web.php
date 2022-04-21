@@ -94,6 +94,9 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
 
 
     // Admin/product/detail
+    Route::get('/admin/product/detail/list', [App\Http\Controllers\AdminProductDetailController::class, 'list'])->name('admin.product.detail.list');
+    Route::get('/admin/product/detail/edit', [App\Http\Controllers\AdminProductDetailController::class, 'edit'])->name('admin.product.detail.edit');
+    Route::post('/admin/product/detail/update', [App\Http\Controllers\AdminProductDetailController::class, 'edit'])->name('admin.product.detail.update');
     Route::get('/admin/product/detail/add', [App\Http\Controllers\AdminProductDetailController::class, 'add'])->name('admin.product.detail.add');
     Route::post('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
     // Route::post('/admin/product/detail/test', [App\Http\Controllers\AdminProductDetailController::class, 'test'])->name('admin.product.detail.test');

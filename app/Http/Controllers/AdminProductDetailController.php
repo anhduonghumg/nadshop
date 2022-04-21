@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 class AdminProductDetailController extends Controller
 {
     protected $productDetailRepo;
+
     public function __construct(ProductDetailRepositoryInterface $productDetailRepo, ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo, ImageRepositoryInterface $imgRepo)
     {
         $this->productDetailRepo = $productDetailRepo;
@@ -76,5 +77,29 @@ class AdminProductDetailController extends Controller
             $this->productDetailRepo->add($saveData);
         }
         return response()->json(['success' => trans('notification.add_success')]);
+    }
+
+    public function list()
+    {
+        $list_product_details = $this->productDetailRepo->get_list_product_details();
+        return view('admin.productDetail.list', compact('list_product_details'));
+    }
+
+    public function edit(Request $request)
+    {
+        $id = $request->proId;
+        $product = $this->productDetailRepo->get_product_detail_by_id($id, ['*']);
+        $list_product_color = $this->colorRepo->get_list_color_product();
+        $list_product_size = $this->sizeRepo->get_list_size_product();
+        $list_image = $this->imgRepo->get_list_image_product($product->product_id);
+
+        $result = [
+            'list_product_color' => $list_product_color,
+            'list_product_size' => $list_product_size,
+            'id_product' => $id,
+            'list_image' => $list_image,
+            'product_detail' => $product
+        ];
+        return response()->json($result);
     }
 }

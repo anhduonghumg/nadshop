@@ -12,4 +12,6 @@ interface ProductDetailRepositoryInterface extends RepositoryInterface
     // public function get_num_product_trash();
     // public function get_num_product_active();
     // public function get_num_product_pending();
+    public function get_list_product_details();
+    public function get_product_detail_by_id($id, $select);
 }
