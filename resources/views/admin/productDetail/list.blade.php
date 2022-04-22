@@ -39,12 +39,13 @@
                         @endif
                         <td>
                             <a href="#" class="btn btn-success btn-sm rounded-0 text-white edit-prodetail" type="button"
-                                data-toggle="modal" data-id="{{ $item->id }}" data-url="{{
+                                data-id="{{ $item->id }}" data-url="{{
                                     route('admin.product.detail.edit')
                                 }}" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
                             <a href="#" class="btn btn-danger btn-sm rounded-0 text-white delete-prodetail"
-                                type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i
-                                    class="fa fa-trash"></i></a>
+                                type="button" data-id="{{ $item->id }}" data-url="{{
+                                    route('admin.product.detail.delete')
+                                }}" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                     @endforeach @else
@@ -77,7 +78,14 @@
                 var size = rsp.list_product_size;
                 var image = rsp.list_image;
                 var product_detail = rsp.product_detail;
-                var show = showToHtml(color, size, image, product_detail);
+                var url_update = rsp.url_update;
+                var show = showToHtml(
+                    url_update,
+                    color,
+                    size,
+                    image,
+                    product_detail
+                );
                 $(".loadajax").hide();
                 $("#modalPopupEdit").html(show);
                 $(".edit-modal").modal("show");
@@ -89,18 +97,42 @@
         });
     });
 
-    $(document).on('click','#btn_edit',function(){
+    $(document).on("click", "#btn_edit", function () {
         $(".loadajax").show();
+        var id = $(".proDetailId").attr("data-id");
+        var url_update = $(".proDetailId").attr("data-url");
+        var product_detail_name = $("#product_name").val();
+        var product_price = $("#product_price").val();
+        var product_discount = $("#product_discount").val();
+        var product_qty_stock = $("#stock").val();
+        var product_color = $("#color").val();
+        var product_size = $("#size_ver").val();
+        var product_details_thumb = $("#thumbnail").val();
+        var data = {
+            id: id,
+            product_detail_name: product_detail_name,
+            product_price: product_price,
+            product_discount: product_discount,
+            product_qty_stock: product_qty_stock,
+            product_color: product_color,
+            product_size: product_size,
+            product_details_thumb: product_details_thumb,
+        };
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
         $.ajax({
-            url: url_edit,
+            url: url_update,
             type: "POST",
-            dataType: "json",
             data: data,
-            success: function (rsp) {
-                $('.loadajax').hide();
+            dataType: "json",
+            success: function (data) {
+                $(".loadajax").hide();
                 if ($.isEmptyObject(data.errors)) {
                     confirm_success(data.success);
-                    $(".edit-modal").modal("hide");
+
                 } else {
                     confirm_warning(data.errors);
                 }
@@ -110,15 +142,61 @@
                 alert("error!!!!");
             },
         });
+        window.location.reload();
     });
 
-    function showToHtml(color, size, image, product_detail) {
+    $(document).on("click", ".delete-prodetail", function () {
+        var url_delete = $(this).attr("data-url");
+        var id = $(this).attr("data-id");
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                });
+                $.ajax({
+                    url: url_delete,
+                    type: "POST",
+                    data: { id: id },
+                    dataType: "json",
+                    success: function (data) {
+                        $(".loadajax").hide();
+                        if ($.isEmptyObject(data.errors)) {
+                            confirm_success(data.success);
+                        } else {
+                            confirm_warning(data.errors);
+                        }
+                    },
+                    error: function () {
+                        $(".loadajax").hide();
+                        alert("error!!!!");
+                    },
+                });
+                $(".loadajax").show();
+                window.location.reload();
+            }
+        });
+    });
+
+    function showToHtml(url, color, size, image, product_detail) {
         var output = ``;
         output += `<div class="modal fade draggable edit-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby=""
         aria-hidden="true">
         <div class="modal-dialog modal-lg ui-draggable">`;
         output += `<div class="modal-content p-3">
-                <form method='POST'>
+                <form method='POST' id="fm_update">
+                    @csrf
                     <div class="modal-header ui-dranggale-handle" style="cursor: move;">
                         <h5 class="modal-title">Sửa chi tiết sản phẩm</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -196,15 +274,20 @@
                                         <label for="" class="col-sm-4 control-label">Ảnh:</label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="thumbnail" name="product_thumbnail">
-                                                <option value="" selected>Chọn ảnh chi tiết</option>`;
+                                                <option value="">Chọn ảnh chi tiết</option>`;
         $.each(image, function (key, value) {
-            output += `<option value="${value.id}">${value.img_name}</option>`;
+            let selected =
+                value.image == product_detail.product_details_thumb
+                    ? "selected"
+                    : null;
+            output += `<option value="${value.image}" ${selected}>${value.img_name}</option>`;
         });
         output += `</select></div></div></div></div></div></div>`;
         output += `<div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                        <buttom type="button" name="btn_edit" class="btn btn-primary" id="btn_edit">Lưu</buton>
+                        <button type="button" name="btn_edit" class="btn btn-primary" id="btn_edit">Lưu</buton>
                     </div>
+                    <input class="proDetailId" type="hidden" data-id ="${product_detail.id}" data-url="${url}">
                 </form>
             </div>
         </div>

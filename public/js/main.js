@@ -248,18 +248,24 @@ $(document).ready(function () {
         }
     });
 
-    var options = {
-        'templateSelection': custom_template,
-        'templateResult': custom_template,
-    }
-
-    $('#selectBox').select2(options[0]);
-    $('.select2-container--default .select2-selection--single').css({ 'height': '220px' });
+    $(".js-example-templating").select2({
+        templateResult: formatState,
+        templateSelection: formatState
+    });
+    function formatState(state) {
+        if (!state.id) { return state.text; }
+        var $state = $(
+            '<span><img src="/dist/images/icons/icon_skypeprofile@2x.png" class="img-flag" /> ' + state.text + '</span>'
+        );
+        return $state.prop('outerHTML');
+    };
 
 });
 
 
-
+// function IsFunction(callback) {
+//     return !IsNullOrEmpty(callback) && typeof callback === 'function';
+// }
 
 function changeImg(input) {
     if (input.files && input.files[0]) {
@@ -308,6 +314,22 @@ function confirm_success(data) {
         timer: 1500
     })
 }
+
+// function confirm_delete() {
+//     Swal({
+//         title: 'Bạn đã chắc chắn chưa?',
+//         text: "Bạn không thể hoàn tác lại.",
+//         icon: 'warning',
+//         type: "input",
+//         showCancelButton: true,
+//         confirmButtonColor: '#3085d6',
+//         cancelButtonColor: '#d33',
+//         confirmButtonText: 'Đồng ý',
+//         cancelButtonText: "Hủy",
+//     }), function () {
+//         confirm_success();
+//     }
+// }
 
 function notification(icon = "success", data) {
     const Toast = Swal.mixin({

@@ -89,17 +89,65 @@ class AdminProductDetailController extends Controller
     {
         $id = $request->proId;
         $product = $this->productDetailRepo->get_product_detail_by_id($id, ['*']);
+        $pro_id = isset($product) ? $product->product_id : '0';
         $list_product_color = $this->colorRepo->get_list_color_product();
         $list_product_size = $this->sizeRepo->get_list_size_product();
-        $list_image = $this->imgRepo->get_list_image_product($product->product_id);
+        $list_image = $this->imgRepo->get_list_image_product($pro_id);
+        $url_update = route('admin.product.detail.update');
 
         $result = [
             'list_product_color' => $list_product_color,
             'list_product_size' => $list_product_size,
             'id_product' => $id,
             'list_image' => $list_image,
-            'product_detail' => $product
+            'product_detail' => $product,
+            'url_update' => $url_update
         ];
         return response()->json($result);
+    }
+
+    public function update(Request $request)
+    {
+        $id = $request->id;
+        $validator = Validator::make($request->all(), [
+            'product_detail_name' => 'bail|required',
+            'product_price' => 'bail|required|numeric',
+            'product_discount' => 'bail|required|numeric',
+            'product_qty_stock' => 'bail|required|numeric',
+            'product_color' => 'bail|required',
+            'product_size' => 'bail|required',
+            'product_details_thumb' => 'bail|required',
+        ]);
+
+        if ($validator->fails()) {
+            $error = collect($validator->errors())->unique()->first();
+            return response()->json(['errors' => $error]);
+        }
+
+        $saveData = [
+            'product_detail_name' => $request->product_detail_name,
+            'product_detail_slug' => Str::slug($request->product_detail_name),
+            'product_details_thumb' => $request->product_details_thumb,
+            'product_price' => $request->product_price,
+            'product_discount' => $request->product_discount,
+            'product_qty_stock' => $request->product_qty_stock,
+            'color_id' => $request->product_color,
+            'size_id' => $request->product_size,
+            'created_at' => now(),
+            'updated_at' => now()
+        ];
+        $this->productDetailRepo->update($saveData, $id);
+        return response()->json(['success' => trans('notification.update_success')]);
+    }
+
+
+    public function delete(Request $request)
+    {
+        $id = $request->id;
+        if ($id != null) {
+            $this->productDetailRepo->forceDelete($id);
+            return response()->json(['success' => trans('notification.force_delete_success')]);
+        }
+        return response()->json(['errors' => trans('notification.no_data')]);
     }
 }

@@ -140,6 +140,7 @@
     </div>
 </div>
 {{-- modal add product detail --}}
-<div id="modalPopup"></div>
+<div id="modalPopup">
+</div>
 <script type="text/javascript"></script>
 @endsection

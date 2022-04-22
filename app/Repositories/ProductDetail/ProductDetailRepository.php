@@ -23,7 +23,7 @@ class ProductDetailRepository extends BaseRepository implements ProductDetailRep
 
     public function get_product_detail_by_id($id, $select = ['*'])
     {
-        $product = $this->model->select($select)
+        $product = $this->model->select(['*'])
             ->firstWhere('id', $id);
         return $product;
     }
