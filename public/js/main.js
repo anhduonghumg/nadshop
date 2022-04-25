@@ -248,18 +248,6 @@ $(document).ready(function () {
         }
     });
 
-    $(".js-example-templating").select2({
-        templateResult: formatState,
-        templateSelection: formatState
-    });
-    function formatState(state) {
-        if (!state.id) { return state.text; }
-        var $state = $(
-            '<span><img src="/dist/images/icons/icon_skypeprofile@2x.png" class="img-flag" /> ' + state.text + '</span>'
-        );
-        return $state.prop('outerHTML');
-    };
-
 });
 
 
@@ -358,4 +346,36 @@ function custom_template(obj) {
         template = $("<div><img src=\"" + img_src + "\" style=\"width:100%;height:150px;\"/><p style=\"font-weight: 700;font-size:14pt;text-align:center;\">" + text + "</p></div>");
         return template;
     }
+}
+
+function currencyFormat(val, unit = 'đ') {
+    if (val != null) {
+        return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + unit;
+    } else {
+        return "";
+    }
+}
+
+function dateFormat(string_date, dash) {
+    if (string_date == null) {
+        return '';
+    }
+    let date = new Date(string_date);
+    let d = date.getUTCDate();
+    let m = date.getUTCMonth() + 1;
+    let y = date.getUTCFullYear();
+    let h = date.getHours();
+    let mi = date.getMinutes();
+
+    return (d <= 9 ? '0' + d : d) + dash + (m <= 9 ? '0' + m : m) + dash + y + ' ' + (h <= 9 ? '0' + h : h) + ':' + mi;
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }

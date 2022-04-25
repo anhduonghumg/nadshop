@@ -322,6 +322,7 @@ function ajaxServerAPI(url, headers, method, data, fncSuccess, funcErr) {
         }
     });
 }
+
 function dateFormatYMDToDMYY(string_date, dash) {
     if (string_date == null) {
         return '';

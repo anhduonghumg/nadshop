@@ -12,7 +12,7 @@ class ProductDetailRepository extends BaseRepository implements ProductDetailRep
         return \App\Models\ProductDetail::class;
     }
 
-    public function get_list_product_details($orderBy = "id", $paginate = 15)
+    public function get_list_product_details($orderBy = "id", $paginate = 2)
     {
         $product =  $this->model
             ->select('id', 'product_detail_name', 'product_details_thumb', 'product_price', 'product_qty_stock', 'created_at')

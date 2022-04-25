@@ -1,6 +1,8 @@
-@extends ('layouts.admin') @section('title', 'Danh sách bài viết')
+@extends ('layouts.admin')
+@section('title', 'Danh sách bài viết')
 @section('content')
 <div id="content" class="container-fluid">
+    {{-- <button class="btn-success btn-click">List Product</button> --}}
     <div class="card">
         <div class="card-header font-weight-bold">Danh sách sản phẩm</div>
         <div class="card-body">
@@ -63,6 +65,7 @@
 </div>
 <div id="modalPopupEdit"></div>
 <script type="text/javascript">
+    //loadData();
     $(document).on("click", ".edit-prodetail", function () {
         $(".loadajax").show();
         var url_edit = $(this).attr("data-url");
@@ -132,7 +135,7 @@
                 $(".loadajax").hide();
                 if ($.isEmptyObject(data.errors)) {
                     confirm_success(data.success);
-
+                    $('#myModal').modal('hide');
                 } else {
                     confirm_warning(data.errors);
                 }
@@ -142,52 +145,40 @@
                 alert("error!!!!");
             },
         });
-        window.location.reload();
+       loadData();
     });
 
     $(document).on("click", ".delete-prodetail", function () {
         var url_delete = $(this).attr("data-url");
         var id = $(this).attr("data-id");
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content"
-                        ),
-                    },
-                });
-                $.ajax({
-                    url: url_delete,
-                    type: "POST",
-                    data: { id: id },
-                    dataType: "json",
-                    success: function (data) {
-                        $(".loadajax").hide();
-                        if ($.isEmptyObject(data.errors)) {
-                            confirm_success(data.success);
-                        } else {
-                            confirm_warning(data.errors);
-                        }
-                    },
-                    error: function () {
-                        $(".loadajax").hide();
-                        alert("error!!!!");
-                    },
-                });
-                $(".loadajax").show();
-                window.location.reload();
-            }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
         });
+        $.ajax({
+            url: url_delete,
+            type: "POST",
+            dataType: "json",
+            data: {id:id},
+            success: function (rsp) {
+                $(".loadajax").hide();
+                confirm_success(rsp.success);
+            },
+            error: function () {
+                $(".loadajax").hide();
+                alert("error!!!!");
+            },
+        });
+        loadData();
     });
+
+    $(document).on('click', '.pagination a', function(event){
+        event.preventDefault();
+        var page = $(this).attr('href').split('page=')[1];
+        loadData(page);
+        //alert(page);
+       });
 
     function showToHtml(url, color, size, image, product_detail) {
         var output = ``;
@@ -295,6 +286,77 @@
     `;
         return output;
     }
+
+    function loadData(page){
+        $(".loadajax").show();
+        $.ajax({
+            url: "{{ route('admin.product.detail.list') }}" + "?page=" +page,
+            type: "GET",
+            //data: data,
+            dataType: "json",
+            success: function (rsp) {
+                $(".loadajax").hide();
+                var output = ``;
+                var temp = 0;
+                var curentPage = rsp.list_product_details.current_page;
+                console.log(rsp);
+
+                $('.page-item').each(function(i, obj) {
+                    if ($(this).hasClass('active')) {
+                     $(this).children('a').attr("href","");
+                     $(this).removeClass('active');
+                     //$(this).children('span').remove();
+
+                 }
+                    var page = $(this).find('a').text();
+                    if(page == curentPage){
+                        $(this).addClass( "active" );
+                        $(this).children('a').removeAttr("href");
+                    }
+                });
+
+                if(rsp.list_product_details.data.length > 0){
+                $.each(rsp.list_product_details.data, function (key, value) {
+                    temp++;
+                    var price = currencyFormat(value.product_price,unit="đ");
+                    var date = dateFormat(value.created_at,'/');
+                    var status = value.product_qty_stock > 0 ? '<td><span class="badge badge-success">Còn hàng</span></td>' : '<td><span class="badge badge-dark">Hết hàng</span></td>';
+                    output += `<tr>
+                        <th scope="row">${temp}</th>
+                        <td><img src="http://localhost:8080/nadshop/${value.product_details_thumb}" with="80px" height="80px" alt=""></td>
+                        <td>${value.product_detail_name}</td>
+                        <td>${price}</td>
+                        <td>${date}</td>
+                       ${status}
+                        <td>
+                            <a href="#" class="btn btn-success btn-sm rounded-0 text-white edit-prodetail" type="button"
+                                data-id="${value.id}" data-url="{{
+                                    route('admin.product.detail.edit')
+                                }}" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                            <a href="#" class="btn btn-danger btn-sm rounded-0 text-white delete-prodetail"
+                                type="button" data-id="${value.id}" data-url="{{
+                                    route('admin.product.detail.delete')
+                                }}" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>`;
+                });
+            }else{
+                output += `<tr>
+                    <td colspan="7" class="bg-white">
+                        <p>Không có bản ghi nào.</p>
+                    </td>
+                </tr>`;
+            }
+                $('.table tbody').html(output);
+
+            },
+            error: function () {
+                $(".loadajax").hide();
+                alert("error!!!!");
+            },
+        });
+    }
+
 </script>
 
 @endsection

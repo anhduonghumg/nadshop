@@ -16,8 +16,12 @@ class AdminProductDetailController extends Controller
 {
     protected $productDetailRepo;
 
-    public function __construct(ProductDetailRepositoryInterface $productDetailRepo, ColorRepositoryInterface $colorRepo, SizeRepositoryInterface $sizeRepo, ImageRepositoryInterface $imgRepo)
-    {
+    public function __construct(
+        ProductDetailRepositoryInterface $productDetailRepo,
+        ColorRepositoryInterface $colorRepo,
+        SizeRepositoryInterface $sizeRepo,
+        ImageRepositoryInterface $imgRepo
+    ) {
         $this->productDetailRepo = $productDetailRepo;
         $this->colorRepo = $colorRepo;
         $this->sizeRepo = $sizeRepo;
@@ -79,8 +83,16 @@ class AdminProductDetailController extends Controller
         return response()->json(['success' => trans('notification.add_success')]);
     }
 
-    public function list()
+    public function list(Request $request)
     {
+        if ($request->ajax()) {
+            $list_product_details = $this->productDetailRepo->get_list_product_details();
+            $result = [
+                'list_product_details' => $list_product_details,
+            ];
+            return response()->json($result);
+        }
+
         $list_product_details = $this->productDetailRepo->get_list_product_details();
         return view('admin.productDetail.list', compact('list_product_details'));
     }
