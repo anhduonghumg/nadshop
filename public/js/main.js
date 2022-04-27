@@ -251,10 +251,6 @@ $(document).ready(function () {
 });
 
 
-// function IsFunction(callback) {
-//     return !IsNullOrEmpty(callback) && typeof callback === 'function';
-// }
-
 function changeImg(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -303,21 +299,18 @@ function confirm_success(data) {
     })
 }
 
-// function confirm_delete() {
-//     Swal({
-//         title: 'Bạn đã chắc chắn chưa?',
-//         text: "Bạn không thể hoàn tác lại.",
-//         icon: 'warning',
-//         type: "input",
-//         showCancelButton: true,
-//         confirmButtonColor: '#3085d6',
-//         cancelButtonColor: '#d33',
-//         confirmButtonText: 'Đồng ý',
-//         cancelButtonText: "Hủy",
-//     }), function () {
-//         confirm_success();
-//     }
-// }
+function confirm_delete() {
+    Swal.fire({
+        title: 'Bạn thật sự muốn xóa?',
+        text: "Bạn không thể hoàn tác lại.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        confirmCancelText: "Hủy"
+    });
+}
 
 function notification(icon = "success", data) {
     const Toast = Swal.mixin({

@@ -107,4 +107,3 @@
         </div>
     </div>
 </div>
-<input type="hidden" id="url_product_detail" data-url="" data-id="">

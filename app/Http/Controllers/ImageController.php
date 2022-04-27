@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Constants\Constants;
 use Intervention\Image\Facades\Image;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ImageController extends Controller
@@ -39,5 +38,10 @@ class ImageController extends Controller
         $image = Image::make($imageFullPath)->fit($width, $height)->save($savedPath);
 
         return $image->response();
+    }
+
+    public function upload()
+    {
+        return view('fileTest.upload');
     }
 }

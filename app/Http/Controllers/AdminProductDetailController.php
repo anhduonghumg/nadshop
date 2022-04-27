@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Constants;
 use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Size\SizeRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
+use App\Helpers\ImageUpload;
 
 class AdminProductDetailController extends Controller
 {
+    use ImageUpload;
     protected $productDetailRepo;
 
     public function __construct(
@@ -48,7 +51,7 @@ class AdminProductDetailController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'product_detail_name.*' => 'bail|required',
+            'product_detail_name.*' => 'bail|required|distinct|unique:product_details,product_detail_name',
             'product_price.*' => 'bail|required|numeric',
             'product_discount.*' => 'bail|required|numeric',
             'product_qty_stock.*' => 'bail|required|numeric',
@@ -85,16 +88,19 @@ class AdminProductDetailController extends Controller
 
     public function list(Request $request)
     {
+        // $status = $request->status;
         if ($request->ajax()) {
+            // if ($status == Constants::PENDING) {
+            //     $list_act = [
+            //         'active' => 'Duyệt',
+            //         'delete' => 'Xóa'
+            //     ];
+            // }
             $list_product_details = $this->productDetailRepo->get_list_product_details();
-            $result = [
-                'list_product_details' => $list_product_details,
-            ];
-            return response()->json($result);
+            return view('admin.productDetail.listAjax', compact('list_product_details'))->render();
         }
-
-        $list_product_details = $this->productDetailRepo->get_list_product_details();
-        return view('admin.productDetail.list', compact('list_product_details'));
+        // $list_product_details = $this->productDetailRepo->get_list_product_details();
+        // return view('admin.productDetail.list', compact('list_product_details', 'list_act'));
     }
 
     public function edit(Request $request)
@@ -122,7 +128,7 @@ class AdminProductDetailController extends Controller
     {
         $id = $request->id;
         $validator = Validator::make($request->all(), [
-            'product_detail_name' => 'bail|required',
+            'product_detail_name' => 'bail|required|unique:product_details,product_detail_name,' . $id,
             'product_price' => 'bail|required|numeric',
             'product_discount' => 'bail|required|numeric',
             'product_qty_stock' => 'bail|required|numeric',
@@ -152,7 +158,6 @@ class AdminProductDetailController extends Controller
         return response()->json(['success' => trans('notification.update_success')]);
     }
 
-
     public function delete(Request $request)
     {
         $id = $request->id;
@@ -162,4 +167,12 @@ class AdminProductDetailController extends Controller
         }
         return response()->json(['errors' => trans('notification.no_data')]);
     }
+
+    // public function test(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $list_product_details = $this->productDetailRepo->get_list_product_details();
+    //         return view('admin.productDetail.test', compact('list_product_details'))->render();
+    //     }
+    // }
 }

@@ -100,7 +100,7 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     Route::get('/admin/product/detail/add', [App\Http\Controllers\AdminProductDetailController::class, 'add'])->name('admin.product.detail.add');
     Route::post('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
     Route::post('/admin/product/detail/delete', [App\Http\Controllers\AdminProductDetailController::class, 'delete'])->name('admin.product.detail.delete');
-    // Route::post('/admin/product/detail/test', [App\Http\Controllers\AdminProductDetailController::class, 'test'])->name('admin.product.detail.test');
+    Route::get('/admin/product/detail/test', [App\Http\Controllers\AdminProductDetailController::class, 'test'])->name('admin.product.detail.test');
 
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
@@ -145,4 +145,5 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     // resize image
     // Route::get('/image/resize',  [App\Http\Controllers\ImageController::class, 'resize'])->name('image.resize');
     // Route::get('/{imagePath}/{size}', [App\Http\Controllers\ImageController::class, 'flyResize'])->where('imagePath', '(.*)');
+    Route::get('/image/upload',  [App\Http\Controllers\ImageController::class, 'upload'])->name('image.upload');
 });

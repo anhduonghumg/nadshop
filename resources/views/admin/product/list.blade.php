@@ -142,5 +142,7 @@
 {{-- modal add product detail --}}
 <div id="modalPopup">
 </div>
-<script type="text/javascript"></script>
+<script type="text/javascript">
+
+</script>
 @endsection
