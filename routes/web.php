@@ -94,6 +94,7 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
 
 
     // Admin/product/detail
+    Route::get('/admin/product/detail/show', [App\Http\Controllers\AdminProductDetailController::class, 'show'])->name('admin.product.detail.show');
     Route::get('/admin/product/detail/list', [App\Http\Controllers\AdminProductDetailController::class, 'list'])->name('admin.product.detail.list');
     Route::get('/admin/product/detail/edit', [App\Http\Controllers\AdminProductDetailController::class, 'edit'])->name('admin.product.detail.edit');
     Route::post('/admin/product/detail/update', [App\Http\Controllers\AdminProductDetailController::class, 'update'])->name('admin.product.detail.update');
@@ -145,5 +146,5 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     // resize image
     // Route::get('/image/resize',  [App\Http\Controllers\ImageController::class, 'resize'])->name('image.resize');
     // Route::get('/{imagePath}/{size}', [App\Http\Controllers\ImageController::class, 'flyResize'])->where('imagePath', '(.*)');
-    Route::get('/image/upload',  [App\Http\Controllers\ImageController::class, 'upload'])->name('image.upload');
+    // Route::get('/image/upload',  [App\Http\Controllers\ImageController::class, 'upload'])->name('image.upload');
 });

@@ -1,18 +1,18 @@
-<div class="analytic">
+{{-- <div class="analytic">
     <a href="{{ request()->url() }}" class="text-primary">Kích hoạt<span class="text-muted">|</span></a>
     <a href="{{ request()->url() }}?satus=pending" class="text-primary">Chờ duyệt<span class="text-muted">
             |</span></a>
     <a href="{{ request()->url() }}?status=trash" class="text-primary">Vô hiệu hóa<span class="text-muted"></span></a>
-</div>
+</div> --}}
 <form action="{{ route('admin.product.action') }}" method="POST">
     @csrf
     <div class="form-action form-inline py-3">
-        <select class="form-control mr-1" name="act" id="">
+        {{--  <select class="form-control mr-1" name="act" id="">
             <option>Chọn</option>
-            {{-- @foreach ($list_act as $k => $v)
+            @foreach ($list_act as $k => $v)
             <option value="{{ $k }}">{{ $v }}</option>
-            @endforeach --}}
-        </select>
+            @endforeach
+        </select>  --}}
         <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" />
     </div>
     <table class="table table-striped">
@@ -60,7 +60,8 @@
                             class="fa fa-asterisk" aria-hidden="true"></i></a>
                 </td>
             </tr>
-            @endforeach @else
+            @endforeach
+            @else
             <tr>
                 <td colspan="7" class="bg-white">
                     <p>Không có bản ghi nào.</p>

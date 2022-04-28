@@ -6,15 +6,16 @@
         <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
             <h5>Danh sách sản phẩm chi tiết</h5>
             <div class="form-search form-inline">
-                <form class="form-search" action="" method="GET">
-                    <input type="text" class="form-control keyword" name="kw" value="{{ request()->input('kw') }}"
-                        placeholder="Tìm kiếm" />
-                    <input type="submit" name="btn-search" value="Tìm kiếm" class="btn btn-primary btn_search" />
-                </form>
+                {{-- <form class="form-search" action="" method="GET"> --}}
+                    <input type="text" class="form-control keyword" name="kw" placeholder="Nhập từ khóa..." />
+                    <button name="btn-search" class="btn btn-primary" id="btn_search">Tìm kiếm</button>
+                    <input type="hidden" data-url="{{ route('admin.product.detail.list') }}" class="url">
+                    {{--
+                </form> --}}
             </div>
         </div>
         <div class="card-body">
-            <div class="analytic">
+            {{-- <div class="analytic">
                 <a href="{{ request()->url() }}" class="text-primary">Kích hoạt<span class="text-muted">|</span></a>
                 <a href="{{ request()->url() }}?status=pending" class="text-primary">Chờ duyệt<span class="text-muted">
                         |</span></a>
@@ -88,20 +89,41 @@
                     </tbody>
                 </table>
             </form>
-            {{ $list_product_details->links('layouts.paginationlink')}}
+            {{ $list_product_details->links('layouts.paginationlink')}} --}}
         </div>
     </div>
 </div>
 <div id="modalPopupEdit"></div>
+<div id="modalPopupDetail"></div>
 <script type="text/javascript">
-    loadData(1);
-    $('.btn_search').attr('disabled',true);
+    loadData(1,"");
+    $('#btn_search').attr('disabled',true);
     $('.keyword').keyup(function(){
         if($(this).val().length !=0)
-            $('.btn_search').attr('disabled', false);
+            $('#btn_search').attr('disabled', false);
         else
-            $('.btn_search').attr('disabled',true);
+            $('#btn_search').attr('disabled',true);
     })
+
+    $(document).on('click','.show-prodetail',function(){
+        var id = $(this).attr('data-id');
+        $(".loadajax").show();
+        $.ajax({
+            url: "{{ route('admin.product.detail.show') }}",
+            type: "GET",
+            dataType: "html",
+            data: {id:id},
+            success: function (rsp) {
+                $(".loadajax").hide();
+                $("#modalPopupDetail").html(rsp);
+                $(".modal-detail").modal("show");
+            },
+            error: function () {
+                $(".loadajax").hide();
+                alert("error!!!!");
+            },
+        });
+    });
 
     $(document).on("click", ".edit-prodetail", function () {
         $(".loadajax").show();
@@ -216,12 +238,25 @@
         });
     });
 
+    $(document).on('click', '#btn_search', function(){
+        var url = $('.url').attr('data-url');
+        var query = $('.keyword').val();
+        var page = 1;
+        history.pushState(null, '', url +"?kw="+query);
+        loadData(page,query);
+       });
+
     $(document).on('click', '.pagination a', function(event){
         event.preventDefault();
         var url = "http://localhost:8080/nadshop/admin/product/detail/list";
         var page = $(this).attr('href').split('page=')[1];
-        history.pushState(null, '', url + "?page=" +page);
-        loadData(page);
+        var query = $('.keyword').val();
+        if(query != ""){
+            history.pushState(null, '', url + "?page=" +page +"&kw="+query);
+        }else{
+            history.pushState(null, '', url + "?page=" +page);
+        }
+        loadData(page,query);
        });
 
        function showToHtml(url, color, size, image, product_detail) {
@@ -331,15 +366,15 @@
         return output;
     }
 
-
-    function loadData(page){
+    function loadData(page,query){
+        $(".loadajax").show();
         $.ajax({
-            url: "{{ route('admin.product.detail.list') }}" + "?page=" + page,
+            url: "{{ route('admin.product.detail.list') }}" + "?page=" + page +"&kw="+query,
             type: "GET",
-            //data: data,
+            //data: { kw:kw },
             dataType: "html",
             success: function (rsp) {
-                //$(".loadajax").hide();
+                $(".loadajax").hide();
                 $('.card .card-body').html(rsp);
                 console.log(rsp);
             },error: function () {

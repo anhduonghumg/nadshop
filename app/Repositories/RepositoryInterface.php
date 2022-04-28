@@ -7,7 +7,7 @@ interface RepositoryInterface
 {
 
     public function get();
-    public function get_list_by_id($id);
+    public function find($id);
     public function add($data);
     public function update($data, $id);
     public function delete($data, $id);
