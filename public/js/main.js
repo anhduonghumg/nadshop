@@ -117,10 +117,10 @@ $(document).ready(function () {
                 <div class="form-group row ">
                 <label for="" class="col-sm-4 control-label">Ảnh chi tiết:</label>
                 <div class="col-sm-8">
-                    <select id="selectBox" class="form-control thumbnail" name="product_details_thumb[]">
+                    <select id="selectThumb" class="form-control thumbnail" name="product_details_thumb[]">
                         <option value="" selected>Chọn ảnh chi tiết</option>`;
                 $.each(resp.list_image, function (key, value) {
-                    output += `<option data-img_src="http://localhost:8080/nadshop/${value.image}" value="${value.image}"></option>`;
+                    output += `<option data-image="http://localhost:8080/nadshop/${value.image}" value="${value.image}"></option>`;
                 });
                 output += `</select></div></div></div></div></div></div>
                             <div class="modal-footer">
@@ -139,7 +139,6 @@ $(document).ready(function () {
                 $('.loadajax').css('display', 'none');
                 $('#modalPopup').empty().html(output);
                 $('.detail-modal').modal('show');
-
             }, error: function () {
                 $('.loadajax').css('display', 'none');
                 alert("error!!!!");
@@ -213,7 +212,6 @@ $(document).ready(function () {
         });
     });
 
-
     $(document).on("click", "ul li a#add_work", function () {
         COUNT_TAB_WORK = COUNT_TAB_WORK + 1;
         var CONTENT_FORM = $(".tab-pane").html();
@@ -247,9 +245,25 @@ $(document).ready(function () {
             $(".nav-tabs li").children('a').first().click();
         }
     });
-
 });
 
+
+function formatState(opt) {
+    if (!opt.id) {
+        return opt.text.toUpperCase();
+    }
+
+    var optimage = $(opt.element).attr('data-image');
+    console.log(optimage)
+    if (!optimage) {
+        return opt.text.toUpperCase();
+    } else {
+        var $opt = $(
+            '<span><img src="' + optimage + '" width="30px" /> ' + opt.text.toUpperCase() + '</span>'
+        );
+        return $opt;
+    }
+};
 
 function changeImg(input) {
     if (input.files && input.files[0]) {

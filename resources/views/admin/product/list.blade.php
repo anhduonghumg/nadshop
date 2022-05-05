@@ -18,7 +18,7 @@
                     <input type="text" class="form-control form-search" name="kw" value="{{ request()->input('kw') }}"
                         placeholder="Tìm kiếm" />
                     <input type="submit" name="btn-search" value="Tìm kiếm" class="btn btn-primary" />
-                    
+
                 </form>
             </div>
         </div>
@@ -142,7 +142,6 @@
 </div>
 {{-- modal add product detail --}}
 <div id="modalPopup">
-
 </div>
 <script type="text/javascript">
 

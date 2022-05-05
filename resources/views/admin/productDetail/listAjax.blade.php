@@ -7,12 +7,12 @@
 <form action="{{ route('admin.product.action') }}" method="POST">
     @csrf
     <div class="form-action form-inline py-3">
-        {{--  <select class="form-control mr-1" name="act" id="">
+        {{-- <select class="form-control mr-1" name="act" id="">
             <option>Chọn</option>
             @foreach ($list_act as $k => $v)
             <option value="{{ $k }}">{{ $v }}</option>
             @endforeach
-        </select>  --}}
+        </select> --}}
         <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" />
     </div>
     <table class="table table-striped">

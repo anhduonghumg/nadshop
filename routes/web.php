@@ -130,6 +130,9 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     // Route::get('/admin/size/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.color.forceDelete');
     Route::post('/admin/size/action', [App\Http\Controllers\AdminSizeController::class, 'action'])->name('admin.size.action');
 
+    // Admin/order
+    Route::get('/admin/order/list', [App\Http\Controllers\AdminOrderController::class, 'list'])->name('admin.order.list');
+
     // helper
     // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
     // Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');

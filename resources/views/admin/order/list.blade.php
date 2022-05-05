@@ -1,0 +1,130 @@
+@extends('layouts.admin')
+@section('title','Danh sách đơn hàng')
+@section('content')
+<div id="content" class="container-fluid">
+    <div class="card">
+        <div class="card-header font-weight-bold">
+            Danh sách đơn hàng
+        </div>
+        <div class="card-body">
+            <div class="analytic">
+                <a href="{{ route('admin.order.list','status=all') }}" class="text-primary">Tất cả<span
+                        class="text-muted"> |</span></a>
+                <a href="{{ route('admin.order.list','status=pending') }}" class="text-primary">Chờ xác nhận<span
+                        class="text-muted">|</span></a>
+                <a href="{{ route('admin.order.list','status=confirm') }}" class="text-primary">Đã xác nhận<span
+                        class="text-muted">|</span></a>
+                <a href="{{ route('admin.order.list','status=complete') }}" class="text-primary">Hoàn thành<span
+                        class="text-muted">|</span></a>
+                <a href="{{ route('admin.order.list','status=cancel') }}" class="text-primary">Hủy bỏ<span
+                        class="text-muted"></span></a>
+            </div>
+            {{-- <form> --}}
+                <div class="form-action form-inline py-3">
+                    <select class="form-control mr-1" name="act" id="">
+                        <option>Chọn</option>
+                        <option>Xác nhận</option>
+                        <option>Hoàn thành</option>
+                        <option>Hủy bỏ</option>
+                    </select>
+                    <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary mr-3">
+                    <button type="button" class="btn btn-success btn-rounded btn-add"><i class="fa fa-plus"
+                            aria-hidden="true"></i> Thêm mới</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <input id="checkall" name="checkall" type="checkbox">
+                            </th>
+                            <th scope="col">STT</th>
+                            <th scope="col">Mã</th>
+                            <th scope="col">Khách hàng</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Giá trị</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Thanh toán</th>
+                            <th scope="col">Chi tiết </th>
+                            <th scope="col">Tác vụ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="list_check[]" value="">
+                            </td>
+                            <th scope="row">1</th>
+                            <td><strong>#1112</strong></td>
+                            <td>
+                                Phan Văn Cương
+                            </td>
+                            <td>22/5/2022</td>
+                            <td>$120</td>
+                            <td>
+                                <span class="badge badge-warning">Đang xử lý</span>
+                            </td>
+                            <td>COD</td>
+                            <td><button type="button" class="btn btn-primary btn-sm btn-rounded">Xem chi tiết</button>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                    data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                        class="fa fa-edit"></i></a>
+                                <a href="#" class="btn btn-danger btn-sm rounded-0 text-white" type="button"
+                                    data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                        class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{--
+            </form> --}}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">Trước</span>
+                            <span class="sr-only">Sau</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<div id="modalPopup">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click','.btn-add',function(){
+$(".modal").modal('show');
+    });
+</script>
+@endsection
