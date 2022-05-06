@@ -62,7 +62,7 @@
                                 @endforeach
                             </select>
                             @error('category_product')
-                            <small class=" text-danger">{{ $message }}</small>
+                            <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <div class="form-group">

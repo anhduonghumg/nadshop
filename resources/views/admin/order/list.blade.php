@@ -102,25 +102,69 @@
     </div>
 </div>
 <div id="modalPopup">
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+    <div class="modal fade draggable edit-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby=""
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg ui-draggable">
+            <div class="modal-content p-3">
+                <form method='POST'>
+                    <div class="modal-header ui-dranggale-handle" style="cursor: move;">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm đơn hàng</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="form-group">
+                            <label for="fullname">Tên khách hàng</label>
+                            <input type="text" class="form-control" id="fullname" placeholder="Nhập tên khách hàng...">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Nhập email...">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Địa chỉ</label>
+                            <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ...">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="country">Country</label>
+                                <select class="custom-select d-block w-100" id="country" required="">
+                                    <option value="">Choose...</option>
+                                    <option>United States</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid country.
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="state">State</label>
+                                <select class="custom-select d-block w-100" id="state" required="">
+                                    <option value="">Choose...</option>
+                                    <option>California</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="zip">Zip</label>
+                                <input type="number" class="form-control" id="zip" placeholder="" required="">
+                                <div class="invalid-feedback">
+                                    Zip code required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <input type="submit" name="btn_save" value="Thêm mới" class="btn btn-primary">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
 </div>
 <script>
     $(document).on('click','.btn-add',function(){

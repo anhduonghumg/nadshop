@@ -150,4 +150,7 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     // Route::get('/image/resize',  [App\Http\Controllers\ImageController::class, 'resize'])->name('image.resize');
     // Route::get('/{imagePath}/{size}', [App\Http\Controllers\ImageController::class, 'flyResize'])->where('imagePath', '(.*)');
     // Route::get('/image/upload',  [App\Http\Controllers\ImageController::class, 'upload'])->name('image.upload');
+
+    // city district
+    // Route::get('/test', [App\Http\Controllers\TestController::class, 'test'])->name('test');
 });
