@@ -33,7 +33,7 @@
     <script>
         var editor_config = {
             path_absolute: "http://localhost:8080/nadshop/",
-            selector: 'textarea',
+            selector: 'textarea.tinytextarea',
             relative_urls: false,
             plugins: [
                 "advlist autolink lists link image charmap print preview hr anchor pagebreak",

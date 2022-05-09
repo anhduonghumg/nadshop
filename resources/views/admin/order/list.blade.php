@@ -28,8 +28,9 @@
                         <option>Hủy bỏ</option>
                     </select>
                     <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary mr-3">
-                    <button type="button" class="btn btn-success btn-rounded btn-add"><i class="fa fa-plus"
-                            aria-hidden="true"></i> Thêm mới</button>
+                    <a href="{{ route('admin.order.add') }}" class="btn btn-success btn-rounded btn-add"><i
+                            class="fa fa-plus"></i> Thêm
+                        mới</a>
                 </div>
                 <table class="table table-striped">
                     <thead>
@@ -116,44 +117,75 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="form-group">
                             <label for="fullname">Tên khách hàng</label>
-                            <input type="text" class="form-control" id="fullname" placeholder="Nhập tên khách hàng...">
+                            <input type="text" class="form-control" id="fullname" name="fullname"
+                                placeholder="Nhập tên khách hàng...">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                placeholder="Nhập số điện thoại...">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Nhập email...">
+                            <input type="email" class="form-control" id="email" name="email"
+                                placeholder="Nhập email...">
                         </div>
                         <div class="form-group">
                             <label for="address">Địa chỉ</label>
-                            <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ...">
+                            <input type="text" class="form-control" id="address" name="address"
+                                placeholder="Nhập địa chỉ...">
                         </div>
                         <div class="row">
-                            <div class="col-md-5 mb-3">
-                                <label for="country">Country</label>
-                                <select class="custom-select d-block w-100" id="country" required="">
-                                    <option value="">Choose...</option>
-                                    <option>United States</option>
+                            <div class="col-md-6 mb-3">
+                                {{-- <label for="city">Tỉnh/Thành phố</label> --}}
+                                <select class="custom-select form-control" id="city" required="">
+                                    <option value="">Tỉnh/Thành phố</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    Please select a valid country.
-                                </div>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="state">State</label>
-                                <select class="custom-select d-block w-100" id="state" required="">
-                                    <option value="">Choose...</option>
-                                    <option>California</option>
+                            <div class="col-md-6 mb-3">
+                                {{-- <label for="state">Quận/Huyện</label> --}}
+                                <select class="custom-select form-control" id="state" required="">
+                                    <option value="">Quận/Huyện</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    Please provide a valid state.
-                                </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="zip">Zip</label>
-                                <input type="number" class="form-control" id="zip" placeholder="" required="">
-                                <div class="invalid-feedback">
-                                    Zip code required.
-                                </div>
-                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="order_status">Trạng thái đơn hàng</label>
+                            <select class="custom-select form-control" id="order_status" name="order_status"
+                                required="">
+                                <option value="">Chọn trang thái đơn hàng</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="order_status">Hình thức thanh toán</label><br>
+                            <input type="radio" id="cod" name="payment" value="cod">
+                            <label for="cod" class="mr-3">COD</label>
+                            <input class="ml-3" type="radio" id="card" name="payment" value="card">
+                            <label for="card">Card</label><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="note">Ghi chú</label>
+                            <textarea class="form-control" rows="3" id="note" name="note"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">First</th>
+                                        <th scope="col">Last</th>
+                                        <th scope="col">Handle</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">3</th>
+                                        <td>Larry</td>
+                                        <td>the Bird</td>
+                                        <td>@twitter</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -164,11 +196,10 @@
             </div>
         </div>
     </div>
-
 </div>
-<script>
+{{--  <script>
     $(document).on('click','.btn-add',function(){
 $(".modal").modal('show');
     });
-</script>
+</script>  --}}
 @endsection

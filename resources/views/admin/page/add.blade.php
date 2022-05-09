@@ -18,14 +18,15 @@
                 </div>
                 <div class="form-group">
                     <label for="desc">Mô tả</label>
-                    <textarea class="form-control" name="desc" id="desc" cols="30" rows="5"></textarea>
+                    <textarea class="form-control tinytextarea" name="desc" id="desc" cols="30" rows="5"></textarea>
                     @error('desc')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label for="content">Nội dung trang</label>
-                    <textarea name="content" class="form-control" id="content" cols="30" rows="5"></textarea>
+                    <textarea name="content" class="form-control tinytextarea" id="content" cols="30"
+                        rows="5"></textarea>
                     @error('content')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror
