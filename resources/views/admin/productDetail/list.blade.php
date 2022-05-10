@@ -376,7 +376,7 @@
             success: function (rsp) {
                 $(".loadajax").hide();
                 $('.card .card-body').html(rsp);
-                console.log(rsp);
+                //console.log(rsp);
             },error: function () {
            alert("error!!!!");
             },

@@ -7,7 +7,7 @@
             Thêm đơn hàng mới
         </div>
         <div class="card-body">
-            <form method='POST'>
+            <form method='POST' id="form_add">
                 <div class="tab-content" id="myTabContent">
                     <div class="form-group">
                         <label for="fullname">Tên khách hàng</label>
@@ -30,7 +30,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-
                             <select class="custom-select form-control" id="city" required="">
                                 <option value="">Tỉnh/Thành phố</option>
                                 @if($list_city->isNotEmpty())
@@ -77,13 +76,16 @@
                                     <th scope="col">Số lượng</th>
                                     <th scope="col">Giá tiền</th>
                                     <th scope="col">Tổng giá tiền</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">
+                                        <button type="button" class="btn-primary btn-add"><i class="fa fa-plus"
+                                                aria-hidden="true"></i></button>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="table-body">
-                                <tr id="row1">
+                                {{-- <tr id="row1" class='list_pro'>
                                     <td width="40%">
-                                        <select name="product_name" id="product_name" class="form-control">
+                                        <select name="product_name[]" id="product_name" class="form-control">
                                             <option value="">Chọn sản phẩm</option>
                                             @if($list_product->isNotEmpty())
                                             @foreach ($list_product as $product )
@@ -93,32 +95,30 @@
                                             @endif
                                         </select>
                                     </td>
-                                    <td><input type="number" min="0" class="form-number" name="qty[]" id="qty"
-                                            value="0">
+                                    <td><input type="number" min="1" class="form-number qty" name="qty[]" value="1">
                                     </td>
-                                    <td><span class="price"></span></td>
-                                    <td><span class="total"></span></td>
+                                    <td><span class="price">0</span></td>
+                                    <td><span class="total">0</span></td>
                                     <td>
                                         <button type="button" class="btn-primary btn-add"><i class="fa fa-plus"
                                                 aria-hidden="true"></i></button>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                         <div class="cart-total text-right">
-                            <strong>Tổng số lượng sản phẩm: <span class="total_product">0</span></strong><br>
+                            <strong>Tổng số lượng sản phẩm: <span class="total_qty">0</span></strong><br>
                             <strong>Tổng tiền: <span class="total_price">0</span></strong>
                         </div>
                     </div>
                 </div>
-                <input type="submit" name="btn_save" value="Thêm mới" class="btn btn-primary">
+                <button type="button" id="btn_add" name="btn_save" class="btn btn-primary">Thêm mới</button>
             </form>
         </div>
     </div>
 </div>
 <script type="text/javascript">
     var count = 1;
-
     $(document).on('change','#city',function(e){
         let city = $('#city').val();
         $.ajax({
@@ -142,11 +142,13 @@
         let show = show_html(count,select_output);
         $('tbody.table-body').append(show);
         }
+        load_product();
     });
 
     $(document).on('click','.remove',function(){
         let delete_row = $(this).data("row");
         $('#' + delete_row).remove();
+        load_product();
     });
 
     $(document).on('change','#product_name',function(){
@@ -160,37 +162,64 @@
             success: function (rsp) {
                 let product = rsp.product;
                 if(product == null){
-                    $('tbody.table-body tr#' + row_id + ' td span.price').html('');
-                    $('tbody.table-body tr#' + row_id + ' td span.total').html('');
+                    $('tbody.table-body tr#' + row_id + ' td span.price').html('0');
+                    $('tbody.table-body tr#' + row_id + ' td span.total').html('0');
                 }else{
                     let price = rsp.product.product_price;
-                    let total = price;
-                $('tbody.table-body tr#' + row_id + ' td span.price').html(price);
-                $('tbody.table-body tr#' + row_id + ' td span.total').html(total);
+                    let show_price = currencyFormat(price);
+                $('tbody.table-body tr#' + row_id + ' td span.price').html(show_price);
                 }
+                load_product();
             },error: function () {
-           alert("error!!!!");
+             alert("error!!!!");
             },
         });
     });
 
-    $(document).on('change','#qty',function(){
-        let qty = $(this).val();
-
-
+    $(document).on('change','.qty',function(){
+        load_product();
     });
 
+    $(document).on('click','#btn_add',function(){
+        let data_fm = $('#form_add').serializeArray();
+        console.log(data_fm);
+    });
+
+    function load_product(){
+        let total_qty = 0;
+        let total_all = 0;
+       $('.table-body tr.list_pro').each(function(){
+          let qty = $(this).find('.qty').val();
+          let price = stringToNumber($(this).find('.price').text());
+          let total = qty * price;
+         $(this).find('.total').text(currencyFormat(total));
+           total_all += Number(total);
+           total_qty += Number(qty);
+       });
+
+       $('.total_price').text(currencyFormat(total_all));
+       $('.total_qty').text(total_qty);
+    }
+
+    function stringToNumber(data){
+        var result;
+       if(data != null){
+            result = data.substring(0, data.length - 1);
+            result = result.replace(/\./g,'');
+       }
+       return result;
+    }
+
     function show_html($count,data){
-        var html_code = `<tr id='row${count}'>`;
+        var html_code = `<tr id='row${count}' class='list_pro'>`;
             html_code += `<td width="40%">
-                   <select name="product_name" id="product_name" class="form-control">`;
+                   <select name="product_name[]" id="product_name" class="form-control">`;
                     html_code += `${data}`;
             html_code += `</select></td>
-               <td><input type="number" min="0" class="form-number" name="qty[]" id="qty"
-                       value="0">
+               <td><input type="number" min="0" class="form-number qty" name="qty[]" value="1">
                </td>
-               <td><span class="price"></span></td>
-               <td><span class="total"></span></td>
+               <td><span class="price">0</span></td>
+               <td><span class="total">0</span></td>
                <td><button type='button' class='btn-danger remove' name='remove' data-row='row${count}'><i class="fa fa-minus" aria-hidden="true"></i></button></td>
            </tr>`;
         return html_code;
