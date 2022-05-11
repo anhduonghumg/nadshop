@@ -23,7 +23,7 @@ class CreateProductOrderTable extends Migration
             $table->string('district', 100);
             $table->double('order_total');
             $table->enum('order_status', ['pending', 'shipping', 'success', 'cancel']);
-            $table->enum('payment', ['cod', 'online']);
+            $table->enum('payment', ['cod', 'card']);
             $table->text('node');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

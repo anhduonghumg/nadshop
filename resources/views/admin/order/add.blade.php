@@ -30,7 +30,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <select class="custom-select form-control" id="city" required="">
+                            <select class="custom-select form-control" name="city" id="city" required="">
                                 <option value="">Tỉnh/Thành phố</option>
                                 @if($list_city->isNotEmpty())
                                 @foreach ($list_city as $city )
@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
 
-                            <select class="custom-select form-control" id="district" required="">
+                            <select class="custom-select form-control" name="district" id="district" required="">
                                 <option value="">Quận/Huyện</option>
                             </select>
                         </div>
@@ -112,13 +112,13 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" id="btn_add" name="btn_save" class="btn btn-primary">Thêm mới</button>
+                <button type="button" id="btn_order_save" name="btn_save" class="btn btn-primary">Thêm mới</button>
             </form>
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    var count = 1;
+    var count = 0;
     $(document).on('change','#city',function(e){
         let city = $('#city').val();
         $.ajax({
@@ -136,13 +136,23 @@
 
     $(document).on('click','.btn-add',function(){
         count = count + 1;
-        let select_output = $('table.table tbody #product_name').html();
         let num = $('tbody.table-body tr').length;
-        if(num <= 4){
-        let show = show_html(count,select_output);
-        $('tbody.table-body').append(show);
-        }
-        load_product();
+        $.ajax({
+            url: "{{ route('admin.order.addProduct') }}",
+            type: "GET",
+            dataType: "json",
+            success: function (rsp) {
+               let product = rsp.list_product;
+               let output = show_html(count,product);
+               if(num <= 4){
+                   $('tbody.table-body').append(output);
+               }else{
+                   alert('Chỉ có thể thêm tối đa 5 sản phẩm');
+               }
+            },error: function () {
+             alert("error!!!!");
+            },
+        });
     });
 
     $(document).on('click','.remove',function(){
@@ -180,10 +190,34 @@
         load_product();
     });
 
-    $(document).on('click','#btn_add',function(){
-        let data_fm = $('#form_add').serializeArray();
-        console.log(data_fm);
-    });
+    $(document).on('click','#btn_order_save',function(){
+
+        let total_order = stringToNumber($('.total_price').text());
+        let total_qty = Number($('.total_qty').text());
+        let fm_data = $('#form_add').serializeArray();
+        fm_data.push({ name: "order_total", value: total_order });
+        fm_data.push({ name: "order_qty", value: total_qty });
+        $('.loadajax').show();
+        $.ajax({
+            url: "{{ route('admin.order.store') }}",
+            type: "post",
+            data: fm_data,
+            dataType: "json",
+            success: function (rsp) {
+                $('.loadajax').hide();
+                if ($.isEmptyObject(rsp.errors)) {
+                    confirm_success(rsp.success);
+                    setTimeout(function(){
+                        window.location.href = "http://localhost:8080/nadshop/admin/order/list";
+                    },1500)
+                } else {
+                    confirm_warning(rsp.errors);
+                }
+            },error: function () {
+           alert("error!!!!");
+            },
+        });
+});
 
     function load_product(){
         let total_qty = 0;
@@ -201,28 +235,35 @@
        $('.total_qty').text(total_qty);
     }
 
-    function stringToNumber(data){
-        var result;
-       if(data != null){
-            result = data.substring(0, data.length - 1);
-            result = result.replace(/\./g,'');
-       }
-       return result;
+    function show_html($count,data){
+        let output = `<tr id="row${count}" class='list_pro'>
+            <td width="40%">
+                <select name="product_name[]" id="product_name" class="form-control">
+                    <option value="">Chọn sản phẩm</option>`;
+                    $.each(data, function (key, value) {
+                        output += `<option value="${value.id}">${value.product_detail_name}</option>`;
+                    });
+               output += `</select>
+            </td>
+            <td><input type="number" min="1" class="form-number qty" name="qty[]" value="1">
+            </td>
+            <td><span class="price">0</span></td>
+            <td><span class="total">0</span></td>
+            <td>
+                <button type='button' class='btn-danger remove' name='remove' data-row='row${count}'><i class="fa fa-minus" aria-hidden="true"></i></button>
+            </td>
+        </tr>`;
+        return output;
     }
 
-    function show_html($count,data){
-        var html_code = `<tr id='row${count}' class='list_pro'>`;
-            html_code += `<td width="40%">
-                   <select name="product_name[]" id="product_name" class="form-control">`;
-                    html_code += `${data}`;
-            html_code += `</select></td>
-               <td><input type="number" min="0" class="form-number qty" name="qty[]" value="1">
-               </td>
-               <td><span class="price">0</span></td>
-               <td><span class="total">0</span></td>
-               <td><button type='button' class='btn-danger remove' name='remove' data-row='row${count}'><i class="fa fa-minus" aria-hidden="true"></i></button></td>
-           </tr>`;
-        return html_code;
+    function stringToNumber(data) {
+        var result;
+        if (data != null) {
+            result = data.substring(0, data.length - 1);
+            result = result.replace(/\./g, '');
+        }
+        return result;
     }
+
 </script>
 @endsection

@@ -31,6 +31,12 @@
 
 <body>
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         var editor_config = {
             path_absolute: "http://localhost:8080/nadshop/",
             selector: 'textarea.tinytextarea',

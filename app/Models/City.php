@@ -11,4 +11,12 @@ class City extends Model
     protected $table = 'user_cities';
     public $timestamps = false;
     protected $guarded = [];
+
+    public function get_name_city($id)
+    {
+        if ($id != null) {
+            $result = City::findOrFail($id);
+            return $result;
+        }
+    }
 }

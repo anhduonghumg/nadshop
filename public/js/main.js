@@ -390,3 +390,4 @@ function getParameterByName(name, url) {
 function locationUrl() {
     return $(location).attr('href');
 }
+

@@ -20,7 +20,6 @@
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-
                         <div class="form-group">
                             <label for="intro">Mô tả sản phẩm</label>
                             <textarea name="product_desc" class="form-control" id="intro" cols="30" rows="5"></textarea>

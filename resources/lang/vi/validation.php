@@ -192,5 +192,11 @@ return [
         'product_color' => 'màu',
         'product_size' => 'kich cỡ/bản',
         'product_details_thumb' => 'ảnh chi tiét',
+        'fullname' => 'họ tên',
+        'district' => 'quận/huyện',
+        'order_status' => 'trạng thái đơn hàng',
+        'payment' => 'hình thức thanh toán',
+        'product_name.*' => 'tên sản phẩm',
+        'note' => 'ghi chú',
     ],
 ];

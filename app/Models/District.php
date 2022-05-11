@@ -11,4 +11,12 @@ class District extends Model
     protected $table = 'user_districts';
     public $timestamps = false;
     protected $guarded = [];
+
+    public function get_name_city($id)
+    {
+        if ($id != null) {
+            $result = District::findOrFail($id);
+            return $result;
+        }
+    }
 }

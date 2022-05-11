@@ -14,4 +14,5 @@ return [
     'change_pass_fail' => 'Bạn không nên đặt mật khẩu mới giống với mật khẩu cũ',
     'change_pass_success' => "Thay đổi mật khẩu thành công",
     'delete_yourself' => 'Bạn không thể xóa chính bạn',
+    'not_select' => 'Bạn chưa chọn sản phẩm!'
 ];
