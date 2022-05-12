@@ -40,7 +40,6 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-
                             <select class="custom-select form-control" name="district" id="district" required="">
                                 <option value="">Quận/Huyện</option>
                             </select>
@@ -214,7 +213,7 @@
                     confirm_warning(rsp.errors);
                 }
             },error: function () {
-           alert("error!!!!");
+                alert("error!!!!");
             },
         });
 });

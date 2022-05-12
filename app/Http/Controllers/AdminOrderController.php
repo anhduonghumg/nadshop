@@ -7,10 +7,12 @@ use App\Models\City;
 use App\Models\OrderDetail;
 use App\Models\District;
 use App\Models\OrderStatus;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
 use App\Repositories\Order\OrderRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class AdminOrderController extends Controller
 {
@@ -37,7 +39,9 @@ class AdminOrderController extends Controller
 
     public function list()
     {
-        return view('admin.order.list');
+        $paginate = 10;
+        $list_orders = $this->order->get_list_orders($paginate);
+        return view('admin.order.list', compact('list_orders'));
     }
 
     public function add(Request $request)
@@ -70,6 +74,19 @@ class AdminOrderController extends Controller
                 'list_product' => $list_product
             ];
             return response()->json($result);
+        }
+    }
+
+    public function detail(Request $request)
+    {
+        if ($request->ajax()) {
+            // $id = $request->order;
+            // $info_orders = get_info_order($id);
+            // $list_product_order = get_product_orders($id);
+
+            // return view('admin.order.detail', compact('info_orders', 'list_product_order'))->render();
+
+            return 1;
         }
     }
 

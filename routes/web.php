@@ -136,6 +136,7 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     Route::get('/admin/order/loadDistrict', [App\Http\Controllers\AdminOrderController::class, 'loadDistrict'])->name('admin.order.district');
     Route::get('/admin/order/addProduct', [App\Http\Controllers\AdminOrderController::class, 'addProduct'])->name('admin.order.addProduct');
     Route::post('/admin/order/store', [App\Http\Controllers\AdminOrderController::class, 'store'])->name('admin.order.store');
+    Route::get('/admin/order/detail', [App\Http\Controllers\AdminOrderController::class, 'detail'])->name('admin.order.detail');
 
 
     // helper
