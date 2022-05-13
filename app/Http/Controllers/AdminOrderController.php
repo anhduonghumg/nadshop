@@ -80,13 +80,12 @@ class AdminOrderController extends Controller
     public function detail(Request $request)
     {
         if ($request->ajax()) {
-            // $id = $request->order;
-            // $info_orders = get_info_order($id);
-            // $list_product_order = get_product_orders($id);
+            $id = (int)$request->order;
+            // $sql = Order::all();
+            $info_orders = $this->order->get_info_order($id);
+            $list_product_order = $this->orderDetail->get_product_order($id);
 
-            // return view('admin.order.detail', compact('info_orders', 'list_product_order'))->render();
-
-            return 1;
+            return view('admin.order.detail', compact('info_orders', 'list_product_order'))->render();
         }
     }
 
@@ -138,10 +137,11 @@ class AdminOrderController extends Controller
             $saveOrder = $this->order->add($saveDataOrder);
 
             if ($saveOrder) {
-                foreach ($request->product_name as $key => $value) {
+                $product_name = $request->product_name;
+                foreach ($product_name as $key => $value) {
                     $saveDataOrderDetail = [
                         'pro_order_qty' => $request->qty[$key],
-                        'product_detail_id' => $request->product_name[$key],
+                        'product_detail_id' => $product_name[$key],
                         'product_order_id' => $saveOrder->id
                     ];
                     $this->orderDetail->create($saveDataOrderDetail);

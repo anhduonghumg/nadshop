@@ -18,3 +18,9 @@ function get_order_code()
 {
     return '#' . str_pad(time(), 8, "0", STR_PAD_LEFT);
 }
+
+function get_address($address, $district, $city)
+{
+    $result = "{$address}," . "{$district}," . "{$city}";
+    return $result;
+}

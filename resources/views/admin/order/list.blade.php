@@ -116,93 +116,7 @@
     </div>
 </div>
 <div id="modalPopup">
-    <div class="modal fade" id="" tabindex="-1" aria-labelledby="" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="">Chi tiết đơn hàng</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <h4>Thông tin đơn hàng</h4>
-                            <p class="border border-dark border-bottom-2 mb-2"></p>
-                            <section class="form-group">
-                                <label for="code">Mã đơn hàng</label>
-                                <input type="text" class="form-control" id="code" name="code" value="">
-                            </section>
-                            <section class="form-group">
-                                <label for="status">Trạng thái đơn hàng</label>
-                                <input type="text" class="form-control" id="status" name="status" value="">
-                            </section>
-                            <section class="form-group">
-                                <label for="fullname">Tên khách hàng</label>
-                                <input type="text" class="form-control" id="fullname" name="fullname" value="">
-                            </section>
-                            <section class="form-group">
-                                <label for="phone">Số điện thoại</label>
-                                <input type="text" class="form-control" id="phone" name="phone" value="">
-                            </section>
-                            <section class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email" name="email" value="">
-                            </section>
-                            <section class="form-group">
-                                <label for="address">Địa chỉ nhận</label>
-                                <input type="text" class="form-control" id="address" name="address" value="">
-                            </section>
-                            <section class="form-group">
-                                <label for="address">Hình thức thanh toán</label>
-                                <input type="text" class="form-control" id="address" name="address" value="">
-                            </section>
-                            <section class="form-group">
-                                <label for="note">Ghi chú</label>
-                                <textarea class="form-control" name="note"></textarea>
-                            </section>
-                        </div>
-                        <div class="col-sm-7">
-                            <h4>Sản phẩm đơn hàng</h4>
-                            <p class="border border-dark border-bottom-2 mb-2"></p>
-                            <section class="form-group">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">STT</th>
-                                            <th scope="col">Ảnh</th>
-                                            <th scope="col">Tên sản phẩm</th>
-                                            <th scope="col">Đơn giá</th>
-                                            <th scope="col">Số lượng</th>
-                                            <th scope="col">Thành tiền</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="col">1</th>
-                                            <th scope="col"><img src="" alt=""></th>
-                                            <th scope="col">ABC</th>
-                                            <th scope="col">120000</th>
-                                            <th scope="col">2</th>
-                                            <th scope="col">240000</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div class="order-value text-right">
-                                    <strong>Tổng số lượng sản phẩm: <span class="total_qty">0</span></strong><br>
-                                    <strong>Tổng tiền: <span class="total_price">0</span></strong>
-                                </div>
-                            </section>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 <script>
     $(document).on('click','.order-detail',function(){
@@ -212,9 +126,10 @@
         url: "{{ route('admin.order.detail') }}",
         data:{order:order},
         type: "GET",
-        dataType: "json",
+        dataType: "html",
         success: function (rsp) {
           $(".loadajax").hide();
+          $("#modalPopup").html(rsp);
           $('.modal').modal('show');
         },error: function () {
          alert("error!!!!");

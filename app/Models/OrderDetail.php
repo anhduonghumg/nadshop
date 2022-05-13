@@ -18,5 +18,12 @@ class OrderDetail extends Model
         'product_order_id'
     ];
 
-
+    public function get_product_order($id)
+    {
+        $result = $this->select('product_detail_name', 'product_details_thumb', 'product_price', 'pro_order_qty')
+            ->join('product_details', 'product_details.id', '=', 'product_order_details.product_detail_id')
+            ->where('product_order_details.product_order_id', $id)
+            ->get();
+        return $result;
+    }
 }

@@ -21,4 +21,10 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             ->paginate($paginate);
         return $result;
     }
+
+    public function get_info_order($id)
+    {
+        $result = $this->model->findOrFail($id);
+        return $result;
+    }
 }

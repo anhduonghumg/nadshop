@@ -7,4 +7,6 @@ use App\Repositories\RepositoryInterface;
 interface OrderRepositoryInterface extends RepositoryInterface
 {
     public function get_list_orders($paginate);
+    public function get_info_order($id);
+    // public function get_product_order($id);
 }
