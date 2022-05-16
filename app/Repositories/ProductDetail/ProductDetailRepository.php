@@ -36,6 +36,7 @@ class ProductDetailRepository extends BaseRepository implements ProductDetailRep
     }
 
 
+
     // public function get_list_products_trash($key = "", $paginate = 10, $orderBy = 'deleted_at')
     // {
     //     $product = $this->model

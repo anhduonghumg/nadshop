@@ -7,6 +7,10 @@ class Constants
     const ADMIN = 0;
     const PUBLIC = 'public';
     const PENDING = 'pending';
+    const SUCCESS = 'success';
+    const CANCEL = 'cancel';
+    const SHIPPING = 'shipping';
+    const ALL = 'all';
     const ACTIVE = 'active';
     const TRASH = 'trash';
     const DELETE = 'delete';

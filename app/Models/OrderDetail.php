@@ -26,4 +26,10 @@ class OrderDetail extends Model
             ->get();
         return $result;
     }
+
+    public function delete_order($id)
+    {
+        $result = $this->where('product_order_id', $id)->delete();
+        return $result;
+    }
 }

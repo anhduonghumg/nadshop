@@ -8,16 +8,16 @@
         </div>
         <div class="card-body">
             <div class="analytic">
-                <a href="{{ route('admin.order.list','status=all') }}" class="text-primary">Tất cả<span
-                        class="text-muted"> |</span></a>
-                <a href="{{ route('admin.order.list','status=pending') }}" class="text-primary">Chờ xác nhận<span
-                        class="text-muted">|</span></a>
-                <a href="{{ route('admin.order.list','status=confirm') }}" class="text-primary">Đã xác nhận<span
-                        class="text-muted">|</span></a>
-                <a href="{{ route('admin.order.list','status=complete') }}" class="text-primary">Hoàn thành<span
-                        class="text-muted">|</span></a>
-                <a href="{{ route('admin.order.list','status=cancel') }}" class="text-primary">Hủy bỏ<span
-                        class="text-muted"></span></a>
+                <a href="{{ route('admin.order.list','status=all') }}" class="text-primary">Tất
+                    cả({{ $data_num_order['all'] }})<span class="text-muted"> |</span></a>
+                <a href="{{ route('admin.order.list','status=pending') }}" class="text-primary">Chờ xác
+                    nhận({{ $data_num_order['pending'] }})<span class="text-muted">|</span></a>
+                <a href="{{ route('admin.order.list','status=shipping') }}" class="text-primary">Vận
+                    chuyển({{ $data_num_order['shipping'] }})<span class="text-muted">|</span></a>
+                <a href="{{ route('admin.order.list','status=success') }}" class="text-primary">Hoàn
+                    thành({{ $data_num_order['success'] }})<span class="text-muted">|</span></a>
+                <a href="{{ route('admin.order.list','status=cancel') }}" class="text-primary">Hủy
+                    bỏ({{ $data_num_order['cancel'] }})<span class="text-muted"></span></a>
             </div>
             {{-- <form> --}}
                 <div class="form-action form-inline py-3">
@@ -59,26 +59,27 @@
                                 <input type="checkbox" name="list_check[]" value="">
                             </td>
                             <th scope="row">{{ $temp }}</th>
-                            <td><strong>{{ $order->order_code }}</strong></td>
+                            <td><strong>{{ $order['order_code'] }}</strong></td>
                             <td>
-                                {{ $order->fullname }}
+                                {{ $order['fullname'] }}
                             </td>
-                            <td>{{ formatDateToDMY($order->created_at) }}</td>
-                            <td>{{ currentcyFormat($order->order_total) }}</td>
+                            <td>{{ formatDateToDMY($order['created_at']) }}</td>
+                            <td>{{ currentcyFormat($order['order_total']) }}</td>
                             <td>
-                                <span class="badge badge-warning">{{ $order->order_status }}</span>
+                                <span class="badge badge-warning">{{ $order['order_status'] }}</span>
                             </td>
-                            <td>{{ $order->payment }}</td>
+                            <td>{{ $order['payment'] }}</td>
                             <td><button type="button" class="btn btn-primary btn-sm btn-rounded order-detail" data-id={{
-                                    $order->product_order_id}}><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                    $order['product_order_id']}}><i class="fa fa-eye" aria-hidden="true"></i></button>
                             </td>
                             <td>
-                                <a href="#" class="btn btn-success btn-sm rounded-0 text-white" type="button"
-                                    data-toggle="tooltip" data-placement="top" title="Edit"><i
-                                        class="fa fa-edit"></i></a>
-                                <a href="#" class="btn btn-danger btn-sm rounded-0 text-white" type="button"
-                                    data-toggle="tooltip" data-placement="top" title="Delete"><i
-                                        class="fa fa-trash"></i></a>
+                                <a href="{{ route('admin.order.edit', $order['id']) }}"
+                                    class="btn btn-success btn-sm rounded-0 text-white order-edit" type="button"
+                                    data-toggle="tooltip" data-placement="top" title="Edit" edit-id={{
+                                    $order['product_order_id']}}><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger btn-sm rounded-0 text-white order-delete" type="button"
+                                    data-toggle="tooltip" data-placement="top" title="Delete"
+                                    delete-id="{{$order['product_order_id']}}"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -93,25 +94,7 @@
                 </table>
                 {{--
             </form> --}}
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">Trước</span>
-                            <span class="sr-only">Sau</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            {{ $list_orders->links('layouts.paginationlink') }}
         </div>
     </div>
 </div>
@@ -136,5 +119,28 @@
         },
     });
  });
+
+ $(document).on('click','.order-delete',function(){
+     let id = $(this).attr('delete-id');
+     $.ajax({
+        url: "{{ route('admin.order.delete') }}",
+        type: "POST",
+        dataType: "json",
+        data: {id:id},
+        beforeSend:function(){
+           return confirm("Bạn thực sự muốn xóa?");
+         },
+        success: function (rsp) {
+            $(".loadajax").hide();
+            confirm_success(rsp.success);
+            //loadData(page);
+        },
+        error: function () {
+            $(".loadajax").hide();
+            alert("error!!!!");
+        },
+    });
+ });
+
 </script>
 @endsection

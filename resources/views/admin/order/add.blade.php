@@ -208,7 +208,7 @@
                     confirm_success(rsp.success);
                     setTimeout(function(){
                         window.location.href = "http://localhost:8080/nadshop/admin/order/list";
-                    },1500)
+                    },1000)
                 } else {
                     confirm_warning(rsp.errors);
                 }

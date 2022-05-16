@@ -138,7 +138,8 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     Route::post('/admin/order/store', [App\Http\Controllers\AdminOrderController::class, 'store'])->name('admin.order.store');
     Route::get('/admin/order/detail', [App\Http\Controllers\AdminOrderController::class, 'detail'])->name('admin.order.detail');
     Route::post('/admin/order/update', [App\Http\Controllers\AdminOrderController::class, 'update'])->name('admin.order.update');
-    Route::get('/admin/order/edit', [App\Http\Controllers\AdminOrderController::class, 'edit'])->name('admin.order.edit');
+    Route::get('/admin/order/edit/{id}', [App\Http\Controllers\AdminOrderController::class, 'edit'])->name('admin.order.edit');
+    Route::post('/admin/order/delete', [App\Http\Controllers\AdminOrderController::class, 'delete'])->name('admin.order.delete');
 
     // helper
     // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');

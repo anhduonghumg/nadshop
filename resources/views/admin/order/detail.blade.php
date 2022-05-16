@@ -42,8 +42,7 @@
                         <section class="form-group">
                             <label for="address">Địa chỉ nhận</label>
                             <input type="text" class="form-control" id="address" name="address"
-                                value="{{ get_address($info_orders->address,$info_orders->district,$info_orders->city) }}"
-                                disabled>
+                                value="{{ $info_orders->address }}" disabled>
                         </section>
                         <section class="form-group">
                             <label for="payment">Hình thức thanh toán</label>

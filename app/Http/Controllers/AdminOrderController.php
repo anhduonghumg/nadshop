@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
 use App\Repositories\Order\OrderRepositoryInterface;
-use Illuminate\Support\Facades\DB;
+use App\Constants\Constants;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 class AdminOrderController extends Controller
 {
@@ -37,11 +40,45 @@ class AdminOrderController extends Controller
         $this->orderDetail = $orderDetail;
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $paginate = 10;
-        $list_orders = $this->order->get_list_orders($paginate);
-        return view('admin.order.list', compact('list_orders'));
+        $get_num_order = $this->order->get_num_order();
+        $get_list_order = $this->order->get_list_order();
+        $get_list_order = collect($get_list_order);
+        $status = isset($request->status) ? $request->status : null;
+        if ($status == Constants::PENDING) {
+            $list_orders = $get_list_order->where('order_status', Constants::PENDING);
+        } elseif ($status == Constants::SHIPPING) {
+            $list_orders = $get_list_order->where('order_status', Constants::SHIPPING);
+        } elseif ($status == Constants::SUCCESS) {
+            $list_orders = $get_list_order->where('order_status', Constants::SUCCESS);
+        } elseif ($status == Constants::CANCEL) {
+            $list_orders = $get_list_order->where('order_status', Constants::CANCEL);
+        } else {
+            $list_orders = $get_list_order;
+        }
+
+        $perPage = 1;
+        $total = $list_orders->count();
+        $options['path'] = $request->fullUrl();
+
+        $list_orders = $list_orders->paginate($perPage, $total, $page = null, $pageName = 'page', $options['path']);
+        // dd($list_orders);
+        $num_order = collect($get_num_order);
+        $all = $num_order->count();
+        $success = $this->order->count_order($num_order, Constants::SUCCESS);
+        $pending = $this->order->count_order($num_order, Constants::PENDING);
+        $shipping = $this->order->count_order($num_order, Constants::SHIPPING);
+        $cancel = $this->order->count_order($num_order, Constants::CANCEL);
+        $data_num_order = [
+            'all' => $all,
+            'success' => $success,
+            'pending' => $pending,
+            'shipping' => $shipping,
+            'cancel' => $cancel,
+        ];
+
+        return view('admin.order.list', compact('list_orders', 'data_num_order'));
     }
 
     public function add(Request $request)
@@ -81,7 +118,6 @@ class AdminOrderController extends Controller
     {
         if ($request->ajax()) {
             $id = (int)$request->order;
-            // $sql = Order::all();
             $info_orders = $this->order->get_info_order($id);
             $list_product_order = $this->orderDetail->get_product_order($id);
 
@@ -117,13 +153,13 @@ class AdminOrderController extends Controller
             $order_code = get_order_code();
             $city = $this->city->get_name_city($request->city);
             $district = $this->district->get_name_city($request->district);
+            $address = get_address($request->address, $district->district_name, $city->city_name);
             $saveDataOrder = [
                 'order_code' => $order_code,
                 'fullname' => $request->fullname,
                 'phone' => $request->phone,
-                'address' => $request->address,
-                'city' => $city->city_name,
-                'district' => $district->district_name,
+                'address' => $address,
+                'email' => $request->email,
                 'order_qty' => $request->order_qty,
                 'order_total' => $request->order_total,
                 'order_status' => $request->order_status,
@@ -148,6 +184,63 @@ class AdminOrderController extends Controller
                 }
 
                 return response()->json(['success' => trans('notification.add_success')]);
+            }
+        }
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $order = $this->order->find($id);
+        $list_city = $this->city->all();
+        $list_status = $this->status->all();
+        $product_order =  $this->orderDetail->get_product_order($id);
+
+        return view('admin.order.edit', compact('list_city', 'list_status', 'order', 'product_order'));
+    }
+
+    public function update(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = (int)$request->id;
+            $validator = Validator::make($request->all(), [
+                'fullname' => 'bail|required|max:255',
+                'phone' => 'bail|required|numeric',
+                'email' => 'bail|email|max:255',
+                'address' => 'bail|required|max:255',
+                //'order_status' => 'bail|required',
+                'note' => 'max:255'
+            ]);
+
+            if ($validator->fails()) {
+                $error = collect($validator->errors())->unique()->first();
+                return response()->json(['errors' => $error]);
+            }
+
+            $saveDataOrder = [
+                'fullname' => $request->fullname,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'note' => $request->note,
+                'email' => $request->email,
+                'user_id' => Auth::id(),
+                'updated_at' => now()
+            ];
+
+            $saveOrder = $this->order->update($saveDataOrder, $id);
+            if ($saveOrder) {
+                return response()->json(['success' => trans('notification.update_success')]);
+            }
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = (int)$request->id;
+            $delete_order = $this->order->forceDelete($id);
+            if ($delete_order) {
+                $this->orderDetail->delete_order($id);
+                return response()->json(['success' => trans('notification.force_delete_success')]);
             }
         }
     }

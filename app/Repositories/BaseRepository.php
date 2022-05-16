@@ -29,7 +29,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function find($id)
     {
-        return $this->model->where('id', $id)->first();
+        return $this->model->findOrFail($id);
     }
 
     public function add($data)
