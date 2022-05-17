@@ -3,13 +3,16 @@
 @section('content')
 <div id="content" class="container-fluid">
     <div class="card">
-        <div class="card-header font-weight-bold">
-            Danh sách đơn hàng
+        <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
+            <h5>Danh sách đơn hàng</h5>
+            <div class="form-search form-inline">
+                <input type="text" class="form-control keyword" name="kw" placeholder="Nhập từ khóa..." />
+                <button name="btn-search" class="btn btn-primary" id="btn_search">Tìm kiếm</button>
+                <input type="hidden" data-url="{{ route('admin.order.list') }}" class="url">
+            </div>
         </div>
         <div class="card-body">
             <div class="analytic">
-                <a href="{{ route('admin.order.list','status=all') }}" class="text-primary">Tất
-                    cả({{ $data_num_order['all'] }})<span class="text-muted"> |</span></a>
                 <a href="{{ route('admin.order.list','status=pending') }}" class="text-primary">Chờ xác
                     nhận({{ $data_num_order['pending'] }})<span class="text-muted">|</span></a>
                 <a href="{{ route('admin.order.list','status=shipping') }}" class="text-primary">Vận
@@ -22,10 +25,10 @@
             {{-- <form> --}}
                 <div class="form-action form-inline py-3">
                     <select class="form-control mr-1" name="act" id="">
-                        <option>Chọn</option>
-                        <option>Xác nhận</option>
-                        <option>Hoàn thành</option>
-                        <option>Hủy bỏ</option>
+                        <option value="">Chọn</option>
+                        @foreach ($list_action as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
                     </select>
                     <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary mr-3">
                     <a href="{{ route('admin.order.add') }}" class="btn btn-success btn-rounded btn-add"><i
@@ -92,9 +95,7 @@
                     </tr>
                     @endif
                 </table>
-                {{--
-            </form> --}}
-            {{ $list_orders->links('layouts.paginationlink') }}
+                {{ $list_orders->links('layouts.paginationlink') }}
         </div>
     </div>
 </div>
@@ -142,5 +143,42 @@
     });
  });
 
+ $(document).on('click', '#btn_search', function(){
+    var url = $('.url').attr('data-url');
+    var query = $('.keyword').val();
+    var page = 1;
+    //history.pushState(null, '', url +"?kw="+query);
+    loadOrder(query,page);
+   });
+
+  $(document).on('click', '.pagination a', function(event){
+    event.preventDefault();
+    //var url = "http://localhost:8080/nadshop/admin/product/detail/list";
+    var page = $(this).attr('href').split('page=')[1];
+    var query = $('.keyword').val();
+    loadOrder(query,page);
+   });
+
+   function loadOrder(query,page){
+    var status = getParameterByName('status');
+    var url;
+    if(status === null){
+        url = "?kw="+query;
+    }else{
+        url = "?status="+status+"&kw="+query;
+    }
+    $(".loadajax").show();
+    $.ajax({
+        url: "{{ route('admin.order.list') }}" + url + "&page="+page,
+        type: "GET",
+        dataType: "html",
+        success: function (rsp) {
+            $(".loadajax").hide();
+            $('.card .card-body').html(rsp);
+        },error: function () {
+       alert("error!!!!");
+        },
+    });
+   }
 </script>
 @endsection

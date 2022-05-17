@@ -24,6 +24,14 @@ $(document).ready(function () {
         $("#img").click();
     });
 
+    $('#btn_search').attr('disabled', true);
+    $('.keyword').keyup(function () {
+        if ($(this).val().length != 0)
+            $('#btn_search').attr('disabled', false);
+        else
+            $('#btn_search').attr('disabled', true);
+    })
+
     // add product detail
     $(document).on("click", "#add_product_detail", function () {
         COUNT_TAB_WORK = 1;

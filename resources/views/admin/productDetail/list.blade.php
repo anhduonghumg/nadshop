@@ -97,13 +97,7 @@
 <div id="modalPopupDetail"></div>
 <script type="text/javascript">
     loadData(1,"");
-    $('#btn_search').attr('disabled',true);
-    $('.keyword').keyup(function(){
-        if($(this).val().length !=0)
-            $('#btn_search').attr('disabled', false);
-        else
-            $('#btn_search').attr('disabled',true);
-    })
+
 
     $(document).on('click','.show-prodetail',function(){
         var id = $(this).attr('data-id');
@@ -377,6 +371,7 @@
                 $(".loadajax").hide();
                 $('.card .card-body').html(rsp);
                 //console.log(rsp);
+
             },error: function () {
            alert("error!!!!");
             },

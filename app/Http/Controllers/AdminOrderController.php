@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Validator;
 use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Constants\Constants;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
 
 class AdminOrderController extends Controller
 {
@@ -42,34 +39,71 @@ class AdminOrderController extends Controller
 
     public function list(Request $request)
     {
-        $get_num_order = $this->order->get_num_order();
+        if ($request->ajax()) {
+            $keyword = isset($request->kw) ? $request->kw : null;
+            $status = isset($request->status) ? $request->status : null;
+            $get_list_order = $this->order->get_list_order();
+            $get_list_order = collect($get_list_order);
+            if ($status != null) {
+                $list_orders = $get_list_order->where('order_status', $status)
+                    ->filter(function ($value) use ($keyword) {
+                        return strstr($value['order_code'], $keyword, true) ||
+                            stripos($value['fullname'], $keyword, true);
+                    });
+            } else {
+                $list_orders = $get_list_order->filter(function ($value) use ($keyword) {
+                    return strstr($value['order_code'], $keyword, true) ||
+                        stripos($value['fullname'], $keyword, true);
+                });
+            }
+            $list_orders = $list_orders->paginate(1);
+            $success = $this->order->count_order($get_list_order, Constants::SUCCESS);
+            $pending = $this->order->count_order($get_list_order, Constants::PENDING);
+            $shipping = $this->order->count_order($get_list_order, Constants::SHIPPING);
+            $cancel = $this->order->count_order($get_list_order, Constants::CANCEL);
+            $data_num_order = [
+                'success' => $success,
+                'pending' => $pending,
+                'shipping' => $shipping,
+                'cancel' => $cancel,
+            ];
+            return view('admin.order.listajax', compact('list_orders', 'data_num_order'))->render();
+        }
         $get_list_order = $this->order->get_list_order();
         $get_list_order = collect($get_list_order);
         $status = isset($request->status) ? $request->status : null;
+        $path = isset($request->status) ? "?status=" . $request->status : null;
+        $list_status = [
+            'pending' => 'Chờ xác nhận',
+            'shipping' => 'Vận chuyển',
+            'success' => 'Hoàn thành',
+            'cancel' => 'Hủy bỏ',
+            'delete' => 'Xóa'
+        ];
+        $list_status = collect($list_status);
         if ($status == Constants::PENDING) {
+            $act = $list_status->only(Constants::SHIPPING, Constants::CANCEL);
             $list_orders = $get_list_order->where('order_status', Constants::PENDING);
         } elseif ($status == Constants::SHIPPING) {
+            $act = $list_status->only(Constants::SUCCESS, Constants::CANCEL);
             $list_orders = $get_list_order->where('order_status', Constants::SHIPPING);
         } elseif ($status == Constants::SUCCESS) {
+            $act = $list_status->only(Constants::DELETE);
             $list_orders = $get_list_order->where('order_status', Constants::SUCCESS);
         } elseif ($status == Constants::CANCEL) {
+            $act = $list_status->only(Constants::DELETE);
             $list_orders = $get_list_order->where('order_status', Constants::CANCEL);
         } else {
+            $act = $list_status->only(Constants::DELETE);
             $list_orders = $get_list_order;
         }
-
-        $perPage = 1;
-        $total = $list_orders->count();
-        $options['path'] = $request->fullUrl();
-
-        $list_orders = $list_orders->paginate($perPage, $total, $page = null, $pageName = 'page', $options['path']);
-        // dd($list_orders);
-        $num_order = collect($get_num_order);
-        $all = $num_order->count();
-        $success = $this->order->count_order($num_order, Constants::SUCCESS);
-        $pending = $this->order->count_order($num_order, Constants::PENDING);
-        $shipping = $this->order->count_order($num_order, Constants::SHIPPING);
-        $cancel = $this->order->count_order($num_order, Constants::CANCEL);
+        $list_action = $act;
+        $list_orders = $list_orders->paginate(Constants::PAGINATE)->withPath($path);
+        $all = $get_list_order->count();
+        $success = $this->order->count_order($get_list_order, Constants::SUCCESS);
+        $pending = $this->order->count_order($get_list_order, Constants::PENDING);
+        $shipping = $this->order->count_order($get_list_order, Constants::SHIPPING);
+        $cancel = $this->order->count_order($get_list_order, Constants::CANCEL);
         $data_num_order = [
             'all' => $all,
             'success' => $success,
@@ -78,7 +112,7 @@ class AdminOrderController extends Controller
             'cancel' => $cancel,
         ];
 
-        return view('admin.order.list', compact('list_orders', 'data_num_order'));
+        return view('admin.order.list', compact('list_orders', 'data_num_order', 'list_action'));
     }
 
     public function add(Request $request)

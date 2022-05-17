@@ -12,16 +12,6 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         return \App\Models\Order::class;
     }
 
-    public function get_list_orders($paginate)
-    {
-        $result = $this->model->select('product_orders.*', 'product_order_details.product_order_id')
-            ->join('product_order_details', 'product_orders.id', '=', 'product_order_details.product_order_id')
-            ->orderByDesc("product_orders.id")
-            ->distinct()
-            ->paginate($paginate);
-        return $result;
-    }
-
     public function get_info_order($id)
     {
         $result = $this->model->findOrFail($id);
