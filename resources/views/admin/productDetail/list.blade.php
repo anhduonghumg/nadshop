@@ -97,8 +97,6 @@
 <div id="modalPopupDetail"></div>
 <script type="text/javascript">
     loadData(1,"");
-
-
     $(document).on('click','.show-prodetail',function(){
         var id = $(this).attr('data-id');
         $(".loadajax").show();
@@ -371,7 +369,6 @@
                 $(".loadajax").hide();
                 $('.card .card-body').html(rsp);
                 //console.log(rsp);
-
             },error: function () {
            alert("error!!!!");
             },

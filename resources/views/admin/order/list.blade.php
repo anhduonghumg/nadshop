@@ -24,13 +24,13 @@
             </div>
             {{-- <form> --}}
                 <div class="form-action form-inline py-3">
-                    <select class="form-control mr-1" name="act" id="">
+                    <select class="form-control mr-1" name="act" id="act">
                         <option value="">Chọn</option>
                         @foreach ($list_action as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
                         @endforeach
                     </select>
-                    <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary mr-3">
+                    <input type="button" name="btn_action" value="Áp dụng" class="btn btn-primary mr-3 btn_action">
                     <a href="{{ route('admin.order.add') }}" class="btn btn-success btn-rounded btn-add"><i
                             class="fa fa-plus"></i> Thêm
                         mới</a>
@@ -59,7 +59,8 @@
                         @php $temp++ @endphp
                         <tr>
                             <td>
-                                <input type="checkbox" name="list_check[]" value="">
+                                <input class="check_order" type="checkbox" name="list_check[]"
+                                    value="{{ $order['id'] }}">
                             </td>
                             <th scope="row">{{ $temp }}</th>
                             <td><strong>{{ $order['order_code'] }}</strong></td>
@@ -100,9 +101,9 @@
     </div>
 </div>
 <div id="modalPopup">
-
 </div>
 <script>
+    var query = $('.keyword').val();
     $(document).on('click','.order-detail',function(){
     $(".loadajax").show();
       let order = $(this).data('id');
@@ -123,6 +124,7 @@
 
  $(document).on('click','.order-delete',function(){
      let id = $(this).attr('delete-id');
+     let page = $(location).attr('href').split('page=')[1];
      $.ajax({
         url: "{{ route('admin.order.delete') }}",
         type: "POST",
@@ -134,7 +136,7 @@
         success: function (rsp) {
             $(".loadajax").hide();
             confirm_success(rsp.success);
-            //loadData(page);
+            loadOrder(query,page);
         },
         error: function () {
             $(".loadajax").hide();
@@ -142,7 +144,6 @@
         },
     });
  });
-
  $(document).on('click', '#btn_search', function(){
     var url = $('.url').attr('data-url');
     var query = $('.keyword').val();
@@ -153,10 +154,35 @@
 
   $(document).on('click', '.pagination a', function(event){
     event.preventDefault();
-    //var url = "http://localhost:8080/nadshop/admin/product/detail/list";
     var page = $(this).attr('href').split('page=')[1];
-    var query = $('.keyword').val();
+    //var url = "http://localhost:8080/nadshop/admin/product/detail/list";
     loadOrder(query,page);
+   });
+
+   $(document).on('click','.btn_action',function(){
+       $(".loadajax").show();
+      var act = $("#act").val();
+      var list_check = [];
+    $('.check_order:checked').each(function() {
+        list_check.push($(this).val());
+     });
+      $.ajax({
+        url: "{{ route('admin.order.action') }}",
+        type: "POST",
+        dataType: "json",
+        data:{act:act,list_check:list_check},
+        success: function (rsp) {
+            $(".loadajax").hide();
+           if ($.isEmptyObject(rsp.errors)) {
+               confirm_success(rsp.success);
+               loadLocation();
+        } else {
+            confirm_warning(rsp.errors);
+        }
+        },error: function () {
+       alert("error!!!!");
+        },
+    });
    });
 
    function loadOrder(query,page){

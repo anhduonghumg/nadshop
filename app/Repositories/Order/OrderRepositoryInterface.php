@@ -11,5 +11,6 @@ interface OrderRepositoryInterface extends RepositoryInterface
     public function get_num_order();
     public function count_order($data, $value);
     public function get_list_order();
+    // public function get_action_by_status($status);
     // public function get_product_order($id);
 }

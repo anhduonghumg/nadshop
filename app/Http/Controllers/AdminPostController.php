@@ -36,13 +36,13 @@ class AdminPostController extends Controller
         $key = isset($request->kw) ? $request->kw : "";
         if (!$status || $status == Constants::ACTIVE) {
             $list_act = ['delete' => 'Xóa'];
-            $list_posts = $this->postRepo->get_list_posts_status(Constants::PUBLIC, $key, $paginate = 10, $orderBy = 'id');
+            $list_posts = $this->postRepo->get_list_posts_status(Constants::PUBLIC, $key, $paginate = 1, $orderBy = 'id');
         } elseif ($status == Constants::TRASH) {
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
             $list_posts = $this->postRepo->get_list_posts_trash($key, $paginate = 10, $orderBy = "deleted_at");
         } elseif ($status == Constants::PENDING) {
             $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
-            $list_posts = $this->postRepo->get_list_posts_status(Constants::PENDING, $key, $paginate = 10, $orderBy = "id");
+            $list_posts = $this->postRepo->get_list_posts_status(Constants::PENDING, $key, $paginate = 1, $orderBy = "id");
         }
 
         $num_post_active = $this->postRepo->get_num_post_active();

@@ -399,3 +399,9 @@ function locationUrl() {
     return $(location).attr('href');
 }
 
+function loadLocation() {
+    let timeout = 1000;
+    setTimeout(function () {
+        window.location.reload();
+    }, timeout)
+}

@@ -10,11 +10,11 @@
 </div>
 {{-- <form> --}}
     <div class="form-action form-inline py-3">
-        <select class="form-control mr-1" name="act" id="">
+        <select class="form-control mr-1" name="act" id="act">
             <option value="">Chọn</option>
-            {{-- @foreach ($list_action as $key => $value)
+            @foreach ($list_action as $key => $value)
             <option value="{{ $key }}">{{ $value }}</option>
-            @endforeach --}}
+            @endforeach
         </select>
         <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary mr-3">
         <a href="{{ route('admin.order.add') }}" class="btn btn-success btn-rounded btn-add"><i class="fa fa-plus"></i>
@@ -45,7 +45,7 @@
             @php $temp++ @endphp
             <tr>
                 <td>
-                    <input type="checkbox" name="list_check[]" value="">
+                    <input class="check_order" type="checkbox" name="list_check[]" value="{{ $order['id'] }}">
                 </td>
                 <th scope="row">{{ $temp }}</th>
                 <td><strong>{{ $order['order_code'] }}</strong></td>

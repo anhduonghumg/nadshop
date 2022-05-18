@@ -44,6 +44,13 @@ class AdminOrderController extends Controller
             $status = isset($request->status) ? $request->status : null;
             $get_list_order = $this->order->get_list_order();
             $get_list_order = collect($get_list_order);
+            $list_status = [
+                'pending' => 'Chờ xác nhận',
+                'shipping' => 'Vận chuyển',
+                'success' => 'Hoàn thành',
+                'cancel' => 'Hủy bỏ',
+                'delete' => 'Xóa'
+            ];
             if ($status != null) {
                 $list_orders = $get_list_order->where('order_status', $status)
                     ->filter(function ($value) use ($keyword) {
@@ -56,7 +63,20 @@ class AdminOrderController extends Controller
                         stripos($value['fullname'], $keyword, true);
                 });
             }
-            $list_orders = $list_orders->paginate(1);
+            $list_status = collect($list_status);
+            if ($status == Constants::PENDING) {
+                $act = $list_status->only(Constants::SHIPPING, Constants::CANCEL);
+            } elseif ($status == Constants::SHIPPING) {
+                $act = $list_status->only(Constants::SUCCESS, Constants::CANCEL);
+            } elseif ($status == Constants::SUCCESS) {
+                $act = $list_status->only(Constants::DELETE);
+            } elseif ($status == Constants::CANCEL) {
+                $act = $list_status->only(Constants::DELETE);
+            } else {
+                $act = $list_status->only(Constants::DELETE);
+            }
+            $list_orders = $list_orders->paginate(Constants::PAGINATE);
+            $list_action = $act;
             $success = $this->order->count_order($get_list_order, Constants::SUCCESS);
             $pending = $this->order->count_order($get_list_order, Constants::PENDING);
             $shipping = $this->order->count_order($get_list_order, Constants::SHIPPING);
@@ -67,7 +87,7 @@ class AdminOrderController extends Controller
                 'shipping' => $shipping,
                 'cancel' => $cancel,
             ];
-            return view('admin.order.listajax', compact('list_orders', 'data_num_order'))->render();
+            return view('admin.order.listajax', compact('list_orders', 'data_num_order', 'list_action', 'data_num_order'))->render();
         }
         $get_list_order = $this->order->get_list_order();
         $get_list_order = collect($get_list_order);
@@ -205,7 +225,6 @@ class AdminOrderController extends Controller
             ];
 
             $saveOrder = $this->order->add($saveDataOrder);
-
             if ($saveOrder) {
                 $product_name = $request->product_name;
                 foreach ($product_name as $key => $value) {
@@ -216,7 +235,6 @@ class AdminOrderController extends Controller
                     ];
                     $this->orderDetail->create($saveDataOrderDetail);
                 }
-
                 return response()->json(['success' => trans('notification.add_success')]);
             }
         }
@@ -275,6 +293,36 @@ class AdminOrderController extends Controller
             if ($delete_order) {
                 $this->orderDetail->delete_order($id);
                 return response()->json(['success' => trans('notification.force_delete_success')]);
+            }
+        }
+    }
+
+    public function action(Request $request)
+    {
+        if ($request->ajax()) {
+            $list_check = $request->list_check;
+            if (!empty($list_check)) {
+                $act = $request->act;
+                if ($act == Constants::SHIPPING) {
+                    $data = ['order_status' => Constants::SHIPPING];
+                    $this->order->update($data, $list_check);
+                    return response()->json(['success' => trans('notification.update_order')]);
+                } elseif ($act == Constants::SUCCESS) {
+                    $data = ['order_status' => Constants::SUCCESS];
+                    $this->order->update($data, $list_check);
+                    return response()->json(['success' => trans('notification.update_order')]);
+                } elseif ($act == Constants::CANCEL) {
+                    $data = ['order_status' => Constants::CANCEL];
+                    $this->order->update($data, $list_check);
+                    return response()->json(['success' => trans('notification.update_order')]);
+                } elseif ($act == Constants::DELETE) {
+                    $this->order->forceDelete($list_check);
+                    return response()->json(['success' => trans('notification.update_order')]);
+                } elseif (empty($act)) {
+                    return response()->json(['errors' => trans('notification.not_action')]);
+                }
+            } else {
+                return response()->json(['errors' => trans('notification.not_element')]);
             }
         }
     }
