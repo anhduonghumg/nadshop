@@ -18,7 +18,6 @@ class ImageController extends Controller
         return 'Done';
     }
 
-
     public function flyResize($size, $imagePath)
     {
         $imageFullPath = base_path($imagePath);

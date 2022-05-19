@@ -78,6 +78,7 @@ class AdminSizeController extends Controller
             return redirect()->route('admin.size.list')->with('status', trans('notification.delete_success'));
         }
     }
+
     public function action(Request $request)
     {
         if ($request->has('btn_action')) {

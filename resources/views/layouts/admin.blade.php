@@ -133,7 +133,7 @@
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
-                            Trang
+                            Quản lý trang
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
@@ -146,7 +146,7 @@
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
-                            Bài viết
+                            Quản lý bài viết
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
@@ -160,7 +160,7 @@
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
-                            Sản phẩm
+                            Quản lý sản phẩm
                         </a>
                         <i class="arrow fas fa-angle-down"></i>
                         <ul class="sub-menu">
@@ -178,7 +178,7 @@
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
-                            Bán hàng
+                            Quản lý bán hàng
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
@@ -190,7 +190,7 @@
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
-                            Người dùng
+                            Quản lý người dùng
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
 
@@ -199,18 +199,19 @@
                             <li><a href="{{ url('admin/user/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-
-                    <!-- <li class="nav-link"><a>Bài viết</a>
+                    <li class="nav-link">
+                        <a href="{{ url('admin/role/list') }}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Quản lí quyền
+                        </a>
+                        <i class="arrow fas fa-angle-right"></i>
                         <ul class="sub-menu">
-                            <li><a>Thêm mới</a></li>
-                            <li><a>Danh sách</a></li>
-                            <li><a>Thêm danh mục</a></li>
-                            <li><a>Danh sách danh mục</a></li>
+                            <li><a href="{{ url('admin/user/add') }}">Thêm mới</a></li>
+                            <li><a href="{{ url('admin/user/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link"><a>Sản phẩm</a></li>
-                    <li class="nav-link"><a>Đơn hàng</a></li>
-                    <li class="nav-link"><a>Hệ thống</a></li> -->
                 </ul>
             </div>
             <div id="wp-content">

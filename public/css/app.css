@@ -191,7 +191,7 @@ a#add_work:hover {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 99999999999999999;
+    z-index: 9999;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -208,7 +208,7 @@ a#add_work:hover {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 99999999999999999;
+    z-index: 9999;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -224,8 +224,48 @@ a#add_work:hover {
     position: absolute;
     top: 220px;
     left: 640px;
-    z-index: 99999;
+    z-index: 99999999999999999999;
     display: none;
+}
+
+.roles-menu {
+    margin-top: 20px;
+}
+.roles-menu > ul {
+    background-color: #fff;
+    border: 1px solid #e3e3e3;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.roles-menu > ul > li {
+    display: block;
+    position: relative;
+}
+.roles-menu > ul > li a {
+    border-left: 3px solid transparent;
+    color: #333;
+    display: block;
+    padding: 10px 15px;
+    position: relative;
+}
+.roles-menu > ul > li.active a {
+    border-color: #f43b48;
+    color: #f43b48;
+}
+.roles-menu > ul > li a:hover {
+    background-color: #eee;
+    border-color: #f43b48;
+}
+.role-action {
+    float: right;
+    display: none;
+}
+.roles-menu > ul > li a:hover .role-action {
+    display: block;
+}
+.slide-nav .sidebar {
+    margin-left: 0;
 }
 
 .form-number {
@@ -243,6 +283,7 @@ a#add_work:hover {
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
 /* .show_list_thumb {
     height: 120px;
     width: 200px;

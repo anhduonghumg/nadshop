@@ -145,6 +145,10 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     // Admin/role
     Route::get('/admin/role/list', [App\Http\Controllers\AdminRoleController::class, 'list'])->name('admin.role.list');
     Route::get('/admin/role/add', [App\Http\Controllers\AdminRoleController::class, 'add'])->name('admin.role.add');
+    Route::post('/admin/role/store', [App\Http\Controllers\AdminRoleController::class, 'store'])->name('admin.role.store');
+    Route::get('/admin/role/edit', [App\Http\Controllers\AdminRoleController::class, 'edit'])->name('admin.role.edit');
+    Route::post('/admin/role/update', [App\Http\Controllers\AdminRoleController::class, 'update'])->name('admin.role.update');
+
     // helper
     // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
     // Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');

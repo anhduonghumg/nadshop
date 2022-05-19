@@ -48,4 +48,5 @@ class M_user extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
 }
