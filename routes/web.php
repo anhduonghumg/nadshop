@@ -148,6 +148,15 @@ Route::middleware('auth', 'verified', 'isAdmin')->group(function () {
     Route::post('/admin/role/store', [App\Http\Controllers\AdminRoleController::class, 'store'])->name('admin.role.store');
     Route::get('/admin/role/edit', [App\Http\Controllers\AdminRoleController::class, 'edit'])->name('admin.role.edit');
     Route::post('/admin/role/update', [App\Http\Controllers\AdminRoleController::class, 'update'])->name('admin.role.update');
+    Route::post('/admin/role/delete', [App\Http\Controllers\AdminRoleController::class, 'delete'])->name('admin.role.delete');
+
+    // Admin/permission
+    Route::get('/admin/permission/list', [App\Http\Controllers\AdminPermissionController::class, 'list'])->name('admin.permission.list');
+    Route::get('/admin/permission/add', [App\Http\Controllers\AdminPermissionController::class, 'add'])->name('admin.permission.add');
+    Route::post('/admin/permission/store', [App\Http\Controllers\AdminPermissionController::class, 'store'])->name('admin.permission.store');
+    Route::get('/admin/permission/edit', [App\Http\Controllers\AdminPermissionController::class, 'edit'])->name('admin.permission.edit');
+    Route::post('/admin/permission/update', [App\Http\Controllers\AdminPermissionController::class, 'update'])->name('admin.permission.update');
+    Route::post('/admin/permission/delete', [App\Http\Controllers\AdminPermissionController::class, 'delete'])->name('admin.permission.delete');
 
     // helper
     // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');

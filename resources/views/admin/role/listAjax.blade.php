@@ -6,43 +6,36 @@
     <button class="btn btn-success btn-rounded add_role"><i class="fa fa-plus"></i> Thêm
         mới</button>
 </div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">
-                <input id="checkall" name="checkall" type="checkbox">
-            </th>
-            <th scope="col">STT</th>
-            <th scope="col">Tên quyền</th>
-            <th scope="col">Tác vụ</th>
-        </tr>
-    </thead>
+<div class="table-responsive">
     @if($list_roles->isNotEmpty())
-    @php $temp = 0; @endphp
-    <tbody>
-        @foreach ($list_roles as $role)
-        @php $temp++ @endphp
-        <tr>
-            <th scope="col">
-                <input id="checkall" name="checkall" type="checkbox">
-            </th>
-            <td scope="col">{{ $temp }}</td>
-            <td scope="col">{{ $role->role_name }}</td>
-            <td>
-                <a class="btn btn-success btn-sm rounded-0 text-white edit-role" type="button" data-toggle="tooltip"
-                    data-placement="top" title="Edit" data-id="{{ $role->id }}"><i class="fa fa-edit"></i></a>
-                <a class="btn btn-danger btn-sm rounded-0 text-white delete-role" type="button" data-toggle="tooltip"
-                    data-placement="top" title="Delete" data-id="{{ $role->id }}"><i class="fa fa-trash"></i></a>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-    @else
-    <tr>
-        <td colspan='4' class="bg-white">
-            <p>Không có bản ghi nào.</p>
-        </td>
-    </tr>
+    <table class="table table-striped custom-table">
+        <thead>
+            <tr>
+                <th>Hành động được phép</th>
+                @foreach ($list_permissions as $permission)
+                <th class="text-center">{{ $permission->per_name }}</th>
+                @endforeach
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($list_roles as $role)
+            <tr>
+                <td class="d-flex justify-content-between" width="50%">
+                    <strong>{{ $role->role_name }}</strong>
+                    <section class='ml-3'>
+                        <a href="" data-id={{ $role->id }}>sửa</a>
+                        <a href="" class="role-delete" data-id={{ $role->id }}>xóa</a>
+                    </section>
+                </td>
+                @foreach ($list_permissions as $permission)
+                <td class="text-center">
+                    <input type="checkbox" name="list_check[]" value="{{ $permission->id }}" />
+                </td>
+                @endforeach
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
     @endif
-</table>
+</div>
 {{ $list_roles->links('layouts.paginationlink') }}

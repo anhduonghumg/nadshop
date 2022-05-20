@@ -253,6 +253,9 @@ $(document).ready(function () {
             $(".nav-tabs li").children('a').first().click();
         }
     });
+
+    $('select').selectpicker();
+
 });
 
 

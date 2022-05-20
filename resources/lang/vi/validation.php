@@ -198,5 +198,6 @@ return [
         'payment' => 'hình thức thanh toán',
         'product_name.*' => 'tên sản phẩm',
         'note' => 'ghi chú',
+        'role_name' => 'tên quyền',
     ],
 ];

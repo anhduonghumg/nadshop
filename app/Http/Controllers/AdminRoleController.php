@@ -6,20 +6,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\Role;
+use App\Models\Permission;
 use App\Constants\Constants;
+use App\Models\RolePermiss;
 
 class AdminRoleController extends Controller
 {
     protected $role;
-    public function __construct(Role $role)
+    protected $rolpermisse;
+    protected $role_permiss;
+    public function __construct(Role $role, Permission $permiss, RolePermiss $role_permiss)
     {
         $this->role = $role;
+        $this->permiss = $permiss;
+        $this->role_permiss = $role_permiss;
     }
 
     public function add(Request $request)
     {
         if ($request->ajax()) {
-            return view('admin.role.add')->render();
+            $list_permiss = $this->permiss->all();
+            return view('admin.role.add', compact('list_permiss'))->render();
         }
     }
 
@@ -28,6 +35,7 @@ class AdminRoleController extends Controller
         if ($request->ajax()) {
             $validator = Validator::make($request->all(), [
                 'role_name' => 'bail|required|max:255|unique:roles',
+                'role_permission' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -36,6 +44,7 @@ class AdminRoleController extends Controller
             }
 
             $name = $request->role_name;
+
             $saveDataRole = [
                 'role_name' => $name,
                 'slug' => Str::slug($name),
@@ -44,6 +53,14 @@ class AdminRoleController extends Controller
             ];
             $saveRole = $this->role->create($saveDataRole);
             if ($saveRole) {
+                $role_permission = $request->role_permission;
+                foreach ($role_permission as $key => $value) {
+                    $data = [
+                        'role_id' => $saveRole->id,
+                        'per_id' => $role_permission[$key]
+                    ];
+                    $this->role_permiss->create($data);
+                }
                 return response()->json(['success' => trans('notification.add_success')]);
             } else {
                 return response()->json(['errors' => trans('notification.no_data')]);
@@ -55,7 +72,8 @@ class AdminRoleController extends Controller
     {
         if ($request->ajax()) {
             $list_roles = $this->role->all()->paginate(Constants::PAGINATE);
-            return view('admin.role.listajax', compact('list_roles'))->render();
+            $list_permissions = $this->permiss->all();
+            return view('admin.role.listAjax', compact('list_roles', 'list_permissions'))->render();
         }
         return view('admin.role.role');
     }
@@ -90,10 +108,25 @@ class AdminRoleController extends Controller
             ];
             $saveRole = $this->role->where('id', $id)->update($saveDataRole);
             if ($saveRole) {
-                return response()->json(['success' => trans('notification.add_success')]);
+                return response()->json(['success' => trans('notification.update_success')]);
             } else {
                 return response()->json(['errors' => trans('notification.no_data')]);
             }
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = (int)$request->id;
+            if ($id != null) {
+                $this->role_permiss->where('role_id', $id)->delete();
+                $delete_role = $this->role->find($id)->delete();
+                if ($delete_role)
+                    return response()->json(['success' => trans('notification.force_delete_success')]);
+                return response()->json(['errors' => trans('notification.no_data')]);
+            }
+            return response()->json(['errors' => trans('notification.no_data')]);
         }
     }
 }

@@ -284,6 +284,12 @@ a#add_work:hover {
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.bootstrap-select {
+    border: 1px solid #ced4da;
+    height: 100%;
+    color: #495057;
+}
+
 /* .show_list_thumb {
     height: 120px;
     width: 200px;

@@ -7,16 +7,22 @@
             <h5>Danh sách quyền</h5>
         </div>
         <div class="card-body">
-
+            <div class="form-action form-inline py-3">
+                <select class="form-control mr-1" name="act" id="act">
+                    <option value="">Chọn</option>
+                </select>
+                <input type="button" name="btn_action" value="Áp dụng" class="btn btn-primary mr-3">
+                <button class="btn btn-success btn-rounded add_role"><i class="fa fa-plus"></i> Thêm
+                    mới</button>
+            </div>
+           
         </div>
     </div>
-</div>
-<div id="modalPopup">
-</div>
-<script type="text/javascript">
-    loadRole();
-
-    $(document).on('click','.add_role',function(e){
+    <div id="modalPopup">
+    </div>
+    {{-- <script type="text/javascript">
+        loadRole();
+    $(document).on('click','.add_role',function(){
         $('.loadajax').show();
         $.ajax({
             url: "{{ route('admin.role.add') }}",
@@ -26,7 +32,6 @@
                 $('.loadajax').hide();
               $('#modalPopup').html(rsp);
             $('.modal').modal('show');
-            $('#role_permiss').selectpicker('refresh');
             },error: function () {
                 alert("error!!!!");
             },
@@ -98,8 +103,7 @@ $(document).on('click','#update_role',function(){
     });
 });
 
-$(document).on('click','.role-delete',function(e){
-    e.preventDefault();
+$(document).on('click','.delete-role',function(){
     var id = $(this).attr("data-id");
     $.ajax({
         url: "{{ route('admin.role.delete') }}",
@@ -119,7 +123,6 @@ $(document).on('click','.role-delete',function(e){
             alert("error!!!!");
         },
     });
-
 });
 
 function loadRole(){
@@ -137,5 +140,5 @@ function loadRole(){
     });
 }
 
-</script>
-@endsection
+    </script> --}}
+    @endsection

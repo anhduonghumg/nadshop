@@ -14,6 +14,17 @@
                         <input type="text" name="role_name" class="form-control" id="role_name"
                             placeholder="Nhập tên quyền">
                     </div>
+                    <div class="form-group">
+                        <label for="role_name" class="col-form-label">Permission</label>
+                        <select id="role_permiss" name='role_permission[]' class="selectpicker form-control" multiple
+                            data-live-search="true">
+                            @if($list_permiss->isNotEmpty())
+                            @foreach ($list_permiss as $item)
+                            <option value="{{ $item->id }}">{{ $item->per_name }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
