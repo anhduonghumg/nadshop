@@ -199,5 +199,6 @@ return [
         'product_name.*' => 'tên sản phẩm',
         'note' => 'ghi chú',
         'role_name' => 'tên quyền',
+        'role_permission'  => 'nhóm quyền'
     ],
 ];

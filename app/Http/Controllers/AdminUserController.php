@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\M_user;
+use App\Models\Role;
+use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,10 +14,14 @@ use App\Repositories\User\UserRepositoryInterface;
 class AdminUserController extends Controller
 {
     protected $userRepo;
-    public function __construct(UserRepositoryInterface $userRepo)
+    protected $role;
+    public function __construct(UserRepositoryInterface $userRepo, Role $role, RoleUser $roleUser)
     {
         $this->userRepo = $userRepo;
+        $this->role = $role;
+        $this->roleUser = $roleUser;
     }
+
     public function list(Request $request)
     {
         $status = $request->input('status');
@@ -39,7 +45,8 @@ class AdminUserController extends Controller
 
     public function add()
     {
-        return view('admin.user.add');
+        $list_roles = $this->role->all();
+        return view('admin.user.add', compact('list_roles'));
     }
 
     public function store(Request $request)
@@ -53,6 +60,7 @@ class AdminUserController extends Controller
                     'username' => 'required|string|min:5|max:50|unique:m_users',
                     'phone' => 'required|numeric',
                     'password' => 'required|string|min:8|confirmed',
+                    'role_permission' => 'required',
                 ],
             );
 
@@ -61,10 +69,17 @@ class AdminUserController extends Controller
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
                 'phone' => $request->input('phone'),
-                'username' => $request->input('username')
+                'username' => $request->input('username'),
             ];
 
-            $this->userRepo->add($data);
+            $inser_user = $this->userRepo->add($data);
+            if ($inser_user) {
+                $data_role = [
+                    'user_id' => $inser_user->id,
+                    'role_id' => $request->input('role_permission')
+                ];
+                $this->roleUser->create($data_role);
+            }
             return redirect()->route('admin.user.list')->with('status', trans('notification.add_success'));
         }
     }
@@ -73,7 +88,8 @@ class AdminUserController extends Controller
     {
         $id = $request->id;
         $user = $this->userRepo->get_user_by_id($id, ['id', 'fullname', 'username', 'phone', 'email', 'role_id', 'password', 'created_at']);
-        return view('admin.user.edit', compact('user'));
+        $list_roles = $this->role->all();
+        return view('admin.user.edit', compact('user', 'list_roles'));
     }
 
     public function update(Request $request, $id)

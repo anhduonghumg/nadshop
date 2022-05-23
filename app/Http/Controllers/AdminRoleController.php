@@ -83,7 +83,9 @@ class AdminRoleController extends Controller
         if ($request->ajax()) {
             $id = (int)$request->id;
             $role = $this->role->find($id);
-            return view('admin.role.edit', compact('role'))->render();
+            $list_permiss = $this->permiss->all();
+            $permiss_selected = $this->role_permiss->get_selected($id);
+            return view('admin.role.edit', compact('role', 'list_permiss', 'permiss_selected'))->render();
         }
     }
 
@@ -93,6 +95,7 @@ class AdminRoleController extends Controller
             $id = (int)$request->data_id;
             $validator = Validator::make($request->all(), [
                 'role_name' => 'bail|required|max:255|unique:roles,role_name,' . $id . ',id',
+                'role_permission' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -101,6 +104,7 @@ class AdminRoleController extends Controller
             }
 
             $name = $request->role_name;
+            $role_permission = $request->role_permission;
             $saveDataRole = [
                 'role_name' => $name,
                 'slug' => Str::slug($name),
@@ -108,6 +112,14 @@ class AdminRoleController extends Controller
             ];
             $saveRole = $this->role->where('id', $id)->update($saveDataRole);
             if ($saveRole) {
+                $this->role_permiss->where('role_id', $id)->delete();
+                foreach ($role_permission as $key => $value) {
+                    $data = [
+                        'role_id' => $id,
+                        'per_id' => $role_permission[$key]
+                    ];
+                    $this->role_permiss->create($data);
+                }
                 return response()->json(['success' => trans('notification.update_success')]);
             } else {
                 return response()->json(['errors' => trans('notification.no_data')]);

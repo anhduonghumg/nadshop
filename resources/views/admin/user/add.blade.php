@@ -51,15 +51,16 @@
 
                 <div class="form-group">
                     <label for="">Nhóm quyền</label>
-                    <select class="form-control" id="">
-                        <option>Chọn quyền</option>
-                        <option>Danh mục 1</option>
-                        <option>Danh mục 2</option>
-                        <option>Danh mục 3</option>
-                        <option>Danh mục 4</option>
+                    <select class="form-control" name='role_permission' id='role'>
+                        <option value="">Chọn quyền</option>
+                        @foreach ($list_roles as $role)
+                        <option value="{{ $role->id}}">{{ $role->role_name }}</option>
+                        @endforeach
                     </select>
+                    @error('role_permission')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
-
                 <button type="submit" class="btn btn-primary" name="btn_add">Thêm mới</button>
             </form>
         </div>

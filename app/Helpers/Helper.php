@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 function currentcyFormat($val, $unit = "đ")
 {
@@ -23,4 +24,10 @@ function get_address($address, $district, $city)
 {
     $result = "{$address}," . "{$district}," . "{$city}";
     return $result;
+}
+
+function get_selected($id)
+{
+    $result = DB::table('permission_roles')->where('role_id', $id)->get();
+    return collect($result);
 }

@@ -4,7 +4,7 @@ namespace App\Constants;
 
 class Constants
 {
-    const ADMIN = 0;
+    const ADMIN = 'admin';
     const PUBLIC = 'public';
     const PENDING = 'pending';
     const SUCCESS = 'success';

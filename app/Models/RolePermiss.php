@@ -11,4 +11,9 @@ class RolePermiss extends Model
     public $table = 'permission_roles';
     public $timestamps = false;
     protected $guarded = [];
+
+    public function get_selected($id)
+    {
+        return $this->select('per_id')->where('role_id', $id);
+    }
 }

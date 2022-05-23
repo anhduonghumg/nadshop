@@ -56,7 +56,8 @@ $(document).on('click','#save_role',function(){
     });
 });
 
-$(document).on('click','.edit-role',function(){
+$(document).on('click','.role-edit',function(e){
+    e.preventDefault();
     $('.loadajax').show();
     var id = $(this).data('id');
     $.ajax({
@@ -66,8 +67,9 @@ $(document).on('click','.edit-role',function(){
         dataType: "html",
         success: function (rsp) {
             $('.loadajax').hide();
-          $('#modalPopup').html(rsp);
-        $('.modal').modal('show');
+            $('#modalPopup').html(rsp);
+            $('.modal').modal('show');
+            $('#role_permiss').selectpicker('refresh');
         },error: function () {
             alert("error!!!!");
         },
@@ -76,8 +78,8 @@ $(document).on('click','.edit-role',function(){
 });
 
 $(document).on('click','#update_role',function(){
-    var data = $('#fm_update_role').serializeArray();
     $('.loadajax').show();
+    var data = $('#fm_update_role').serializeArray();
     $.ajax({
         url: "{{ route('admin.role.update') }}",
         type: "POST",

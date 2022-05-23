@@ -11,10 +11,11 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\VerifyEmailNotification;
 use App\Notifications\ResetPasswordNotification;
 use App\Constants\Constants;
+use App\Traits\HasPermissions;
 
 class M_user extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasPermissions;
 
     protected $table = 'm_users';
 
@@ -25,6 +26,7 @@ class M_user extends Authenticatable implements MustVerifyEmail
         'phone',
         'email',
         'password',
+        'role_id'
     ];
 
     protected $hidden = [
@@ -48,5 +50,4 @@ class M_user extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPasswordNotification($token));
     }
-
 }

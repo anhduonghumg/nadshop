@@ -23,13 +23,15 @@
                 <td class="d-flex justify-content-between" width="50%">
                     <strong>{{ $role->role_name }}</strong>
                     <section class='ml-3'>
-                        <a href="" data-id={{ $role->id }}>sửa</a>
+                        <a href="" class="role-edit" data-id={{ $role->id }}>sửa</a>
                         <a href="" class="role-delete" data-id={{ $role->id }}>xóa</a>
                     </section>
                 </td>
                 @foreach ($list_permissions as $permission)
                 <td class="text-center">
-                    <input type="checkbox" name="list_check[]" value="{{ $permission->id }}" />
+                    <input type="checkbox" name="list_check"
+                        @if(in_array($permission->id,get_selected($role->id)->pluck('per_id')->toArray())) checked
+                    @endif />
                 </td>
                 @endforeach
             </tr>

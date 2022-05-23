@@ -1,4 +1,4 @@
-<div class="modal fade">
+<div class="modal fade" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,9 +15,22 @@
                             $role->role_name }}">
                         <input type="hidden" name="data_id" value="{{ $role->id }}">
                     </div>
+                    <div class="form-group">
+                        <label for="role_permiss" class="col-form-label">Permission</label>
+                        <select id="role_permiss" name='role_permission[]' class="selectpicker form-control" multiple
+                            data-live-search="true">
+                            @if($list_permiss->isNotEmpty())
+                            @foreach ($list_permiss as $item)
+                            <option value="{{ $item->id }}" @if(in_array($item->id,
+                                $permiss_selected->pluck('per_id')->toArray())) selected
+                                @endif>{{$item->per_name }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer">
+            <div class=" modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                 <button type="button" id='update_role' class="btn btn-primary">Lưu</button>
             </div>

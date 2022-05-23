@@ -46,18 +46,17 @@
                     {{-- <small class="text-danger">{{ $message }}</small> --}}
                     @enderror
                 </div>
-                {{-- <div class="form-group">
-                    <label for="password-confirm">Nhập lại mật khẩu</label>
-                    <input class="form-control" type="password" name="password_confirmation" id="password-confirm">
-                </div> --}}
                 <div class="form-group">
                     <label for="">Nhóm quyền</label>
-                    <select class="form-control" id="">
+                    <select class="form-control" name='role_permission' id='role'>
                         <option>Chọn quyền</option>
-                        <option>Danh mục 1</option>
-                        <option>Danh mục 2</option>
-                        <option>Danh mục 3</option>
-                        <option>Danh mục 4</option>
+                        @foreach ($list_roles as $role)
+                        @if($role->id == $user->role_id)
+                        <option value="{{$role->id}}" selected>{{ $role->role_name }}</option>
+                        @else
+                        <option value="{{$role->id}}">{{ $role->role_name }}</option>
+                        @endif
+                        @endforeach
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary" name="btn_update">Cập nhập</button>
