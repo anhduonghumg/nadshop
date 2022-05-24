@@ -87,7 +87,7 @@ class AdminUserController extends Controller
     public function edit(Request $request, $id)
     {
         $id = $request->id;
-        $user = $this->userRepo->get_user_by_id($id, ['id', 'fullname', 'username', 'phone', 'email', 'role_id', 'password', 'created_at']);
+        $user = $this->userRepo->get_user_by_id($id);
         $list_roles = $this->role->all();
         return view('admin.user.edit', compact('user', 'list_roles'));
     }
@@ -98,7 +98,8 @@ class AdminUserController extends Controller
             $request->validate(
                 [
                     'fullname' => 'required|string|max:255',
-                    'phone' => 'required|numeric'
+                    'phone' => 'required|numeric',
+                    'role_permission' => 'required',
                 ],
             );
             $data = [
@@ -106,7 +107,13 @@ class AdminUserController extends Controller
                 'phone' => $request->input('phone')
             ];
 
-            $this->userRepo->update($data, $id);
+            $update_user = $this->userRepo->update($data, $id);
+            if ($update_user) {
+                $data_role = [
+                    'role_id' => $request->input('role_permission')
+                ];
+                $this->roleUser->where('user_id', $id)->update($data_role);
+            }
             return redirect()->route('admin.user.list')->with('status', trans('notification.update_success'));
         }
     }

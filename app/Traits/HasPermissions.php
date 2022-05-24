@@ -10,7 +10,7 @@ trait HasPermissions
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'role_id');
     }
 
     public function hasRole($role)

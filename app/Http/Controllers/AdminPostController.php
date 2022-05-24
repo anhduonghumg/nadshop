@@ -7,23 +7,21 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use App\Constants\Constants;
 use App\Helpers\ImageUpload;
 use App\Helpers\Recursive;
-use App\Helpers\Number;
 use App\Repositories\Post\PostRepositoryInterface;
-
+use App\Models\M_user;
 
 class AdminPostController extends Controller
 {
     use ImageUpload, Recursive;
 
     protected $postRepo;
-    public function __construct(PostRepositoryInterface $postRepo)
+    public function __construct(PostRepositoryInterface $postRepo, Post $post, M_user $user)
     {
         $this->postRepo = $postRepo;
-
+        $this->post = $post;
         $this->middleware(function (Request $request, $next) {
             session(['module_active' => 'post']);
             return $next($request);
@@ -53,79 +51,38 @@ class AdminPostController extends Controller
         return view('admin.post.list', compact('list_posts', 'count', 'list_act'));
     }
 
-    public function add()
+    public function add(Request $request)
     {
-        $data_category_post = $this->dataSelect(new CategoryPost);
-        return view('admin.post.add', compact('data_category_post'));
+        if ($this->authorize('create', $this->post)) {
+            $data_category_post = $this->dataSelect(new CategoryPost);
+            return view('admin.post.add', compact('data_category_post'));
+        }
     }
 
     public function store(Request $request)
     {
-        if ($request->has('btn_add')) {
-            $request->validate(
-                [
-                    'title' => ['required', 'string', 'max:255', 'unique:posts'],
-                    'desc' => ['required', 'string'],
-                    'content' => ['required', 'string'],
-                    'thumbnail' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-                    'category_post' => ['required']
-                ]
-            );
-
-            $data = [
-                'title' => $request->input('title'),
-                'slug' => Str::slug($request->input('title')),
-                'desc' => $request->input('desc'),
-                'status' => $request->input(('status')),
-                'content' => $request->input('content'),
-                'user_id' => Auth::id(),
-                'post_cat_id' => $request->input('category_post'),
-                "created_at" => now(),
-                "updated_at" => now(),
-            ];
-
-            if ($request->hasFile('thumbnail')) {
-                $dataImg = $this->ImageUpload($request->thumbnail, 'post');
-                $data['thumbnail'] = $dataImg['file_path'];
-            }
-
-            $this->postRepo->add($data);
-            return redirect()->route('admin.post.list')->with('status', trans('notification.add_success'));
-        }
-    }
-
-    public function edit(Request $request, $id)
-    {
-        $post = $this->postRepo->get_post_by_id($id, ['title', 'desc', 'content', 'thumbnail', 'post_cat_id']);
-
-        $data_cat_post = $this->dataSelect(new CategoryPost);
-        return view('admin.post.edit', compact('post', 'data_cat_post'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        if (!isset($id) || $id == 0) {
-            return redirect()->route('admin.post.list');
-        } else {
-            if ($request->has('btn_update')) {
-
+        if ($this->authorize('create', $this->post)) {
+            if ($request->has('btn_add')) {
                 $request->validate(
                     [
-                        'title' => ['required', 'string', 'max:255', 'unique:posts,title,' . $id . ',id'],
+                        'title' => ['required', 'string', 'max:255', 'unique:posts'],
                         'desc' => ['required', 'string'],
                         'content' => ['required', 'string'],
                         'thumbnail' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                         'category_post' => ['required']
-                    ],
+                    ]
                 );
 
                 $data = [
                     'title' => $request->input('title'),
                     'slug' => Str::slug($request->input('title')),
                     'desc' => $request->input('desc'),
+                    'status' => $request->input(('status')),
                     'content' => $request->input('content'),
+                    'user_id' => Auth::id(),
                     'post_cat_id' => $request->input('category_post'),
-                    'updated_at' => now(),
+                    "created_at" => now(),
+                    "updated_at" => now(),
                 ];
 
                 if ($request->hasFile('thumbnail')) {
@@ -133,13 +90,60 @@ class AdminPostController extends Controller
                     $data['thumbnail'] = $dataImg['file_path'];
                 }
 
-                $this->postRepo->update($data, $id);
-
-                return redirect()->route('admin.post.list')->with('status', trans('notification.update_success'));
+                $this->postRepo->add($data);
+                return redirect()->route('admin.post.list')->with('status', trans('notification.add_success'));
             }
         }
     }
+    public function edit(Request $request, $id)
+    {
+        if ($this->authorize('update', $this->post)) {
+            $post = $this->postRepo->get_post_by_id($id, ['title', 'desc', 'content', 'thumbnail', 'post_cat_id']);
 
+            $data_cat_post = $this->dataSelect(new CategoryPost);
+            return view('admin.post.edit', compact('post', 'data_cat_post'));
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        if ($this->authorize('update', $this->post)) {
+            if (!isset($id) || $id == 0) {
+                return redirect()->route('admin.post.list');
+            } else {
+                if ($request->has('btn_update')) {
+
+                    $request->validate(
+                        [
+                            'title' => ['required', 'string', 'max:255', 'unique:posts,title,' . $id . ',id'],
+                            'desc' => ['required', 'string'],
+                            'content' => ['required', 'string'],
+                            'thumbnail' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+                            'category_post' => ['required']
+                        ],
+                    );
+
+                    $data = [
+                        'title' => $request->input('title'),
+                        'slug' => Str::slug($request->input('title')),
+                        'desc' => $request->input('desc'),
+                        'content' => $request->input('content'),
+                        'post_cat_id' => $request->input('category_post'),
+                        'updated_at' => now(),
+                    ];
+
+                    if ($request->hasFile('thumbnail')) {
+                        $dataImg = $this->ImageUpload($request->thumbnail, 'post');
+                        $data['thumbnail'] = $dataImg['file_path'];
+                    }
+
+                    $this->postRepo->update($data, $id);
+
+                    return redirect()->route('admin.post.list')->with('status', trans('notification.update_success'));
+                }
+            }
+        }
+    }
     public function delete($id)
     {
         if ($id != null) {

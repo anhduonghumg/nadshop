@@ -68,11 +68,7 @@
                             <th scope="row">{{ $temp }}</th>
                             <td>{{ $user->fullname }}</td>
                             <td>{{ $user->email }}</td>
-                            @if ($user->role_id == 1)
-                            <td>Người dùng</td>
-                            @else
-                            <td>Quản trị</td>
-                            @endif
+                            <td>{{ $user->role_name }}</td>
                             @if ($user->email_verified_at != null)
                             <td>Đã xác thực</td>
                             @else

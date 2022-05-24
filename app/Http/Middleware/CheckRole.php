@@ -25,10 +25,10 @@ class CheckRole
 
     public function handle(Request $request, Closure $next)
     {
-        $id = Auth::id();
-        if ($this->roleUser->get_role($id) === Constants::ADMIN) {
+        if ($request->user()->id == 27) {
+            return $next($request);
+        } else {
             return redirect()->route('home');
         }
-        return $next($request);
     }
 }

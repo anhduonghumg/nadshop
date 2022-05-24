@@ -11,9 +11,9 @@ class Post extends Model
 
     protected $guarded = [];
 
-    public function User()
+    public function user()
     {
-        return $this->belongsTo('App\models\M_user', 'user_id', 'id');
+        return $this->belongsTo('App\Models\M_user');
     }
 
     public function postCategory()

@@ -10,15 +10,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\VerifyEmailNotification;
 use App\Notifications\ResetPasswordNotification;
-use App\Constants\Constants;
 use App\Traits\HasPermissions;
 
 class M_user extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasPermissions;
-
     protected $table = 'm_users';
-
     protected $fillable = [
         'id',
         'fullname',
@@ -26,7 +23,6 @@ class M_user extends Authenticatable implements MustVerifyEmail
         'phone',
         'email',
         'password',
-        'role_id'
     ];
 
     protected $hidden = [
@@ -39,6 +35,10 @@ class M_user extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'role_id');
+    // }
 
     // Thay đổi mail mặc định
     public function sendEmailVerificationNotification()
