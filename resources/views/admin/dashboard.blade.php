@@ -21,7 +21,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col">
             <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
                 <div class="card-header">DOANH SỐ</div>
@@ -42,6 +41,37 @@
         </div>
     </div>
     <!-- end analytic  -->
+    <div class="card">
+        <div class="card-header font-weight-bold">
+            THỐNG KÊ BÁN HÀNG
+        </div>
+        <div class="card-body">
+            <form class='d-flex'>
+                <div class="col-md-3">
+                    <span for="">Từ ngày</span>
+                    <input type="text" name="datepicker" id='datepicker' class='form-control'>
+                    <button type="button" id="btn-dashboard-filter" class='btn btn-sm btn-primary'>Lọc</button>
+                </div>
+                <div class="col-md-3">
+                    <span for="">Đến ngày</span>
+                    <input type="text" name="datepicker2" id='datepicker2' class='form-control'>
+                </div>
+                <div class="col-md-3">
+                    <span for="">Lọc theo</span>
+                    <select class='dashboard-filter form-control'>
+                        <option>--Chọn--</option>
+                        <option value='lastWeek'>Tuần qua</option>
+                        <option value='lastMonth'>Tháng qua</option>
+                        <option value='thisMonth'>Tháng này</option>
+                        <option value='lastYear'>Năm qua</option>
+                    </select>
+                </div>
+            </form>
+            <div class="col-md-12">
+                <div id="chart" style="height:250px;"></div>
+            </div>
+        </div>
+    </div>
     <div class="card">
         <div class="card-header font-weight-bold">
             ĐƠN HÀNG MỚI
@@ -206,5 +236,49 @@
             </nav>
         </div>
     </div>
+    <div id="myfirstchart" style="height: 250px;"></div>
 </div>
+<script type="text/javascript">
+    $( function() {
+        $( "#datepicker" ).datepicker({
+          dateFormat: "dd/mm/yy",
+          dayNamesMin: ["T2","T3","T4","T5","T6","T7","CN"],
+        });
+        $( "#datepicker2" ).datepicker({
+            dateFormat: "dd/mm/yy",
+            dayNamesMin: ["T2","T3","T4","T5","T6","T7","CN"],
+          });
+      });
+</script>
+
+<script type="text/javascript">
+    var chart = new Morris.Bar({
+        element: 'chart',
+        lineColors: ['#819C79','#fc8710','#FF6541','#A4ADD3','#766B56'],
+        parseTime: false,
+        hideHover: 'auto',
+        gridTextSize: 12,
+        xkey: 'period',
+        ykeys: ['order','sales','profit','qty'],
+        labels: ['Đơn hàng','Doanh số','Lợi nhuận','Số lượng']
+      });
+
+    $(document).on('click','#btn-dashboard-filter',function(){
+        var from_date = $('#datepicker').val();
+        var to_date = $('#datepicker2').val();
+        //$(".loadajax").show();
+        $.ajax({
+            url: "{{ route('dashboard.filter') }}",
+            type: "POST",
+            data: { from_date:from_date,to_date:to_date },
+            dataType: "json",
+            success: function (rsp) {
+              chart.setData(rsp);
+            },error: function () {
+           alert("error!!!!");
+            },
+        });
+    })
+
+</script>
 @endsection
