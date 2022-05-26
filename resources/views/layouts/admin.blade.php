@@ -231,16 +231,15 @@
     <div class="loadajax">
         <i class="fa fa-spinner fa-spin"></i>
     </div>
+    <script src="{{ url('public/js/app.js') }}"></script>
+    <script src="{{ url('public/js/main.js') }}"></script>
+    <script src="{{ url('public/js/sweetalert2.min.js') }}"></script>
     <script>
         setTimeout(function(){
             $('.loader').hide();
             $('#wp-content').show();
        },500);
-      // ("#myModal .thumbnail").selectator();
     </script>
-    <script src="{{ url('public/js/app.js') }}"></script>
-    <script src="{{ url('public/js/main.js') }}"></script>
-    <script src="{{ url('public/js/sweetalert2.min.js') }}"></script>
 </body>
 
 </html>

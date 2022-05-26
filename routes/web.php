@@ -29,7 +29,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // verified
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/filter-by-date', [App\Http\Controllers\DashboardController::class, 'filter_by_date'])->name('dashboard.filter');
+    Route::post('/filter-by-date', [App\Http\Controllers\DashboardController::class, 'filter_by_date'])->name('dashboard.filter.date');
+    Route::post('/filter', [App\Http\Controllers\DashboardController::class, 'filter'])->name('dashboard.filter');
+    Route::post('/load-chart', [App\Http\Controllers\DashboardController::class, 'load_chart'])->name('load.chart');
     // Admin/user
     Route::get('/admin/user/list', [App\Http\Controllers\AdminUserController::class, 'list'])->name('admin.user.list');
     Route::get('/admin/user/add', [App\Http\Controllers\AdminUserController::class, 'add'])->name('admin.user.add');
@@ -159,6 +161,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/admin/permission/update', [App\Http\Controllers\AdminPermissionController::class, 'update'])->name('admin.permission.update');
     Route::post('/admin/permission/delete', [App\Http\Controllers\AdminPermissionController::class, 'delete'])->name('admin.permission.delete');
 
+    // Route::get('/chart', [App\Http\Controllers\TestController::class, 'chart'])->name('chart');
+    // Route::post('/filter-by-date', [App\Http\Controllers\TestController::class, 'filter_by_date'])->name('filter');
     // helper
     // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
     // Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');

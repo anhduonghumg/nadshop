@@ -290,6 +290,9 @@ a#add_work:hover {
     color: #495057;
 }
 
+svg {
+    width: 100%;
+}
 /* .show_list_thumb {
     height: 120px;
     width: 200px;

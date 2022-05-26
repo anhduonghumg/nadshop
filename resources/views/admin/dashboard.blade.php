@@ -236,7 +236,6 @@
             </nav>
         </div>
     </div>
-    <div id="myfirstchart" style="height: 250px;"></div>
 </div>
 <script type="text/javascript">
     $( function() {
@@ -252,6 +251,8 @@
 </script>
 
 <script type="text/javascript">
+    load_chart();
+    
     var chart = new Morris.Bar({
         element: 'chart',
         lineColors: ['#819C79','#fc8710','#FF6541','#A4ADD3','#766B56'],
@@ -268,7 +269,7 @@
         var to_date = $('#datepicker2').val();
         //$(".loadajax").show();
         $.ajax({
-            url: "{{ route('dashboard.filter') }}",
+            url: "{{ route('dashboard.filter.date') }}",
             type: "POST",
             data: { from_date:from_date,to_date:to_date },
             dataType: "json",
@@ -280,5 +281,33 @@
         });
     })
 
+    $(document).on('change','.dashboard-filter',function(){
+        var filter = $(this).val();
+        $.ajax({
+            url: "{{ route('dashboard.filter') }}",
+            type: "POST",
+            data: { filter:filter },
+            dataType: "json",
+            success: function (rsp) {
+              chart.setData(rsp);
+            },error: function () {
+           alert("error!!!!");
+            },
+        });
+    })
+
+    function load_chart(){
+        $.ajax({
+            url: "{{ route('load.chart') }}",
+            type: "POST",
+            //data: { filter:filter },
+            dataType: "json",
+            success: function (rsp) {
+              chart.setData(rsp);
+            },error: function () {
+           alert("error!!!!");
+            },
+        });
+    }
 </script>
 @endsection
