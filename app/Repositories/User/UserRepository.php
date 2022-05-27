@@ -17,8 +17,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $user = $this->model
             ->select('m_users.id', 'm_users.fullname', 'm_users.username', 'm_users.phone', 'm_users.email', 'm_users.password', 'm_users.created_at', 'role_id')
-            ->join('role_users', 'm_users.id', '=', 'role_users.user_id')
-            ->join('roles', 'roles.id', '=', 'role_users.role_id')
+            ->leftjoin('role_users', 'm_users.id', '=', 'role_users.user_id')
+            ->leftjoin('roles', 'roles.id', '=', 'role_users.role_id')
             ->firstWhere('m_users.id', $id);
         return $user;
     }
@@ -27,8 +27,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $user = $this->model
             ->select('m_users.id', 'm_users.fullname', 'm_users.email', 'm_users.created_at', 'm_users.deleted_at', 'role_name')
-            ->join('role_users', 'm_users.id', '=', 'role_users.user_id')
-            ->join('roles', 'roles.id', '=', 'role_users.role_id')
+            ->leftjoin('role_users', 'm_users.id', '=', 'role_users.user_id')
+            ->leftjoin('roles', 'roles.id', '=', 'role_users.role_id')
             ->whereNotNull('m_users.deleted_at')
             // ->where('m_users.id', '<>', Auth::id())
             ->where('m_users.fullname', 'LIKE', "%{$key}%")

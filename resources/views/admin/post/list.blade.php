@@ -89,31 +89,40 @@
                             @endif
                             <td>{{ $item->fullname }}</td>
                             <td>{{ $item->created_at }}</td>
-                            @if (request()->input('status') == Constants::TRASH)
+                            @if (request()->input('status') == Constants::TRASH &&
+                            (request()->user()->can(['update','delete'])
+                            || request()->user()->id == $get_author))
                             <td>
+                                {{-- @if($request->user()->can('update')) --}}
                                 <a href="{{ route('admin.post.edit', ['id' => $item->id]) }}"
                                     class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                     data-toggle="tooltip" data-placement="top" title="Edit"><i
                                         class="fa fa-edit"></i></a>
+                                {{-- @endif --}}
+                                {{-- @can($request->user()->can('delete-post')) --}}
                                 <a href="{{ route('admin.post.forceDelete', ['id' => $item->id]) }}"
                                     onclick="return confirm('Bạn muốn xóa bản ghi này?')"
                                     data-url="{{ route('admin.post.forceDelete', ['id' => $item->id]) }}"
                                     class="btn btn-danger btn-sm rounded-0 text-white action_delete" type="button"
                                     data-toggle="tooltip" data-placement="top" title="Delete"><i
                                         class="fa fa-trash"></i></a>
+                                {{-- @endcan --}}
                             </td>
                             @else
                             <td>
+                                @if(request()->user()->can(['update','delete']) || request()->user()->id == $get_author)
                                 <a href="{{ route('admin.post.edit', ['id' => $item->id]) }}"
                                     class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                     data-toggle="tooltip" data-placement="top" title="Edit"><i
                                         class="fa fa-edit"></i></a>
+
                                 <a href="{{ route('admin.post.delete', ['id' => $item->id]) }}"
                                     onclick="return confirm('Bạn muốn xóa bản ghi này?')"
                                     data-url="{{ route('admin.post.delete', ['id' => $item->id]) }}"
                                     class="btn btn-danger btn-sm rounded-0 text-white action_delete" type="button"
                                     data-toggle="tooltip" data-placement="top" title="Delete"><i
                                         class="fa fa-trash"></i></a>
+                                @endif
                             </td>
                             @endif
                         </tr>

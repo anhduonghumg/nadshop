@@ -46,7 +46,7 @@
             THỐNG KÊ BÁN HÀNG
         </div>
         <div class="card-body">
-            <form class='d-flex'>
+            <form class='d-flex' autocomplete="off">
                 <div class="col-md-3">
                     <span for="">Từ ngày</span>
                     <input type="text" name="datepicker" id='datepicker' class='form-control'>
@@ -252,7 +252,7 @@
 
 <script type="text/javascript">
     load_chart();
-    
+
     var chart = new Morris.Bar({
         element: 'chart',
         lineColors: ['#819C79','#fc8710','#FF6541','#A4ADD3','#766B56'],

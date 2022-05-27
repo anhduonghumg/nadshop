@@ -18,7 +18,8 @@
                 </div>
                 <div class="form-group">
                     <label for="desc">Mô tả bài viết</label>
-                    <textarea name="desc" class="form-control tinytextarea" id="desc" cols="30" rows="5">{{ old('desc') }}</textarea>
+                    <textarea name="desc" class="form-control tinytextarea" id="desc" cols="30"
+                        rows="5">{{ old('desc') }}</textarea>
                     @error('desc')
                     <small class="text-danger">{{ $message }}</small>
                     @enderror

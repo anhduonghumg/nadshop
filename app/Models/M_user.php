@@ -50,4 +50,9 @@ class M_user extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function post()
+    {
+        return $this->hasMany(Post::class, 'user_id');
+    }
 }

@@ -92,10 +92,10 @@
                             </td>
                             @else
                             <td>
-                                {{-- <a href="{{ route('admin.user.edit',$user->id) }}"
+                                <a href="{{ route('admin.user.edit',$user->id) }}"
                                     class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                     data-toggle="tooltip" data-placement="top" title="Edit"><i
-                                        class="fa fa-edit"></i></a> --}}
+                                        class="fa fa-edit"></i></a>
                                 <a href="{{ route('admin.user.forceDelete',$user->id) }}"
                                     onclick="return confirm('Bạn muốn xóa bản ghi này?')"
                                     class="btn btn-danger btn-sm rounded-0 text-white" type="button"

@@ -81,7 +81,6 @@ class AdminProductDetailController extends Controller
                 'created_at' => now(),
                 'updated_at' => now()
             ];
-
             $this->productDetailRepo->add($saveData);
         }
         return response()->json(['success' => trans('notification.add_success')]);
