@@ -24,7 +24,6 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware'], function () {
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // verified
 Route::middleware('auth', 'verified')->group(function () {
@@ -184,3 +183,7 @@ Route::middleware('auth', 'verified')->group(function () {
     // city district
     // Route::get('/test', [App\Http\Controllers\TestController::class, 'test'])->name('test');
 });
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('user/signin', [App\Http\Controllers\Client\UserController::class, 'login']);
+Route::get('user/signup', [App\Http\Controllers\Client\UserController::class, 'register']);
