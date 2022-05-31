@@ -11,6 +11,8 @@ class Product extends Model
 
     protected $guarded = [];
 
-    
-
+    public function product_variant()
+    {
+        return $this->hasMany(ProductDetail::class, 'product_id');
+    }
 }

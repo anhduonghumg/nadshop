@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategoryProduct;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Constants\Constants;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $cat;
+    protected $product;
+    public function __construct(CategoryProduct $cat, Product $product)
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->cat = $cat;
+        $this->product = $product;
     }
 
     /**
@@ -23,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('client.home.home');
+        $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
+        $list_product_new = $this->product->all();
+        return view('client.home.home', compact('category_products', 'list_product_new'));
     }
 }

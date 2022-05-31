@@ -31,3 +31,27 @@ function get_selected($id)
     $result = DB::table('permission_roles')->where('role_id', $id)->get();
     return collect($result);
 }
+
+function menu($menu, $parent = 0)
+{
+    $str_menu = "";
+    foreach ($menu as $key => $value) {
+        $str_menu .= "<div class='nav-item dropdown'>";
+        $value['url'] = "";
+        if ($value['parent_id'] == $parent) {
+            $str_menu .= "<a href='#' class='nav-link dropdown-toggle' data-toggle='dropdown'>" . $value['category_product_name'] . "</a>";
+            unset($value[$key]);
+            $id = $value['id'];
+            foreach ($menu as $key => $value) {
+                $str_menu .= "<div class='dropdown-menu rounded-0 m-0'>";
+                $value['url'] = '';
+                if ($value['parent_id'] != $parent && $value['parent_id'] == $id) {
+                    $str_menu .= "<a href='#' class='dropdown-item'>" . $value['category_product_name'] . "</a>";
+                }
+                $str_menu .= "</div>";
+            }
+        }
+        $str_menu .= "</div>";
+    }
+    return $str_menu;
+}

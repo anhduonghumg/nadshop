@@ -184,6 +184,8 @@ Route::middleware('auth', 'verified')->group(function () {
     // Route::get('/test', [App\Http\Controllers\TestController::class, 'test'])->name('test');
 });
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('user/signin', [App\Http\Controllers\Client\UserController::class, 'login']);
 Route::get('user/signup', [App\Http\Controllers\Client\UserController::class, 'register']);
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('product/cat/{id}', [App\Http\Controllers\Client\ProductController::class, 'show'])->name('client.product.show');
+Route::get('product/detail/{id}', [App\Http\Controllers\Client\ProductController::class, 'detail'])->name('client.product.detail');

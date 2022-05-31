@@ -28,6 +28,6 @@ class ProductDetail extends Model
 
     function product()
     {
-        return $this->belongsTo('App\models\Product', 'product_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }
