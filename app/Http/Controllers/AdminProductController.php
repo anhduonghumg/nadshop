@@ -68,11 +68,14 @@ class AdminProductController extends Controller
                     'product_content' => ['required', 'string'],
                     'product_thumb' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                     'category_product' => ['required'],
-                    'brand' => ['required'],
+                    // 'brand' => ['required'],
                     'list_product_thumb' => ['required'],
                     'product_status' => ['required']
                 ]
             );
+
+            $new_product = $request->product_new ? $request->product_new : 0;
+            $best_seller_product = $request->product_best_seller ? $request->product_best_seller : 0;
 
             $data = [
                 'product_name' => $request->input('product_name'),
@@ -83,6 +86,8 @@ class AdminProductController extends Controller
                 'user_id' => Auth::id(),
                 'brand_id' => $request->input('brand'),
                 'product_cat_id' => $request->input('category_product'),
+                'is_product_new' => $new_product,
+                'is_product_bestseller' => $best_seller_product,
                 "created_at" => now(),
                 "updated_at" => now(),
             ];
@@ -128,9 +133,13 @@ class AdminProductController extends Controller
                     'product_content' => ['required', 'string'],
                     'product_thumb' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                     'category_product' => ['required'],
-                    'brand' => ['required'],
+
+                    // 'brand' => ['required'],
                 ]
             );
+
+            $new_product = $request->product_new ? $request->product_new : 0;
+            $best_seller_product = $request->product_best_seller ? $request->product_best_seller : 0;
 
             $data = [
                 'product_name' => $request->input('product_name'),
@@ -140,6 +149,8 @@ class AdminProductController extends Controller
                 'user_id' => Auth::id(),
                 'brand_id' => $request->input('brand'),
                 'product_cat_id' => $request->input('category_product'),
+                'is_product_new' => $new_product,
+                'is_product_bestseller' => $best_seller_product,
                 "created_at" => now(),
                 "updated_at" => now(),
             ];

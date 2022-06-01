@@ -58,6 +58,10 @@ $(document).ready(function () {
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
+                                            <div class='info-product my-3'>
+                                             <strong for="">Tên sản phẩm gốc: </strong>
+                                             <span>${resp.info_product.product_name}</span>
+                                              </div>
                                             <ul class="nav nav-tabs mt-3 mb-3" id="myTab" role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <a class="nav-link active" id="p_1-tab" data-toggle="tab" href="#p_1" role="tab"
@@ -82,10 +86,17 @@ $(document).ready(function () {
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row ">
-                                                                <label for="product_price" class="col-sm-4 control-label">Giá:</label>
+                                                            <label for="cost_price" class="col-sm-4 control-label">Giá nhập:</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control cost_price"
+                                                                    placeholder="Giá nhập sản phẩm (VNĐ)" name="cost_price[]">
+                                                            </div>
+                                                           </div>
+                                                            <div class="form-group row ">
+                                                                <label for="product_price" class="col-sm-4 control-label">Giá bán:</label>
                                                                 <div class="col-sm-8">
                                                                     <input type="text" class="form-control product_price"
-                                                                        placeholder="Giá sản phẩm (VNĐ)" name="product_price[]">
+                                                                        placeholder="Giá bán sản phẩm (VNĐ)" name="product_price[]">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
@@ -167,9 +178,13 @@ $(document).ready(function () {
         var product_details_thumb = [];
         var product_qty_stock = [];
         var product_discount = [];
+        var cost_price = [];
 
         $(".product_detail_name").each(function () {
             product_detail_name.push($(this).val());
+        });
+        $(".cost_price").each(function () {
+            cost_price.push($(this).val());
         });
         $(".product_price").each(function () {
             product_price.push($(this).val());
@@ -206,6 +221,7 @@ $(document).ready(function () {
                 product_details_thumb: product_details_thumb,
                 product_qty_stock: product_qty_stock,
                 product_discount: product_discount,
+                cost_price: cost_price,
             },
             dataType: "json",
             success: function (data) {
@@ -254,7 +270,6 @@ $(document).ready(function () {
         }
     });
 });
-
 
 function formatState(opt) {
     if (!opt.id) {

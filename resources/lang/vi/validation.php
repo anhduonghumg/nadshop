@@ -183,6 +183,7 @@ return [
         'product_discount.*' => 'khuyến mãi',
         'product_qty_stock.*' => 'số lượng',
         'product_color.*' => 'màu',
+        'cost_price.*' => 'giá nhập',
         'product_size.*' => 'kich cỡ/bản',
         'product_details_thumb.*' => 'ảnh chi tiét',
         'product_detail_name' => 'tên sản phẩm chi tiết',

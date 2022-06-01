@@ -189,3 +189,4 @@ Route::get('user/signup', [App\Http\Controllers\Client\UserController::class, 'r
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('product/cat/{id}', [App\Http\Controllers\Client\ProductController::class, 'show'])->name('client.product.show');
 Route::get('product/detail/{id}', [App\Http\Controllers\Client\ProductController::class, 'detail'])->name('client.product.detail');
+Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');

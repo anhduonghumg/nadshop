@@ -78,6 +78,24 @@
                             <small class=" text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="product_new" id="product_new"
+                                value="{{ $product->is_product_new }}" @if($product->is_product_new == Constants::TRUE)
+                            return
+                            'checked'
+                            @endif>
+                            <label for="product_new">Sản phẩm mới</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="product_best_seller" id="product_best_seller"
+                                value="{{ $product->is_product_best_seller}}" @if($product->is_product_best_seller ==
+                            Constants::TRUE)
+                            return
+                            'checked'
+                            @endif>
+                            <label for="product_best_seller">Sản phẩm bán
+                                chạy</label>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" name="btn_update" class="btn btn-primary">Cập nhập</button>

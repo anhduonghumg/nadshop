@@ -20,6 +20,27 @@
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+                        {{-- <div class="form-group">
+                            <label for="cost_price">Giá nhập sản phẩm</label>
+                            <input class="form-control" type="text" name="cost_price" id="cost_price">
+                            @error('cost_price')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="sell_price">Giá bán sản phẩm</label>
+                            <input class="form-control" type="text" name="sell_price" id="sell_price">
+                            @error('sell_price')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="sale">Giảm giá</label>
+                            <input class="form-control" type="text" name="sale" id="sale">
+                            @error('sale')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div> --}}
                         <div class="form-group">
                             <label for="intro">Mô tả sản phẩm</label>
                             <textarea name="product_desc" class="form-control" id="intro" cols="30" rows="5"></textarea>
@@ -75,6 +96,14 @@
                             @error('brand')
                             <small class=" text-danger">{{ $message }}</small>
                             @enderror
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="product_new" id="product_new" value=1>
+                            <label for="product_new">Sản phẩm mới</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" name="product_best_seller" id="product_best_seller" value=1>
+                            <label for="product_best_seller">Sản phẩm bán chạy</label>
                         </div>
                         <div class="form-group">
                             <label for="">Trạng thái</label>

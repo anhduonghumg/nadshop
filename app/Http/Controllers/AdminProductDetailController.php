@@ -7,6 +7,7 @@ use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Size\SizeRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ class AdminProductDetailController extends Controller
 
     public function __construct(
         ProductDetailRepositoryInterface $productDetailRepo,
+        ProductRepositoryInterface $productRepo,
         ColorRepositoryInterface $colorRepo,
         SizeRepositoryInterface $sizeRepo,
         ImageRepositoryInterface $imgRepo
@@ -30,6 +32,7 @@ class AdminProductDetailController extends Controller
         $this->colorRepo = $colorRepo;
         $this->sizeRepo = $sizeRepo;
         $this->imgRepo = $imgRepo;
+        $this->productRepo = $productRepo;
     }
 
     public function add(Request $request)
@@ -38,13 +41,15 @@ class AdminProductDetailController extends Controller
         $list_product_color = $this->colorRepo->get_list_color_product();
         $list_product_size = $this->sizeRepo->get_list_size_product();
         $list_image = $this->imgRepo->get_list_image_product($id);
+        $info_product = $this->productRepo->find($id);
         $url_add_product_detail = route('admin.product.detail.store');
         $result = [
             'list_product_color' => $list_product_color,
             'list_product_size' => $list_product_size,
             'url_add_product' => $url_add_product_detail,
             'id_product' => $id,
-            'list_image' => $list_image
+            'list_image' => $list_image,
+            'info_product' => $info_product
         ];
         return response()->json($result);
     }
@@ -53,12 +58,14 @@ class AdminProductDetailController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'product_detail_name.*' => 'bail|required|distinct|unique:product_details,product_detail_name',
+            'cost_price.*' => 'bail|required|numeric',
             'product_price.*' => 'bail|required|numeric',
             'product_discount.*' => 'bail|required|numeric',
             'product_qty_stock.*' => 'bail|required|numeric',
             'product_color.*' => 'bail|required',
             'product_size.*' => 'bail|required',
             'product_details_thumb.*' => 'bail|required',
+
         ]);
 
         if ($validator->fails()) {
@@ -71,6 +78,7 @@ class AdminProductDetailController extends Controller
                 'product_detail_name' => $request->product_detail_name[$key],
                 'product_detail_slug' => Str::slug($request->product_detail_name[$key]),
                 'product_details_thumb' => $request->product_details_thumb[$key],
+                'cost_price' => $request->cost_price[$key],
                 'product_price' => $request->product_price[$key],
                 'product_discount' => $request->product_discount[$key],
                 'product_qty_stock' => $request->product_qty_stock[$key],

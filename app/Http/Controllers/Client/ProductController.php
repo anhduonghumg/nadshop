@@ -29,4 +29,19 @@ class ProductController extends Controller
 
         return view('client.product.detail', compact('product', 'category_products'));
     }
+
+    public function load_product(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = (int)$request->id;
+            $list_product = $this->product->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+                ->join('product_details', 'products.id', '=', 'product_details.product_id')
+                ->where('products.product_cat_id', $id)
+                ->orderByDesc('products.id')
+                ->distinct()
+                ->take(8)
+                ->get();
+            return view('client.product.load', compact('list_product'))->render();
+        }
+    }
 }

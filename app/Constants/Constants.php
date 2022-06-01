@@ -19,4 +19,8 @@ class Constants
     const EMPTY = NULL;
     const PATH_IMAGE = 'storage/app/public/images/';
     const PAGINATE = 15;
+    const TRUE = 1;
+    const FALSE = 0;
+    const SHIRT_MEN = 16;
+    const TROUSERS_MEN = 17;
 }

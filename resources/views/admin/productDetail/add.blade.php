@@ -5,11 +5,17 @@
             <form action="{{ route('admin.product.detail', $id) }}" method='POST' enctype='multipart/form-data'>
                 @csrf
                 <div class="modal-header ui-dranggale-handle" style="cursor: move;">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm chi tiết sản phẩm</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <div class="section-info d-flex justify-content-between">
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm chi tiết sản phẩm</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <label for="">Tên sản phẩm gốc</label>
+                    </div>
                 </div>
+                
                 <ul class="nav nav-tabs mt-3 mb-3" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="p_1-tab" data-toggle="tab" href="#p_1" role="tab"
@@ -26,8 +32,7 @@
                         <div class="row">
                             <div class="col-sm-6 col-xs-12">
                                 <div class="form-group row">
-                                    <label for="product_name" class="col-sm-4 control-label">Tên sản
-                                        phẩm:</label>
+                                    <label for="product_name" class="col-sm-4 control-label">Tên sản phẩm:</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" id="product_name"
                                             placeholder="Tên sản phẩm" name="product_detail_name[]">
