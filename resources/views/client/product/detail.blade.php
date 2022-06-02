@@ -1,5 +1,16 @@
 @extends('layouts.client')
 @section('content')
+<div class="breadcrumb-shop clearfix px-xl-5 bg-none">
+    <div class="padding-lf-40 clearfix">
+        <div class="">
+            <ol class="breadcrumb breadcrumb-arrows clearfix">
+                <li><a href="{{ route('client.home') }}" target="_self"><i class="fa fa-home"></i> Trang chủ |</a></li>
+                <li><a href="/ao-phong-pc6379.html">Áo Phông</a></li>
+                <li class="active"><span>Áo Phông Regular Cotton 0092</span></li>
+            </ol>
+        </div>
+    </div>
+</div>
 <div class="container-fluid py-5">
     <div class="row px-xl-5">
         <div class="col-lg-5 pb-5">

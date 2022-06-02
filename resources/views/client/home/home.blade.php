@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between bg-light border">
-                    <a href="{{ route('client.product.detail',$product->id) }}" class="btn btn-sm text-dark p-0"><i
+                    <a href="{{ route('client.product.cat.show',$product->id) }}" class="btn btn-sm text-dark p-0"><i
                             class="fas fa-eye text-primary mr-1"></i>View
                         Detail</a>
                     <a href="" class="btn btn-sm text-dark p-0"><i
@@ -181,7 +181,6 @@
 </div>
 <!-- Products End -->
 
-
 <!-- Products Start -->
 <div class="container-fluid pt-5">
     <div class="ml-5 mb-5 d-flex">
@@ -198,6 +197,27 @@
         </div>
     </div>
     <div class="row px-xl-5 pb-3 load_trouser_data">
+
+    </div>
+</div>
+<!-- Products End -->
+
+<!-- Products Start -->
+<div class="container-fluid pt-5">
+    <div class="ml-5 mb-5 d-flex">
+        <h2 class="section-title "><span class="text-uppercase">Phụ kiện</span></h2>
+        <div class="outerTabTitle">
+            <ul class="tabTitle d-flex">
+                @foreach ($list_menu_accessories as $menu)
+                <li class="titleTabItem active">
+                    <a class="accessory_title text-uppercase" data-id={{ $menu->id }}>{{ $menu->category_product_name
+                        }}</a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+    <div class="row px-xl-5 pb-3 load_accessory_data">
 
     </div>
 </div>
@@ -310,6 +330,7 @@
 <!-- Modal Account End -->
 
 <script type="text/javascript">
+    var is_busy = false;
     $(document).on('click','.account',function(e){
         e.preventDefault();
         openLoginModal();
@@ -321,38 +342,53 @@
     });
 
     $(document).on('click','.tp_title',function(e){
-        $(".loading").show();
-        var id = $(this).attr('data-id');
-        $.ajax({
-            url: "{{ route('client.product.load') }}",
-            type: "POST",
-            data: {id:id},
-            dataType: "html",
-            success: function (rsp) {
-             $(".loading").hide();
-             $('.load_data').html(rsp);
-            },error: function () {
-           alert("error!!!!");
-            },
-        });
+        e.preventDefault();
+        if (is_busy == true) {
+            return false;
+        }
+        var data = $(this).attr('data-id');
+        var selector = $('.load_data');
+        load_data(selector,data);
     })
 
     $(document).on('click','.trouser_title',function(e){
+        e.preventDefault();
+        if (is_busy == true) {
+            return false;
+        }
+        var data = $(this).attr('data-id');
+        var selector = $('.load_trouser_data');
+        load_data(selector,data);
+    })
+
+    $(document).on('click','.accessory_title',function(e){
+        e.preventDefault();
+        if (is_busy == true) {
+            return false;
+        }
+        var data = $(this).attr('data-id');
+        var selector = $('.load_accessory_data');
+        load_data(selector,data);
+    })
+
+    function load_data(selector,data){
         $(".loading").show();
-        var id = $(this).attr('data-id');
+        is_busy = true;
         $.ajax({
             url: "{{ route('client.product.load') }}",
             type: "POST",
-            data: {id:id},
+            data: {id:data},
             dataType: "html",
             success: function (rsp) {
              $(".loading").hide();
-             $('.load_trouser_data').html(rsp);
+             selector.html(rsp);
+             is_busy = false;
             },error: function () {
-           alert("error!!!!");
+            $(".loading").hide();
+             alert("error!!!!");
             },
         });
-    })
+    }
 
 function openLoginModal(){
     showLoginForm();

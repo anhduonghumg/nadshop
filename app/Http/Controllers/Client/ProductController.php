@@ -20,7 +20,6 @@ class ProductController extends Controller
     public function detail($id)
     {
         $pro_id = (int)$id;
-
         $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
         $product = $this->product
             ->join('product_details', 'product_details.product_id', '=', 'products.id')

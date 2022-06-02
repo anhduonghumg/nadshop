@@ -79,7 +79,7 @@
         </div>
         <div class="row align-items-center py-3 px-xl-5">
             <div class="col-lg-3 d-none d-lg-block">
-                <a href="" class="text-decoration-none">
+                <a href="{{ route('client.home') }}" class="text-decoration-none">
                     <h1 class="m-0 display-5 font-weight-semi-bold"><span
                             class="text-primary font-weight-bold border px-3 mr-1">NAD</span>SHOP</h1>
                 </a>
@@ -109,9 +109,8 @@
         </div>
     </div>
     <!-- Topbar End -->
-
     <!-- Nav start -->
-    <div class="container-fluid mb-5">
+    <div class="container-fluid">
         <div class="row border-top px-xl-5">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
@@ -127,13 +126,13 @@
                             @foreach ($category_products as $cat)
                             <div class="nav-item dropdown">
                                 @if($cat->parent_id == 0)
-                                <a href="{{ Route('client.product.show',$cat->id) }}" class="nav-link dropdown-toggle"
+                                <a href="{{ Route('client.product.cat.show',$cat->id) }}" class="nav-link dropdown-toggle"
                                     data-toggle="dropdown">{{
                                     $cat->category_product_name }}</a>
                                 <div class="dropdown-menu rounded-0 m-0">
                                     @foreach ($category_products as $cat2)
                                     @if($cat2->parent_id !=0 && $cat2->parent_id == $cat->id)
-                                    <a href="{{ route('client.product.show',$cat2->id) }}" class="nav-item nav-link">{{
+                                    <a href="{{ route('client.product.cat.show',$cat2->id) }}" class="nav-item nav-link">{{
                                         $cat2->category_product_name }}</a>
                                     @endif
                                     @endforeach

@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryProduct;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Constants\Constants;
+use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\CategoryProduct\CategoryProductRepositoryInterface;
 
 class HomeController extends Controller
 {
     protected $cat;
     protected $product;
-    public function __construct(CategoryProduct $cat, Product $product)
-    {
+    public function __construct(
+        CategoryProductRepositoryInterface $cat,
+        ProductRepositoryInterface $product
+    ) {
         // $this->middleware('auth');
         $this->cat = $cat;
         $this->product = $product;
@@ -25,37 +28,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
-        $list_product_new = $this->product
-            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
-            ->join('product_details', 'products.id', '=', 'product_details.product_id')
-            ->where('products.is_product_new', Constants::TRUE)
-            ->orderByDesc('products.id')
-            ->distinct()
-            ->take(8)
-            ->get();
+        $take = 8;
+        $category_products = CategoryProduct::where('deleted_at', Constants::EMPTY)->get();
+        $list_product_new = $this->product->get_list_product('is_product_new', $take);
+        $list_product_best_sell = $this->product->get_list_product('is_product_bestseller', $take);
+        $list_menu_shirt = $this->cat->get_cat_menu(Constants::SHIRT_MEN);
+        $list_menu_trousers = $this->cat->get_cat_menu(Constants::TROUSERS_MEN);
+        $list_menu_accessories = $this->cat->get_cat_menu(Constants::ACCESSORIES_MEN);
 
-        $list_product_best_sell = $this->product
-            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
-            ->join('product_details', 'products.id', '=', 'product_details.product_id')
-            ->where('products.is_product_bestseller', Constants::TRUE)
-            ->orderByDesc('products.id')
-            ->distinct()
-            ->take(8)
-            ->get();
-
-        $list_menu_shirt = $this->cat
-            ->select('category_product_name', 'id')
-            ->where('deleted_at', Constants::EMPTY)
-            ->where('parent_id', Constants::SHIRT_MEN)
-            ->get();
-
-        $list_menu_trousers = $this->cat
-            ->select('category_product_name', 'id')
-            ->where('deleted_at', Constants::EMPTY)
-            ->where('parent_id', Constants::TROUSERS_MEN)
-            ->get();
-
-        return view('client.home.home', compact('category_products', 'list_product_new', 'list_product_best_sell', 'list_menu_shirt', 'list_menu_trousers'));
+        return view('client.home.home', compact(
+            'category_products',
+            'list_product_new',
+            'list_product_best_sell',
+            'list_menu_shirt',
+            'list_menu_accessories',
+            'list_menu_trousers'
+        ));
     }
 }

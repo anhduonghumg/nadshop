@@ -23,4 +23,5 @@ class Constants
     const FALSE = 0;
     const SHIRT_MEN = 16;
     const TROUSERS_MEN = 17;
+    const ACCESSORIES_MEN = 18;
 }

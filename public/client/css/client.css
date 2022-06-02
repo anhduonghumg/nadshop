@@ -1940,6 +1940,44 @@ pre code {
     font-size: 34px;
 }
 
+.titleFilter {
+    position: relative;
+}
+
+.groupFilterNew:hover .contentFilter {
+    display: flex;
+}
+.contentFilter {
+    padding: 4px 2px;
+    display: none;
+    position: absolute;
+    z-index: 9999999999999;
+    top: 365px;
+    left: 130px;
+    background: #fff;
+}
+.contentFilter ul {
+    list-style: none;
+}
+
+.layered_subtitle {
+    margin-right: 100px;
+    cursor: pointer;
+    display: block;
+}
+.s-filter {
+    margin-top: 10px;
+    margin-right: 155px;
+}
+.s-filter ul {
+    padding: 0px;
+    margin: 0px;
+}
+.box-head {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
 @media (max-width: 575.98px) {
     .table-responsive-sm {
         display: block;

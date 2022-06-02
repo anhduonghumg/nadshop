@@ -13,6 +13,7 @@ interface CategoryProductRepositoryInterface extends RepositoryInterface
     public function get_num_cat_product_trash();
     public function get_num_cat_product_active();
     public function get_num_cat_product_pending();
+    public function get_cat_menu($category);
     // public function check_parent_cat($id);
     // public function get_name_parent_cat($id);
 }

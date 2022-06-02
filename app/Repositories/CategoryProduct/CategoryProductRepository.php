@@ -87,4 +87,15 @@ class CategoryProductRepository extends BaseRepository implements CategoryProduc
             return $this->model->select('category_product_name')->where('id', $id)->first();
         return null;
     }
+
+    public function get_cat_menu($category)
+    {
+        $result = $this->model
+            ->select('category_product_name', 'id')
+            ->where('category_product_status', Constants::PUBLIC)
+            ->where('deleted_at', Constants::EMPTY)
+            ->where('parent_id', $category)
+            ->get();
+        return $result;
+    }
 }

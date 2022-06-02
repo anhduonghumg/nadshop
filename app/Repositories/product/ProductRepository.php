@@ -70,4 +70,18 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $num = $this->model->where('product_status', Constants::PENDING)->where('deleted_at', Constants::EMPTY)->count();
         return $num;
     }
+
+    public function get_list_product($column, $take)
+    {
+        $result = $this->model
+            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->where("products.{$column}", Constants::TRUE)
+            ->where('products.product_status', Constants::PUBLIC)
+            ->orderByDesc('products.id')
+            ->distinct()
+            ->take($take)
+            ->get();
+        return $result;
+    }
 }
