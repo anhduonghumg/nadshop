@@ -84,4 +84,16 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->get();
         return $result;
     }
+
+    public function get_product_by_cat($id)
+    {
+        $result = $this->model
+            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'category_products.category_product_name')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->join('category_products', 'products.product_cat_id', '=', 'category_products.id')
+            ->where('category_products.id', $id)
+            ->distinct()
+            ->get();
+        return $result;
+    }
 }

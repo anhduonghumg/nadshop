@@ -96,7 +96,6 @@ class AdminProductDetailController extends Controller
 
     public function list(Request $request)
     {
-
         if ($request->ajax()) {
             $kw = $request->kw;
             $list_product_details = $this->productDetailRepo->get_list_product_details($kw, 'id', 1);

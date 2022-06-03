@@ -1936,6 +1936,9 @@ pre code {
     display: none;
 }
 
+.breadcrumb-shop {
+    font-size: 14px;
+}
 .loading i {
     font-size: 34px;
 }
@@ -1948,12 +1951,12 @@ pre code {
     display: flex;
 }
 .contentFilter {
-    padding: 4px 2px;
+    padding: 4px 15px;
     display: none;
     position: absolute;
     z-index: 9999999999999;
-    top: 365px;
-    left: 130px;
+    top: 70px;
+    left: 95px;
     background: #fff;
 }
 .contentFilter ul {
@@ -1964,6 +1967,9 @@ pre code {
     margin-right: 100px;
     cursor: pointer;
     display: block;
+}
+.filter-here {
+    margin-top: 30px;
 }
 .s-filter {
     margin-top: 10px;
@@ -1976,6 +1982,29 @@ pre code {
 .box-head {
     margin-top: 40px;
     margin-bottom: 40px;
+}
+
+.custom-dropdown {
+    text-align: end;
+}
+
+.filter-color li label {
+    border: 1px solid #eaeaea;
+    width: 25px;
+    height: 25px;
+    padding-top: 6px;
+    padding-left: 6px;
+    float: left;
+    margin-bottom: 5px;
+}
+
+.check-box-list label {
+    font-family: "Quicksand";
+    display: inline-block;
+    cursor: pointer;
+    line-height: 12px;
+    font-weight: 400;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 575.98px) {
@@ -3358,6 +3387,28 @@ input[type="button"].btn-block {
 .dropdown-menu-right {
     right: 0;
     left: auto;
+}
+
+.color-filter {
+    display: block;
+    width: 18px !important;
+    height: 18px !important;
+    margin: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    outline: 1px solid gray;
+    box-shadow: none;
+    font-size: 15px;
+    text-align: center;
+    line-height: 1em;
+    /* background: red; */
+}
+
+.color-filter:checked:after {
+    content: "✔";
+    color: white;
 }
 
 @media (min-width: 576px) {

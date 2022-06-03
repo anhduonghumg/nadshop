@@ -13,4 +13,5 @@ interface ProductRepositoryInterface extends RepositoryInterface
     public function get_num_product_active();
     public function get_num_product_pending();
     public function get_list_product($column, $take);
+    public function get_product_by_cat($id);
 }

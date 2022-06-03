@@ -126,13 +126,14 @@
                             @foreach ($category_products as $cat)
                             <div class="nav-item dropdown">
                                 @if($cat->parent_id == 0)
-                                <a href="{{ Route('client.product.cat.show',$cat->id) }}" class="nav-link dropdown-toggle"
-                                    data-toggle="dropdown">{{
+                                <a href="{{ Route('client.product.cat.show',$cat->id) }}"
+                                    class="nav-link dropdown-toggle" data-toggle="dropdown">{{
                                     $cat->category_product_name }}</a>
                                 <div class="dropdown-menu rounded-0 m-0">
                                     @foreach ($category_products as $cat2)
                                     @if($cat2->parent_id !=0 && $cat2->parent_id == $cat->id)
-                                    <a href="{{ route('client.product.cat.show',$cat2->id) }}" class="nav-item nav-link">{{
+                                    <a href="{{ route('client.product.cat.show',$cat2->id) }}"
+                                        class="nav-item nav-link">{{
                                         $cat2->category_product_name }}</a>
                                     @endif
                                     @endforeach

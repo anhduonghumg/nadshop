@@ -189,4 +189,5 @@ Route::get('user/signup', [App\Http\Controllers\Client\UserController::class, 'r
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('client.home');
 Route::get('product/cat/{id}', [App\Http\Controllers\Client\ProductCategoryController::class, 'show'])->name('client.product.cat.show');
 Route::get('product/{id}', [App\Http\Controllers\Client\ProductController::class, 'detail'])->name('client.product.detail');
+Route::post('product/filter', [App\Http\Controllers\Client\ProductController::class, 'filter'])->name('client.product.filter');
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');

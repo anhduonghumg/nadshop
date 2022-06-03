@@ -43,4 +43,30 @@ class ProductController extends Controller
             return view('client.product.load', compact('list_product'))->render();
         }
     }
+
+    public function filter(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $list_product = Product::select('products.id,products.product_name', 'product_details.product_price', 'products.product_thumb')
+                ->join('product_details', 'product_details.product_id', '=', 'products.id');
+            // ->where('products.product_cat_id',$)
+            $list_product->when($request->color_filter != null, function ($q) {
+                return $q->whereIn('likes', '>', request('likes_amount', 0));
+            });
+            $list_product->when($request->size_filter != null, function ($q) {
+                return $q->whereIn('created_at', request('ordering_rule', 'desc'));
+            });
+
+            $list_products = $list_product->get();
+            // $list_product = Product::query();
+            // if (isset($request->color_filter)) {
+            //     $color_filter = implode("','", $request->color_filter);
+            //     $list_product = $list_product->whereIn('colors.id', [$color_filter]);
+            // }
+
+            // if()
+            // return response()->json();
+        }
+    }
 }
