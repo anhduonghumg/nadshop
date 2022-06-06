@@ -181,7 +181,7 @@ Route::middleware('auth', 'verified')->group(function () {
     // Route::get('/image/upload',  [App\Http\Controllers\ImageController::class, 'upload'])->name('image.upload');
 
     // city district
-    // Route::get('/test', [App\Http\Controllers\TestController::class, 'test'])->name('test');
+    Route::get('/test', [App\Http\Controllers\TestController::class, 'paginatejs'])->name('test');
 });
 
 Route::get('user/signin', [App\Http\Controllers\Client\UserController::class, 'login']);

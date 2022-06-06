@@ -35,6 +35,7 @@
     <script src="{{ url('public/client/mail/contact.js') }}"></script>
     <!-- Template Javascript -->
     <script src="{{ url('public/client/js/client.js') }}"></script>
+    <script src="{{ url('public/client/js/pagination.js') }}"></script>
 </head>
 
 <body>

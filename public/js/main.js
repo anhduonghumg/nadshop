@@ -420,3 +420,8 @@ function loadLocation() {
         window.location.reload();
     }, timeout)
 }
+
+function thumb_path(val) {
+    if (val != null)
+        return location.href + '/' + val;
+}

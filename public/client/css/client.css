@@ -3408,7 +3408,7 @@ input[type="button"].btn-block {
 
 .color-filter:checked:after {
     content: "✔";
-    color: white;
+    color: "red" !important;
 }
 
 @media (min-width: 576px) {

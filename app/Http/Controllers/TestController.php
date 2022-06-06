@@ -51,4 +51,10 @@ class TestController extends Controller
             echo $data = json_encode($chart_data);
         }
     }
+
+    public function paginatejs()
+    {
+
+        return view('client.test.paginate');
+    }
 }
