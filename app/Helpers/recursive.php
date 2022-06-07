@@ -60,5 +60,14 @@ trait Recursive
         return $str_menu;
     }
 
-
+    function breadcrumb($id, $model, $name, $router)
+    {
+        $output = "";
+        $get = $model::find($id);
+        if ($get->parent_id == 0) {
+            $output .= "<li><a href='{{$router}}'>{{$get->$name}}</a></li>";
+        } else {
+            // if($get->parent_id == )
+        }
+    }
 }

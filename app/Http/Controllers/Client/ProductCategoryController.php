@@ -28,6 +28,7 @@ class ProductCategoryController extends Controller
         $category_products = CategoryProduct::where('deleted_at', Constants::EMPTY)->get();
         $list_products = $this->product->get_product_by_cat($id);
         $get_name_category = $this->catProduct->find($id);
+
         return view('client.categoryProduct.show', compact('category_products', 'list_products', 'get_name_category', 'id'));
     }
 }

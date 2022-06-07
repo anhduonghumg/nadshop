@@ -1928,7 +1928,7 @@ pre code {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 99999999999;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -1951,7 +1951,7 @@ pre code {
     display: flex;
 }
 .contentFilter {
-    padding: 4px 15px;
+    padding: 4px 9px;
     display: none;
     position: absolute;
     z-index: 9999999999999;
@@ -5017,6 +5017,26 @@ input[type="button"].btn-block {
     color: #6c757d;
 }
 
+#pagination ul {
+    list-style: none;
+    display: flex;
+}
+#pagination .paginationjs-page,
+#pagination .paginationjs-ellipsis,
+#pagination .paginationjs-prev,
+#pagination .paginationjs-next {
+    width: 40px;
+    height: 34px;
+    line-height: 34px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+#pagination .active {
+    background-color: black;
+    color: white;
+}
+
 .pagination {
     display: flex;
     padding-left: 0;
@@ -5090,6 +5110,13 @@ input[type="button"].btn-block {
     vertical-align: baseline;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
         border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.breadcrumb-icon {
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 14px;
+    color: #d19c97;
 }
 
 @media (prefers-reduced-motion: reduce) {

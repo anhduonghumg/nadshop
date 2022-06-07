@@ -4,9 +4,9 @@
     <div class="clearfix">
         <div class="">
             <ol class="breadcrumb breadcrumb-arrows clearfix">
-                <li><a href="{{ route('client.home') }}" target="_self"><i class="fa fa-home"></i> Trang chủ |</a></li>
-                <li><a href="/ao-phong-pc6379.html">Áo Phông</a></li>
-                <li class="active"><span>Áo Phông Regular Cotton 0092</span></li>
+                <li><a href="{{ route('client.home') }}" target="_self"><i class="fa fa-home"></i>Trang chủ</a><i
+                        class="fas fa-angle-double-right breadcrumb-icon"></i></li>
+                <li>Áo Phông</li>
             </ol>
         </div>
     </div>
@@ -91,20 +91,20 @@
                     <div class="filter-price s-filter">
                         <ul class="check-box-list clearfix">
                             <li class="filter-item">
-                                <input type="checkbox" class="price-filter filter-check" value1="0" value2="199999">
-                                <label><span class="button tp_button"></span>Dưới 200.000 </label>
+                                <input type="checkbox" class="price-filter filter-check" value="0">
+                                <label><span class="button tp_button"></span>Dưới 200.000đ</label>
                             </li>
                             <li class="filter-item">
-                                <input type="checkbox" class="price-filter filter-check" value1="0" value2="199999">
-                                <label><span class="button tp_button"></span>Từ 200.000 - 500.000 </label>
+                                <input type="checkbox" class="price-filter filter-check" value="1">
+                                <label><span class="button tp_button"></span>Từ 200.000đ - 500.000đ </label>
                             </li>
                             <li class="filter-item">
-                                <input type="checkbox" class="price-filter filter-check">
-                                <label><span class="button tp_button"></span>Từ 500.000 - 1000.0000 </label>
+                                <input type="checkbox" class="price-filter filter-check" value="2">
+                                <label><span class="button tp_button"></span>Từ 500.000đ - 1000.0000đ </label>
                             </li>
                             <li class="filter-item">
-                                <input type="checkbox" class="price-filter filter-check">
-                                <label><span class="button tp_button"></span>Trên 1000.000</label>
+                                <input type="checkbox" class="price-filter filter-check" value="3">
+                                <label><span class="button tp_button"></span>Trên 1000.000đ</label>
                             </li>
                         </ul>
                     </div>
@@ -156,14 +156,17 @@
                 </div>
                 @endif
             </div>
+            {{-- <div id="pagination"></div> --}}
         </div>
-        <div id="paginate"></div>
+        <div id="pagination"></div>
     </div>
 </div>
 </div>
 <!-- Shop End -->
 <script type="text/javascript">
+    load_data();
     $(document).on('click','.filter-check',function(){
+        var price_filter = get_filter('price-filter');
     load_data();
 })
 
@@ -181,25 +184,47 @@ function get_filter(class_name){
 }
 
 function load_data(){
-    //$('.loading').show();
+    $('.loading').show();
     var color_filter = get_filter('color-filter');
     var size_filter = get_filter('size-filter');
+    var price_filter = get_filter('price-filter');
     var cat_id = $('.groupFilterNew').attr('data-id');
     var sort_by = $('.sort_by').val();
-    //var price_filter = get_filter('price-filter');
     $.ajax({
         url: "{{ route('client.product.filter') }}",
         type: "POST",
-        data: { color_filter:color_filter,size_filter:size_filter,sort_by:sort_by,cat_id:cat_id},
+        data: {
+            color_filter:color_filter,
+            size_filter:size_filter,
+            price_filter:price_filter,
+            sort_by:sort_by,
+            cat_id:cat_id
+        },
         dataType: "json",
         success: function (rsp) {
-            //$(".loading").hide();
-            var show = show_data(rsp.list_product);
-            $('.filter-here').html(show);
+            $('.loading').hide();
+            var total = rsp.list_product.length;
+            var data = rsp.list_product;
+            pagination(data,total);
         },error: function () {
-       alert("error!!!!");
+            $(".loading").hide();
+            alert("error!!!!");
         }
     });
+}
+
+
+function pagination(data,total){
+    $('#pagination').pagination({
+        dataSource: data,
+        locator: 'data',
+        totalNumber: total,
+        pageSize: 2,
+        callback: function(data, pagination){
+           var show = show_data(data);
+           $('.filter-here').html(show);
+        }
+    })
 }
 
 function show_data(data){
@@ -207,8 +232,6 @@ function show_data(data){
     output += `<div class="row px-xl-5 pb-3">`;
    if(data.length > 0){
     $.each(data, function (key, value) {
-        //var path = thumb_path(value.product_thumb);
-        //var route = asset('')
         var price = currencyFormat(value.product_price);
  output += `<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
     <div class="card product-item border-0 mb-4">

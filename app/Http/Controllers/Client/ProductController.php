@@ -48,23 +48,16 @@ class ProductController extends Controller
     public function filter(Request $request)
     {
         if ($request->ajax()) {
-
             $id = isset($request->cat_id) ? (int)$request->cat_id : null;
             $color = $request->color_filter;
             $size = $request->size_filter;
+            $price = $request->price_filter;
             $sort_by = isset($request->sort_by) ? $request->sort_by : 'new';
             $list_product = Product::select('products.id', 'products.product_name', 'product_details.product_price', 'products.product_thumb')
                 ->join('product_details', 'product_details.product_id', '=', 'products.id')
                 ->where('products.product_cat_id', $id)
                 ->distinct();
-            // $list_product->when($request->color_filter != null, function ($q) {
-            //     return $q->whereIn('likes', '>', request('likes_amount', 0));
-            // });
-            // $list_product->when($request->size_filter != null, function ($q) {
-            //     return $q->whereIn('created_at', request('ordering_rule', 'desc'));
-            // });
-            // $list_products = $list_product->get();
-            // $list_product = Product::query();
+
             if (!empty($color)) {
                 $color_filter = Arr::flatten($color);
                 $list_product = $list_product->whereIn('product_details.color_id', $color_filter);
@@ -75,11 +68,22 @@ class ProductController extends Controller
                 $list_product = $list_product->whereIn('product_details.size_id', $size_filter);
             }
 
-            // if (!empty($price)) {
-            //     $price_filter = $list_product->whereIn(function ($q) {
-            //         $q->whereBetween('price', [0, 199999]);
-            //     });
-            // }
+            if (!empty($price)) {
+                $list_product->where(function ($query) {
+                    $query->when(in_array('0', request()->price_filter), function ($query) {
+                        $query->orWhere('product_details.product_price', '<', '200000');
+                    })
+                        ->when(in_array('1', request()->price_filter), function ($query) {
+                            $query->orWhereBetween('product_details.product_price', ['200000', '500000']);
+                        })
+                        ->when(in_array('2', request()->price_filter), function ($query) {
+                            $query->orWhereBetween('product_details.product_price', ['500000', '1000000']);
+                        })
+                        ->when(in_array('3', request()->price_filter), function ($query) {
+                            $query->orWhere('product_details.product_price', '>', '1000000');
+                        });
+                });
+            }
 
             if ($sort_by == 'new') {
                 $list_product = $list_product->orderByDesc('products.id');
@@ -91,7 +95,6 @@ class ProductController extends Controller
 
             $list_product = $list_product->get();
             $result = [
-                // 'route' => route('client.product.detail'),
                 'list_product' => $list_product
             ];
             return response()->json($result);
