@@ -8,13 +8,19 @@ use App\Models\Product;
 use App\Models\CategoryProduct;
 use App\Constants\Constants;
 use Illuminate\Support\Arr;
+use App\Repositories\Product\ProductRepositoryInterface;
 
 class ProductController extends Controller
 {
     protected $product;
-    public function __construct(Product $product, CategoryProduct $cat)
-    {
+    protected $productRepo;
+    public function __construct(
+        Product $product,
+        CategoryProduct $cat,
+        ProductRepositoryInterface $productRepo
+    ) {
         $this->product = $product;
+        $this->productRepo = $productRepo;
         $this->cat = $cat;
     }
 
@@ -25,9 +31,10 @@ class ProductController extends Controller
         $product = $this->product
             ->join('product_details', 'product_details.product_id', '=', 'products.id')
             ->where('products.id', $pro_id)
-            ->get();
-
-        return view('client.product.detail', compact('product', 'category_products'));
+            ->first();
+        $list_colors = $this->productRepo->get_color_by_product($id);
+        // $list_size = $this->product->get_size_by_product();
+        return view('client.product.detail', compact('product', 'category_products', 'list_colors'));
     }
 
     public function load_product(Request $request)

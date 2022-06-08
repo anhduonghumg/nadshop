@@ -60,14 +60,17 @@ trait Recursive
         return $str_menu;
     }
 
-    function breadcrumb($id, $model, $name, $router)
-    {
-        $output = "";
-        $get = $model::find($id);
-        if ($get->parent_id == 0) {
-            $output .= "<li><a href='{{$router}}'>{{$get->$name}}</a></li>";
-        } else {
-            // if($get->parent_id == )
-        }
-    }
+    // function breadcrumb($id, $model, $name, $router)
+    // {
+    //     $output = "";
+    //     $get = $model::find($id);
+    //     $get_all = $model::select('id')->get()->to_array();
+    //     if (in_array($get->parent_id, $get_all)) {
+    //         $output .= "<li><a href='{{$router}}'>{{$get->$name}}</a><i
+    //         class='fas fa-angle-double-right breadcrumb-icon'></i></li>
+    //         <li>{{ $get->name }}</li>";
+    //     } else {
+    //         $output .= "<li><a href='{{$router}}'>{{$get->$name}}</a></li>";
+    //     }
+    // }
 }

@@ -6,7 +6,7 @@
             <ol class="breadcrumb breadcrumb-arrows clearfix">
                 <li><a href="{{ route('client.home') }}" target="_self"><i class="fa fa-home"></i>Trang chủ</a><i
                         class="fas fa-angle-double-right breadcrumb-icon"></i></li>
-                <li>Áo Phông</li>
+                <li>{{ $get_name_category->category_product_name }}</li>
             </ol>
         </div>
     </div>

@@ -5119,6 +5119,44 @@ input[type="button"].btn-block {
     color: #d19c97;
 }
 
+.color_check,
+.size-check {
+    display: none;
+}
+.btn_size {
+    border: 1px solid #d7d7d7;
+    margin-right: 5px;
+    display: block;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.btn_color {
+    position: relative;
+    margin-right: 5px;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+.icon-color {
+    position: absolute;
+    display: none;
+    top: 6px;
+    left: 6px;
+    color: #ee82ee;
+}
+
+.size-check:checked + label.btn_size {
+    border: 1px solid #333;
+}
+
+.color_check:checked + label i.icon-color {
+    display: block;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .badge {
         transition: none;

@@ -4,29 +4,24 @@
     <div class="padding-lf-40 clearfix">
         <div class="">
             <ol class="breadcrumb breadcrumb-arrows clearfix">
-                <li><a href="{{ route('client.home') }}" target="_self"><i class="fa fa-home"></i> Trang chủ |</a></li>
-                <li><a href="/ao-phong-pc6379.html">Áo Phông</a></li>
-                <li class="active"><span>Áo Phông Regular Cotton 0092</span></li>
+                <li><a href="{{ route('client.home') }}" target="_self"><i class="fa fa-home"></i>Trang chủ</a><i
+                        class="fas fa-angle-double-right breadcrumb-icon"></i></li>
+                <li><a href="{{ route('client.product.cat.show',$product->product_cat_id) }}" target="_self">{{
+                        $product->category->category_product_name }}</a><i
+                        class="fas fa-angle-double-right breadcrumb-icon"></i>
+                </li>
+                <li>{{ $product->product_name }}</li>
             </ol>
         </div>
     </div>
 </div>
 <div class="container-fluid py-5">
-    <div class="row px-xl-5">
-        <div class="col-lg-5 pb-5">
+    <div class="row">
+        <div class="col-7 pb-5 px-xl-5">
             <div id="product-carousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner border">
                     <div class="carousel-item active">
-                        <img class="w-100 h-100" src="{{ url('public/client/img/product-1.jpg') }}" alt="Image">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="w-100 h-100" src="{{ url('public/client/img/product-2.jpg') }}" alt="Image">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="w-100 h-100" src="{{ url('public/client/img/product-3.jpg') }}" alt="Image">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="w-100 h-100" src="{{ url('public/client/img/product-4.jpg') }}" alt="Image">
+                        <img height="1000px" class="w-100" src="{{ asset($product->product_thumb) }}" alt="Image">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
@@ -37,76 +32,53 @@
                 </a>
             </div>
         </div>
-
-        <div class="col-lg-7 pb-5">
-            <h3 class="font-weight-semi-bold">Colorful Stylish Shirt</h3>
-            <div class="d-flex mb-3">
-                <div class="text-primary mr-2">
-                    <small class="fas fa-star"></small>
-                    <small class="fas fa-star"></small>
-                    <small class="fas fa-star"></small>
-                    <small class="fas fa-star-half-alt"></small>
-                    <small class="far fa-star"></small>
+        <div class="col-5 pb-5">
+            <h3 class="font-weight-semi-bold">{{ $product->product_name }}</h3>
+            <div class="mb-3">
+                <strong class="pt-1">Còn hàng</strong>
+            </div>
+            <h3 class="font-weight-semi-bold mb-4">{{ currentcyFormat($product->product_price) }}</h3>
+            <div class="mb-4">
+                <div class="info-color d-flex">
+                    <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Màu sắc:</p>
+                    <span class="color-name"></span>
                 </div>
-                <small class="pt-1">(50 Reviews)</small>
+                <div class="my-2">
+                    @if($list_colors->isNotEmpty())
+                    @foreach ($list_colors as $color)
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="color_check" name="color" id="btn_color{{$color->id}}"
+                            autocomplete="off">
+                        <label class="color-label btn_color" data-color="{{ $color->id }}" data-id="{{ $color->proId }}"
+                            data-toggle="tooltip" title="{{ $color->color_name }}"
+                            style="background-color:{{ $color->code_color }}" for="btn_color{{ $color->id }}">
+                            <i class="fas fa-check icon-color"></i>
+                        </label>
+                    </div>
+                    @endforeach
+                    @endif
+                </div>
             </div>
-            <h3 class="font-weight-semi-bold mb-4">$150.00</h3>
-            <p class="mb-4">Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit
-                clita ea.
-                Sanc invidunt ipsum et, labore clita lorem magna lorem ut. Erat lorem duo dolor no sea nonumy.
-                Accus
-                labore stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum diam et rebum kasd
-                rebum.
-            </p>
-            <div class="d-flex mb-3">
-                <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
-                <form>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="size-1" name="size">
-                        <label class="custom-control-label" for="size-1">XS</label>
+            <div class="mb-3">
+                <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Kích thước:</p>
+                <div class="my-2">
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="size-check" name="size" id="btn_size1" autocomplete="off">
+                        <label class="btn btn-outline-dark btn_size" for="btn_size1">S</label>
                     </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="size-2" name="size">
-                        <label class="custom-control-label" for="size-2">S</label>
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="size-check" name="size" id="btn_size2" autocomplete="off">
+                        <label class="btn btn-outline-dark btn_size" for="btn_size2">M</label>
                     </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="size-3" name="size">
-                        <label class="custom-control-label" for="size-3">M</label>
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="size-check" name="size" id="btn_size3" autocomplete="off">
+                        <label class="btn btn-outline-dark btn_size" for="btn_size3">L</label>
                     </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="size-4" name="size">
-                        <label class="custom-control-label" for="size-4">L</label>
+                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="size-check" name="size" id="btn_size4" autocomplete="off">
+                        <label class="btn btn-outline-dark btn_size" for="btn_size4">XL</label>
                     </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="size-5" name="size">
-                        <label class="custom-control-label" for="size-5">XL</label>
-                    </div>
-                </form>
-            </div>
-            <div class="d-flex mb-4">
-                <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
-                <form>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="color-1" name="color">
-                        <label class="custom-control-label" for="color-1">Black</label>
-                    </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="color-2" name="color">
-                        <label class="custom-control-label" for="color-2">White</label>
-                    </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="color-3" name="color">
-                        <label class="custom-control-label" for="color-3">Red</label>
-                    </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="color-4" name="color">
-                        <label class="custom-control-label" for="color-4">Blue</label>
-                    </div>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="color-5" name="color">
-                        <label class="custom-control-label" for="color-5">Green</label>
-                    </div>
-                </form>
+                </div>
             </div>
             <div class="d-flex align-items-center mb-4 pt-2">
                 <div class="input-group quantity mr-3" style="width: 130px;">
@@ -129,7 +101,8 @@
                     <button class="btn btn-dark px-3 mr-2" id="buy_now">Mua ngay</button>
                 </div>
                 <div class="d-inline-flex mt-2">
-                    <button class="btn btn-dark px-5" id="wishlist"><i class="far fa-heart mr-2"></i>Yêu thích</button>
+                    <button class="btn btn-dark px-5" id="wishlist"><i class="far fa-heart mr-2"></i>Yêu
+                        thích</button>
                 </div>
             </div>
         </div>
@@ -271,7 +244,6 @@
         </div>
     </div>
 </div>
-
 <div class="container-fluid py-5">
     <div class="text-center mb-4">
         <h2 class="section-title px-5"><span class="px-2">You May Also Like</span></h2>
@@ -373,4 +345,11 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).on('click','.btn_color',function(){
+      var id_color = $(this).attr('data-color');
+      var id_product = $(this).attr('data-id');
+
+    })
+</script>
 @endsection
