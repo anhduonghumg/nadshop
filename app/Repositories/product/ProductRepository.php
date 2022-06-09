@@ -100,11 +100,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function get_color_by_product($id)
     {
         $result = $this->model
-            ->select('colors.id', 'colors.color_name','colors.code_color','products.id as proId')
+            ->select('colors.id', 'colors.color_name', 'colors.code_color', 'products.id as proId')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->join('colors', 'product_details.color_id', '=', 'colors.id')
             ->where('product_details.product_id', $id)
             ->distinct()
+            ->get();
+        return $result;
+    }
+    public function get_size_by_product($color, $product)
+    {
+        $result = $this->model
+            ->select('sizes.size_name', 'product_details.id', 'product_details.product_qty_stock', 'product_details.id as proId','products.id as pId')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->join('sizes', 'product_details.size_id', '=', 'sizes.id')
+            ->where('product_details.product_id', $product)
+            ->where('product_details.color_id', $color)
             ->get();
         return $result;
     }

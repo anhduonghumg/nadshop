@@ -61,24 +61,26 @@
             </div>
             <div class="mb-3">
                 <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Kích thước:</p>
-                <div class="my-2">
+                <div class="my-2" id="variant_size">
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="size-check" name="size" id="btn_size1" autocomplete="off">
-                        <label class="btn btn-outline-dark btn_size" for="btn_size1">S</label>
+                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip" for="btn_size1">S</label>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="size-check" name="size" id="btn_size2" autocomplete="off">
-                        <label class="btn btn-outline-dark btn_size" for="btn_size2">M</label>
+                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip" for="btn_size2">M</label>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="size-check" name="size" id="btn_size3" autocomplete="off">
-                        <label class="btn btn-outline-dark btn_size" for="btn_size3">L</label>
+                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip" for="btn_size3">L</label>
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="size-check" name="size" id="btn_size4" autocomplete="off">
-                        <label class="btn btn-outline-dark btn_size" for="btn_size4">XL</label>
+                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip" for="btn_size4">XL</label>
                     </div>
                 </div>
+            </div>
+            <div class="mb-2" id="variant_qty">
             </div>
             <div class="d-flex align-items-center mb-4 pt-2">
                 <div class="input-group quantity mr-3" style="width: 130px;">
@@ -87,7 +89,7 @@
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
-                    <input type="text" class="form-control bg-secondary text-center" value="1">
+                    <input type="text" class="form-control bg-secondary text-center quantity" value="1">
                     <div class="input-group-btn">
                         <button class="btn btn-primary btn-plus">
                             <i class="fa fa-plus"></i>
@@ -96,7 +98,7 @@
                 </div>
             </div>
             <div class="select-action">
-                <div class="d-flex">
+                <div class="d-flex btn_action">
                     <button class="btn btn-dark px-3 mr-2" id="add_to_cart">Thêm vào giỏ hàng</button>
                     <button class="btn btn-dark px-3 mr-2" id="buy_now">Mua ngay</button>
                 </div>
@@ -110,78 +112,76 @@
     <div class="row px-xl-5">
         <div class="col">
             <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
-                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
+                <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Mô tả sản phẩm</a>
+                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Chính sách cửa hàng</a>
+                <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Đánh giá</a>
             </div>
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="tab-pane-1">
-                    <h4 class="mb-3">Product Description</h4>
-                    <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam
-                        invidunt
-                        duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur
-                        invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore
-                        diam stet
-                        rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no
-                        ut diam
-                        consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor
-                        accusam,
-                        ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem
-                        elitr
-                        sanctus eirmod takimata dolor ea invidunt.</p>
-                    <p>Dolore magna est eirmod sanctus dolor, amet diam et eirmod et ipsum. Amet dolore tempor
-                        consetetur sed lorem dolor sit lorem tempor. Gubergren amet amet labore sadipscing clita
-                        clita
-                        diam clita. Sea amet et sed ipsum lorem elitr et, amet et labore voluptua sit rebum. Ea
-                        erat sed
-                        et diam takimata sed justo. Magna takimata justo et amet magna et.</p>
+                    <h4 class="mb-3">Mô tả</h4>
+                    <div class="content-des">
+                        {{ $product->product_desc }}
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="tab-pane-2">
-                    <h4 class="mb-3">Additional Information</h4>
-                    <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam
-                        invidunt
-                        duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur
-                        invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore
-                        diam stet
-                        rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no
-                        ut diam
-                        consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor
-                        accusam,
-                        ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem
-                        elitr
-                        sanctus eirmod takimata dolor ea invidunt.</p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item px-0">
-                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                </li>
-                            </ul>
+                    <h4 class="mb-3">Chính sách</h4>
+                    <div class="description-content" style="display: block;">
+                        <div class="description-productdetail">
+                            <div class="description-productdetail">
+                                <p style="margin:10px 0px;padding:0px;list-style:none;"><span
+                                        style="font-size:14px;"><span
+                                            style="font-family:arial, helvetica, sans-serif;">&nbsp;►Đổi hàng&nbsp;trong
+                                            vòng 5&nbsp;ngày.</span></span></p>
+                                <p style="margin:10px 0px;padding:0px;list-style:none;"><span
+                                        style="font-size:14px;"><span
+                                            style="font-family:arial, helvetica, sans-serif;">&nbsp;►Giảm đến 15% trên
+                                            tổng hóa đơn khi mua hàng ( tại cửa hàng ) vào tháng sinh
+                                            nhật.</span></span></p>
+                                <p style="margin:10px 0px;padding:0px;list-style:none;"><span
+                                        style="font-size:14px;"><span
+                                            style="font-family:arial, helvetica, sans-serif;">&nbsp;►Giao hàng nội thành
+                                            Hà Nội chỉ từ 15.000đ trong vòng 24 giờ.</span></span></p>
+                                <p style="margin:10px 0px;padding:0px;list-style:none;"><span
+                                        style="font-size:14px;"><span
+                                            style="font-family:arial, helvetica, sans-serif;">&nbsp;►Tích điểm 3-8% giá
+                                            trị đơn hàng cho mỗi lần mua và trừ tiền vào lần mua tiếp
+                                            theo.</span></span></p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item px-0">
-                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                </li>
-                            </ul>
+                    </div>
+                    <div class="product-description">
+                        <div class="title-bl">
+                            <h4>Hướng dẫn bảo quản <span class="icon-open"></span></h4>
+                        </div>
+                        <div class="description-content" style="display: block;">
+                            <div class="description-productdetail">
+                                <div class="description-productdetail">
+                                    <p><span style="font-size:14px;"><span
+                                                style="font-family:arial, helvetica, sans-serif;"><span
+                                                    style="color:rgb(88,89,91);background-color:rgb(248,248,248);">►</span>Có
+                                                thể giặt tay hay giặt máy đều được (ưu tiên giặt tay để tăng tuổi thọ
+                                                của sản phẩm)</span></span></p>
+                                    <p><span style="font-size:14px;"><span
+                                                style="font-family:arial, helvetica, sans-serif;"><span
+                                                    style="color:rgb(88,89,91);background-color:rgb(248,248,248);">►</span>Lộn
+                                                trái sản phẩm khi giặt, không giặt chung sản phẩm trắng với quần áo tối
+                                                màu.</span></span></p>
+                                    <p><span style="font-size:14px;"><span
+                                                style="font-family:arial, helvetica, sans-serif;"><span
+                                                    style="color:rgb(88,89,91);background-color:rgb(248,248,248);">►</span>Sử
+                                                dụng xà phòng trung tính,không sử dụng xà phòng có chất tẩy
+                                                mạnh.&nbsp;</span></span></p>
+                                    <p><span style="font-size:14px;"><span
+                                                style="font-family:arial, helvetica, sans-serif;"><span
+                                                    style="color:rgb(88,89,91);background-color:rgb(248,248,248);">►</span>Không
+                                                sử dụng chất tẩy, không ngâm sản phẩm.&nbsp;</span></span></p>
+                                    <p><span style="font-size:14px;"><span
+                                                style="font-family:arial, helvetica, sans-serif;"><span
+                                                    style="color:rgb(88,89,91);background-color:rgb(248,248,248);">►</span>Hạn
+                                                chế sấy ở nhiệt độ cao, bảo quản nơi khô ráo, thoáng mát, không phơi
+                                                trực tiếp dưới ánh nắng mặt trời.</span></span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -346,10 +346,109 @@
     </div>
 </div>
 <script type="text/javascript">
+    var is_busy = false;
+    var quantity = $('.quantity');
+    $('.btn-plus').click(function () {
+        quantity.val(Number(quantity.val()) + 1).trigger('input');
+    });
+
+    $('.btn-minus').click(function () {
+        quantity.val(Math.max(Number(quantity.val()) - 1, 1)).trigger('input');
+    });
+
+    if(!$("input[name='color']:checked").val()){
+        $("input[name='size']").attr('disabled',true);
+        $(".btn_size").attr('title','Bạn phải chọn màu trước');
+    }else{
+        $("input[name='size']").attr('disabled',false);
+        $(".btn_size").removeAttr("title");
+    }
+
+    if(!$("input[name='size']:checked").val()){
+        $("#add_to_cart").attr('disabled','disabled');
+        $("#buy_now").attr('disabled','disabled');
+    }else{
+        $("#add_to_cart").removeAttr('disabled');
+        $("#buy_now").removeAttr('disabled');
+    }
+
     $(document).on('click','.btn_color',function(){
+      if(is_busy) return false;
       var id_color = $(this).attr('data-color');
       var id_product = $(this).attr('data-id');
-
+      is_busy = true;
+      $.ajax({
+        url: "{{ route('client.product.variant') }}",
+        type: "POST",
+        data: {
+            id_color:id_color,
+            id_product:id_product
+     },
+        dataType: "json",
+        success: function (rsp) {
+            //$('.loading').hide();
+            var show_size = show_variant(rsp.size);
+            $('.color-name').html(rsp.color_name);
+            $('#variant_size').html(show_size);
+            is_busy = false;
+        },error: function () {
+            //$(".loading").hide();
+            alert("error!!!!");
+        }
+     });
     })
+
+    $(document).on('click','.btn_size',function(){
+        if(is_busy) return false;
+        if($("input[name='color']:checked").val()){
+            var product_variant = $(this).data('pro');
+            var product = $(this).attr('data-id');
+            is_busy = true;
+            $.ajax({
+              url: "{{ route('client.product.change') }}",
+              type: "POST",
+              data: {
+                product_variant:product_variant,
+                product:product
+           },
+              dataType: "json",
+              success: function (rsp) {
+                  var show_data = show(rsp.variant_id,rsp.pro_id);
+                  $('.btn_action').html(show_data);
+                  is_busy = false;
+              },error: function () {
+                  //$(".loading").hide();
+                  alert("error!!!!");
+              }
+          });
+        }else{
+            alert('Bạn chưa chọn màu');
+        }
+    });
+
+function show(data,data2){
+    var output = ''
+    output += `<button class="btn btn-dark px-3 mr-2" id="add_to_cart" data-variant="${data}" data-product="${data2}">Thêm vào giỏ hàng</button>
+    <button class="btn btn-dark px-3 mr-2" id="buy_now" data-variant="${data}" data-product="${data2}">Mua ngay</button>`;
+    return output;
+}
+
+ function show_variant(data){
+        var output = '';
+        if(data.length > 0){
+            $.each(data, function (key, value){
+                output += `<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="size-check" name="size" id="btn_size${value.id}" autocomplete="off">
+                    <label class="btn btn-outline-dark btn_size" data-pro="${value.proId}" data-id="${value.pId}" for="btn_size${value.id}">${value.size_name}</label>
+                </div>`;
+            });
+            //output += `<p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Số lượng còn lại: ${value.product_qty_stock}</p>`;
+        }else{
+            output += `<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Phiên bản này không còn</p>
+            </div>`;
+        }
+        return output;
+    }
 </script>
 @endsection

@@ -9,6 +9,7 @@ use App\Models\CategoryProduct;
 use App\Constants\Constants;
 use Illuminate\Support\Arr;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Models\Color;
 
 class ProductController extends Controller
 {
@@ -33,8 +34,45 @@ class ProductController extends Controller
             ->where('products.id', $pro_id)
             ->first();
         $list_colors = $this->productRepo->get_color_by_product($id);
+        $view = $product->views;
+        $view = $view + 1;
+        $data = ['views' => $view];
+        $this->product->where('products.id', $pro_id)->update($data);
         // $list_size = $this->product->get_size_by_product();
         return view('client.product.detail', compact('product', 'category_products', 'list_colors'));
+    }
+
+    public function variant(Request $request)
+    {
+        if ($request->ajax()) {
+            $color = (int)$request->id_color;
+            $product = (int)$request->id_product;
+
+            $size_by_color = $this->productRepo->get_size_by_product($color, $product);
+            $color = Color::find($color);
+
+            $result = [
+                'size' => $size_by_color,
+                'color_name' => $color->color_name
+            ];
+
+            return response()->json($result);
+        }
+    }
+
+    public function change(Request $request)
+    {
+        if ($request->ajax()) {
+            $variant = (int)$request->product_variant;
+            $product = (int)$request->product;
+
+            $result = [
+                'variant_id' => $variant,
+                'pro_id' => $product
+            ];
+
+            return response()->json($result);
+        }
     }
 
     public function load_product(Request $request)
