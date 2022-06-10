@@ -88,7 +88,10 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between bg-light border">
-                    <a href="{{ route('client.product.cat.show',$product->id) }}" class="btn btn-sm text-dark p-0"><i
+                    <a href="{{ route('client.product.cat.show',$product->id) }}" data-id="{{ $product->id }}"
+                        data-name="{{ $product->product_name }}" data-img="{{ $product->product_thumb}}"
+                        data-url="{{ route('client.product.detail',$product->id) }}"
+                        data-price="{{ $product->product_price }}" class="btn btn-sm text-dark p-0 btn_view"><i
                             class="fas fa-eye text-primary mr-1"></i>View
                         Detail</a>
                     <a href="" class="btn btn-sm text-dark p-0"><i
@@ -123,7 +126,10 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between bg-light border">
-                    <a href="{{ route('client.product.detail',$product2->id) }}" class="btn btn-sm text-dark p-0"><i
+                    <a href="{{ route('client.product.detail',$product2->id) }}" data-id="{{ $product2->id }}"
+                        data-name="{{ $product2->product_name }}" data-img="{{ $product2->product_thumb}}"
+                        data-url="{{ route('client.product.detail',$product2->id) }}"
+                        data-price="{{ $product2->product_price }}" class="btn btn-sm text-dark p-0 btn_view"><i
                             class="fas fa-eye text-primary mr-1"></i>View
                         Detail</a>
                     <a href="" class="btn btn-sm text-dark p-0"><i

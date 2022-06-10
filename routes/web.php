@@ -193,4 +193,5 @@ Route::post('product/filter', [App\Http\Controllers\Client\ProductController::cl
 Route::post('product/variant', [App\Http\Controllers\Client\ProductController::class, 'variant'])->name('client.product.variant');
 Route::post('product/change', [App\Http\Controllers\Client\ProductController::class, 'change'])->name('client.product.change');
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
+Route::get('wishlist', [App\Http\Controllers\Client\ProductController::class, 'wishlist'])->name('client.product.wishlist');
 // Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');

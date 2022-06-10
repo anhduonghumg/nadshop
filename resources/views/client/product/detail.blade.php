@@ -103,7 +103,10 @@
                     <button class="btn btn-dark px-3 mr-2" id="buy_now">Mua ngay</button>
                 </div>
                 <div class="d-inline-flex mt-2">
-                    <button class="btn btn-dark px-5" id="wishlist"><i class="far fa-heart mr-2"></i>Yêu
+                    <button class="btn btn-dark px-5" id="wishlist" data-name="{{ $product->product_name }}"
+                        data-price="{{ $product->product_price }}" data-image="{{ asset($product->product_thumb) }}"
+                        data-url="{{ route('client.product.detail',$pro_id) }}" data-id={{ $pro_id }}><i
+                            class="far fa-heart mr-2"></i>Yêu
                         thích</button>
                 </div>
             </div>
@@ -244,7 +247,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid py-5">
+{{-- <div class="container-fluid py-5">
     <div class="text-center mb-4">
         <h2 class="section-title px-5"><span class="px-2">You May Also Like</span></h2>
     </div>
@@ -344,7 +347,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <script type="text/javascript">
     var is_busy = false;
     var quantity = $('.quantity');
@@ -371,6 +374,7 @@
         $("#add_to_cart").removeAttr('disabled');
         $("#buy_now").removeAttr('disabled');
     }
+
 
     $(document).on('click','.btn_color',function(){
       if(is_busy) return false;
@@ -426,6 +430,42 @@
         }
     });
 
+    $(document).on('click','#wishlist',function(){
+      var id = $(this).data('id');
+      var name = $(this).data('name');
+      var price = $(this).data('price');
+      var image = $(this).data('image');
+      var url = $(this).data('url');
+      var newItem = {
+          'id' : id,
+          'url' : url,
+          'name' : name,
+          'price' : price,
+          'image' : image
+      }
+
+      if(localStorage.getItem('data_wishlist') == null){
+          localStorage.setItem('data_wishlist','[]');
+      }
+
+      var old_data = JSON.parse(localStorage.getItem('data_wishlist'));
+      var matches = $.grep(old_data,function(obj){
+         return obj.id == id;
+      });
+
+      if(matches.length){
+        alert("Sản phẩm này bạn đã yêu thích.")
+      }else{
+        var add_wishlist = old_data.push(newItem);
+        if(add_wishlist){
+            alert("Thêm sản phẩm vào danh sách yêu thích thành công.");
+        }
+      }
+      localStorage.setItem('data_wishlist',JSON.stringify(old_data));
+      total = old_data.length;
+       $('.wishlist_badge').html(total);
+    });
+
 function show(data,data2){
     var output = ''
     output += `<button class="btn btn-dark px-3 mr-2" id="add_to_cart" data-variant="${data}" data-product="${data2}">Thêm vào giỏ hàng</button>
@@ -450,5 +490,11 @@ function show(data,data2){
         }
         return output;
     }
+
+
+
+
+
+
 </script>
 @endsection

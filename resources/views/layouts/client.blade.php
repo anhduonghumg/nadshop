@@ -24,7 +24,7 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ url('public/client/css/client.css') }}" rel="stylesheet">
     <link href="{{ url('public/client/css/account.css') }}" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.js"
@@ -34,12 +34,14 @@
     </script>
     <script src="{{ url('public/client/lib/easing/easing.min.js') }}"></script>
     <script src="{{ url('public/client/lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <!-- Contact Javascript File -->
     <script src="{{ url('public/client/mail/jqBootstrapValidation.min.js') }}"></script>
     <script src="{{ url('public/client/mail/contact.js') }}"></script>
     <!-- Template Javascript -->
     <script src="{{ url('public/client/js/client.js') }}"></script>
     <script src="{{ url('public/client/js/pagination.js') }}"></script>
+
 </head>
 
 <body>
@@ -50,6 +52,11 @@
             }
         });
     </script>
+    <style>
+        .slick-carousel img {
+            width: 200px;
+        }
+    </style>
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row bg-secondary py-2 px-xl-5">
@@ -102,13 +109,13 @@
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
-                <a href="" class="btn border">
+                <a href="{{ route('client.product.wishlist') }}" class="btn border">
                     <i class="fas fa-heart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="wishlist_badge">0</span>
                 </a>
                 <a href="" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="cart_badge">0</span>
                 </a>
             </div>
         </div>
@@ -165,9 +172,130 @@
         </div>
     </div>
     <!-- Nav end -->
+
+    {{-- viewed --}}
+    <div id="phistory-bar" class="hidden-xs hidden-sm tp_product_detail_history">
+        <div class="phistor-icon"><i class="fa fa-angle-double-left"></i></div>
+        <div class="phistory-title">Đã xem</div>
+        <div class="phistory-content">
+            <div class="phis-v-box">
+                <div class="caroufredsel_wrapper"
+                    style="display: block; text-align: start; float: none; position: relative; inset: auto; z-index: auto; width: 96px; height: 258px; margin: 0px; overflow: hidden;">
+                    <div class="phistor-v-slider"
+                        style="text-align: left; float: none; position: absolute; inset: 0px auto auto 0px; margin: 0px; height: 1118px; width: 96px;">
+                        <div class="phistory-v-item" style="">
+                            <a href="/quan-au-dang-ngan-xan-gau-slimfit-0104-p37513776.html"
+                                title="Quần Âu Dáng Ngắn Xắn Gấu Slimfit 0104">
+                                <img src="https://mcdn.nhanh.vn/store/662/ps/20220610/QA0104__8__thumb.jpg"
+                                    alt="Quần Âu Dáng Ngắn Xắn Gấu Slimfit 0104">
+                            </a>
+                        </div>
+                        <div class="phistory-v-item" style="">
+                            <a href="/ao-phong-regular-cotton-0092-p37503956.html" title="Áo Phông Regular Cotton 0092">
+                                <img src="https://mcdn.nhanh.vn/store/662/ps/20220601/AP0092__3__thumb.jpg"
+                                    alt="Áo Phông Regular Cotton 0092">
+                            </a>
+                        </div>
+                        <div class="phistory-v-item" style="">
+                            <a href="/ao-phong-regular-cotton-0091-p37503947.html" title="Áo Phông Regular Cotton 0091">
+                                <img src="https://mcdn.nhanh.vn/store/662/ps/20220601/AP0091__11__thumb.jpg"
+                                    alt="Áo Phông Regular Cotton 0091">
+                            </a>
+                        </div>
+                        <div class="phistory-v-item" style="">
+                            <a href="/giay-sneaker-vai-0089-p37502808.html" title="Giày Sneaker Vải 0089">
+                                <img src="https://mcdn.nhanh.vn/store/662/ps/20220607/GN0089__1__thumb.jpg"
+                                    alt="Giày Sneaker Vải 0089">
+                            </a>
+                        </div>
+                        <div class="phistory-v-item" style="">
+                            <a href="/ao-so-mi-co-tau-tay-dai-regular-dui-0088-p37502771.html"
+                                title="Áo Sơ Mi Cổ Tàu Tay Dài Regular Đũi 0088">
+                                <img src="https://mcdn.nhanh.vn/store/662/ps/20220601/SM0088__5__thumb.jpg"
+                                    alt="Áo Sơ Mi Cổ Tàu Tay Dài Regular Đũi 0088">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="phistor-v-nav">
+                    <div class="prevSlideZ" style="display: block;"><i class="fa fa-chevron-up"></i></div>
+                    <div class="nextSlideZ" style="display: block;"><i class="fa fa-chevron-down"></i></div>
+                </div>
+            </div>
+            <script>
+                var phistor = $(".phistor-v-slider");
+                    phistor.carouFredSel(false);
+                    setTimeout(function () {
+                        phistor.carouFredSel({
+                            items: 3,
+                            direction: "up",
+                            scroll: {
+                                items: 1,
+                                duration: 700
+                            },
+                            auto: false,
+                            prev: ".prevSlideZ",
+                            next: ".nextSlideZ",
+                        });
+                    },200);
+            </script>
+        </div>
+        <script>
+            var $storeId = $('#storeId').val();
+            var pHisVer = $('.phistor-v-slider');
+            if (pHisVer.length) {
+                pHisVer.carouFredSel({
+                    items: 3,
+                    direction: "up",
+                    scroll: {
+                        items: 1,
+                        duration: 700
+                    },
+                    auto: false,
+                    prev: ".phistor-v-nav .prevSlideZ",
+                    next: ".phistor-v-nav .nextSlideZ"
+                });
+            }
+
+            $('.phistor-icon').click(function () {
+                var productHistory = $('#phistory-bar .phistory-content');
+                productHistory.empty();
+                if (!$(this).hasClass('is-open')) {
+                    ajaxLoadView({
+                        view: 'pHistorySidebar',
+                        params: '&view=horizontal',
+                        delay: 150,
+                        onSuccess: function (rs) {
+                            productHistory.html(rs)
+                        }
+                    });
+                } else {
+                    ajaxLoadView({
+                        view: 'pHistorySidebar',
+                        params: '&view=vertical',
+                        delay: 150,
+                        onSuccess: function (rs) {
+                            productHistory.html(rs)
+                        }
+                    });
+                }
+                $(this).toggleClass('is-open');
+                $('#phistory-bar').toggleClass('is-active')
+            });
+
+            if(in_array($storeId,[113339,3676])){
+                $('.closeBox').click(function () {
+                    $('#phistory-bar').addClass('hidden');
+                });
+            }
+        </script>
+    </div>
+    {{-- end viewed --}}
+
     <div class="wp-content">
         @yield('content');
     </div>
+
     <!-- Footer Start -->
     <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
@@ -261,7 +389,54 @@
     <div class="loading">
         <i class="fa fa-spinner fa-spin"></i>
     </div>
+    <script type="text/javascript">
+        var total_wl = 0;
+       if(localStorage.getItem('data_wishlist') == null){
+           total_wl = 0;
+       }else{
+           total_wl += JSON.parse(localStorage.getItem('data_wishlist')).length;
+       }
+       $('.wishlist_badge').html(total_wl);
 
+       $('.slick-carousel').slick({
+        infinite: false,
+        vertical:true,
+        verticalSwiping:true,
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        prevArrow: $('.top-arrow'),
+        nextArrow: $('.bottom-arrow')
+      });
+
+       $(document).on('click','.btn_view',function(e){
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+        var price = $(this).data('price');
+        var image = $(this).data('img');
+        var url  = $(this).data('url');
+        var viewedItem = {
+            'id' : id,
+            'url' : url,
+            'name' : name,
+            'price' : price,
+            'image' : image
+        }
+           if(localStorage.getItem('data_viewed') == null){
+               localStorage.setItem('data_viewed','[]');
+           }
+
+           var viewed = JSON.parse(localStorage.getItem('data_viewed'));
+           var matches = $.grep(viewed,function(obj){
+              return obj.id == id;
+           });
+
+           if(!matches.length){
+               viewed.push(viewedItem);
+           }
+
+           localStorage.setItem('data_viewed',JSON.stringify(viewed));
+       });
+    </script>
 </body>
 
 </html>

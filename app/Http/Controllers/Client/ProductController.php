@@ -39,7 +39,7 @@ class ProductController extends Controller
         $data = ['views' => $view];
         $this->product->where('products.id', $pro_id)->update($data);
         // $list_size = $this->product->get_size_by_product();
-        return view('client.product.detail', compact('product', 'category_products', 'list_colors'));
+        return view('client.product.detail', compact('product', 'category_products', 'list_colors', 'pro_id'));
     }
 
     public function variant(Request $request)
@@ -73,6 +73,12 @@ class ProductController extends Controller
 
             return response()->json($result);
         }
+    }
+
+    public function wishlist()
+    {
+        $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
+        return view('client.product.wishlist', compact('category_products'));
     }
 
     public function load_product(Request $request)
