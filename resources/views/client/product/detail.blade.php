@@ -89,7 +89,7 @@
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
-                    <input type="text" class="form-control bg-secondary text-center quantity" value="1">
+                    <input type="text" class="form-control bg-secondary text-center product_quantity" value="1">
                     <div class="input-group-btn">
                         <button class="btn btn-primary btn-plus">
                             <i class="fa fa-plus"></i>
@@ -350,7 +350,7 @@
 </div> --}}
 <script type="text/javascript">
     var is_busy = false;
-    var quantity = $('.quantity');
+    var quantity = $('.product_quantity');
     $('.btn-plus').click(function () {
         quantity.val(Number(quantity.val()) + 1).trigger('input');
     });
@@ -465,6 +465,59 @@
       total = old_data.length;
        $('.wishlist_badge').html(total);
     });
+
+    $(document).on('click','#add_to_cart',function(){
+        if(is_busy) return false;
+        var product_id = $(this).data('product');
+        var product_variant = $(this).data('variant');
+        var qty = Number($('.product_quantity').val());
+        is_busy = true;
+        $.ajax({
+            url: "{{ route('client.cart.add') }}",
+            type: "POST",
+            data: {
+              product_id:product_id,
+              product_variant:product_variant
+         },
+            dataType: "json",
+            success: function (rsp) {
+             var name = rsp.product_detail_name;
+             var price = rsp.product_price;
+             var thumbnail = rsp.product_details_thumb;
+             var newCart = {
+                'id' : product_variant,
+                'name' : name,
+                'price' : price,
+                'thumbnail' : thumbnail,
+                'qty': qty,
+            }
+
+            if(localStorage.getItem('data_cart') == null){
+                localStorage.setItem('data_cart','[]');
+            }
+
+            var old_cart_data = JSON.parse(localStorage.getItem('data_cart'));
+            const itemExists = old_cart_data.find(item => {
+                if(item.id === product_variant) {
+                  item.qty += qty;
+                  return true;
+                }
+                return false;
+              })
+
+              if (!itemExists) {
+                var add_cart = old_cart_data.push(newCart);
+                if(add_cart){
+                    alert("Thêm sản phẩm vào giỏ hàng thành công.");
+                }
+              }
+             localStorage.setItem('data_cart',JSON.stringify(old_cart_data));
+             is_busy= false;
+            },error: function () {
+                alert("error!!!!");
+            }
+        });
+    })
 
 function show(data,data2){
     var output = ''

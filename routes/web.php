@@ -195,3 +195,7 @@ Route::post('product/change', [App\Http\Controllers\Client\ProductController::cl
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
 Route::get('wishlist', [App\Http\Controllers\Client\ProductController::class, 'wishlist'])->name('client.product.wishlist');
 // Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
+
+// CART
+Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');
+Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'show'])->name('client.cart.show');

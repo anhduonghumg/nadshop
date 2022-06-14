@@ -113,7 +113,7 @@
                     <i class="fas fa-heart text-primary"></i>
                     <span class="wishlist_badge">0</span>
                 </a>
-                <a href="" class="btn border">
+                <a href="{{ route('client.cart.show') }}" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
                     <span class="cart_badge">0</span>
                 </a>
@@ -174,7 +174,7 @@
     <!-- Nav end -->
 
     {{-- viewed --}}
-    <div id="phistory-bar" class="hidden-xs hidden-sm tp_product_detail_history">
+    {{-- <div id="phistory-bar" class="hidden-xs hidden-sm tp_product_detail_history">
         <div class="phistor-icon"><i class="fa fa-angle-double-left"></i></div>
         <div class="phistory-title">Đã xem</div>
         <div class="phistory-content">
@@ -222,74 +222,8 @@
                     <div class="nextSlideZ" style="display: block;"><i class="fa fa-chevron-down"></i></div>
                 </div>
             </div>
-            <script>
-                var phistor = $(".phistor-v-slider");
-                    phistor.carouFredSel(false);
-                    setTimeout(function () {
-                        phistor.carouFredSel({
-                            items: 3,
-                            direction: "up",
-                            scroll: {
-                                items: 1,
-                                duration: 700
-                            },
-                            auto: false,
-                            prev: ".prevSlideZ",
-                            next: ".nextSlideZ",
-                        });
-                    },200);
-            </script>
         </div>
-        <script>
-            var $storeId = $('#storeId').val();
-            var pHisVer = $('.phistor-v-slider');
-            if (pHisVer.length) {
-                pHisVer.carouFredSel({
-                    items: 3,
-                    direction: "up",
-                    scroll: {
-                        items: 1,
-                        duration: 700
-                    },
-                    auto: false,
-                    prev: ".phistor-v-nav .prevSlideZ",
-                    next: ".phistor-v-nav .nextSlideZ"
-                });
-            }
-
-            $('.phistor-icon').click(function () {
-                var productHistory = $('#phistory-bar .phistory-content');
-                productHistory.empty();
-                if (!$(this).hasClass('is-open')) {
-                    ajaxLoadView({
-                        view: 'pHistorySidebar',
-                        params: '&view=horizontal',
-                        delay: 150,
-                        onSuccess: function (rs) {
-                            productHistory.html(rs)
-                        }
-                    });
-                } else {
-                    ajaxLoadView({
-                        view: 'pHistorySidebar',
-                        params: '&view=vertical',
-                        delay: 150,
-                        onSuccess: function (rs) {
-                            productHistory.html(rs)
-                        }
-                    });
-                }
-                $(this).toggleClass('is-open');
-                $('#phistory-bar').toggleClass('is-active')
-            });
-
-            if(in_array($storeId,[113339,3676])){
-                $('.closeBox').click(function () {
-                    $('#phistory-bar').addClass('hidden');
-                });
-            }
-        </script>
-    </div>
+    </div> --}}
     {{-- end viewed --}}
 
     <div class="wp-content">
@@ -398,6 +332,7 @@
        }
        $('.wishlist_badge').html(total_wl);
 
+       /*
        $('.slick-carousel').slick({
         infinite: false,
         vertical:true,
@@ -407,7 +342,10 @@
         prevArrow: $('.top-arrow'),
         nextArrow: $('.bottom-arrow')
       });
+      */
 
+      /*
+      ============ Viewd ===========
        $(document).on('click','.btn_view',function(e){
         var id = $(this).data('id');
         var name = $(this).data('name');
@@ -436,6 +374,7 @@
 
            localStorage.setItem('data_viewed',JSON.stringify(viewed));
        });
+       */
     </script>
 </body>
 
