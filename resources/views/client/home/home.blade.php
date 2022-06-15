@@ -88,14 +88,13 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-between bg-light border">
-                    <a href="{{ route('client.product.cat.show',$product->id) }}" data-id="{{ $product->id }}"
+                    <a href="{{ route('client.product.detail',$product->id) }}" data-id="{{ $product->id }}"
                         data-name="{{ $product->product_name }}" data-img="{{ $product->product_thumb}}"
                         data-url="{{ route('client.product.detail',$product->id) }}"
                         data-price="{{ $product->product_price }}" class="btn btn-sm text-dark p-0 btn_view"><i
-                            class="fas fa-eye text-primary mr-1"></i>View
-                        Detail</a>
+                            class="fas fa-eye text-primary mr-1"></i>Xem chi tiết</a>
                     <a href="" class="btn btn-sm text-dark p-0"><i
-                            class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                            class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
                 </div>
             </div>
         </div>
@@ -130,10 +129,9 @@
                         data-name="{{ $product2->product_name }}" data-img="{{ $product2->product_thumb}}"
                         data-url="{{ route('client.product.detail',$product2->id) }}"
                         data-price="{{ $product2->product_price }}" class="btn btn-sm text-dark p-0 btn_view"><i
-                            class="fas fa-eye text-primary mr-1"></i>View
-                        Detail</a>
+                            class="fas fa-eye text-primary mr-1"></i>Xem chi tiết</a>
                     <a href="" class="btn btn-sm text-dark p-0"><i
-                            class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                            class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
                 </div>
             </div>
         </div>

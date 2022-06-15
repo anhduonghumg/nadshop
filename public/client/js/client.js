@@ -83,9 +83,18 @@
         }
     });
 
-    // Product Quantity
+    //Product Quantity
+    $(document).on('click', '.btn-plus', function () {
+        $(this).parent().prev().val(Number($(this).parent().prev().val()) + 1).trigger('input');
+    });
+
+    $(document).on('click', '.btn-minus', function () {
+        $(this).parent().next().val(Math.max(Number($(this).parent().next().val()) - 1, 1)).trigger('input');
+    });
 
 })(jQuery);
+
+
 
 function currencyFormat(val, unit = 'đ') {
     if (val != null) {
@@ -93,4 +102,16 @@ function currencyFormat(val, unit = 'đ') {
     } else {
         return "";
     }
+}
+
+function asset(param) {
+    let path = window.location.origin + '/nadshop/' + param;
+    return path;
+}
+
+function num_in_cart(){
+    let num_in_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
+        return sum + current.qty;
+      }, 0);
+      $('.cart_badge').html(num_in_cart);
 }

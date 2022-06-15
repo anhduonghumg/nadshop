@@ -324,6 +324,7 @@
         <i class="fa fa-spinner fa-spin"></i>
     </div>
     <script type="text/javascript">
+        num_in_cart();
         var total_wl = 0;
        if(localStorage.getItem('data_wishlist') == null){
            total_wl = 0;
@@ -331,6 +332,7 @@
            total_wl += JSON.parse(localStorage.getItem('data_wishlist')).length;
        }
        $('.wishlist_badge').html(total_wl);
+
 
        /*
        $('.slick-carousel').slick({

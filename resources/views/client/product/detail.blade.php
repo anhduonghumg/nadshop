@@ -350,14 +350,6 @@
 </div> --}}
 <script type="text/javascript">
     var is_busy = false;
-    var quantity = $('.product_quantity');
-    $('.btn-plus').click(function () {
-        quantity.val(Number(quantity.val()) + 1).trigger('input');
-    });
-
-    $('.btn-minus').click(function () {
-        quantity.val(Math.max(Number(quantity.val()) - 1, 1)).trigger('input');
-    });
 
     if(!$("input[name='color']:checked").val()){
         $("input[name='size']").attr('disabled',true);
@@ -512,6 +504,7 @@
                 }
               }
              localStorage.setItem('data_cart',JSON.stringify(old_cart_data));
+             num_in_cart();
              is_busy= false;
             },error: function () {
                 alert("error!!!!");
@@ -543,11 +536,6 @@ function show(data,data2){
         }
         return output;
     }
-
-
-
-
-
 
 </script>
 @endsection
