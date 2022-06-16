@@ -18,7 +18,6 @@
         $(window).resize(toggleNavbarMethod);
     });
 
-
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -109,9 +108,88 @@ function asset(param) {
     return path;
 }
 
-function num_in_cart(){
-    let num_in_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
+function num_in_cart() {
+    let num_in_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function (sum, current) {
         return sum + current.qty;
-      }, 0);
-      $('.cart_badge').html(num_in_cart);
+    }, 0);
+    $('.cart_badge').html(num_in_cart);
 }
+
+function toggleCart(e) {
+    e.preventDefault();
+    if (cartOpen) {
+        closeCart();
+        return;
+    }
+    openCart();
+}
+
+function openCart() {
+    cartOpen = true;
+    show_cart();
+    show_cart_total();
+    $('body').addClass('open');
+}
+
+function closeCart() {
+    cartOpen = false;
+    $('body').removeClass('open');
+}
+
+function show_cart() {
+    if (localStorage.getItem('data_cart') != null) {
+        let show_data = JSON.parse(localStorage.getItem('data_cart'));
+        if (show_data.length > 0) {
+            let show_cart = render_to_html(show_data);
+            $('.js-cart-product-template').html(show_cart);
+        } else {
+            let output = `<p class="cart__empty js-cart-empty">
+                Chưa có sản phẩm nào trong giỏ hàng.
+            </p>`;
+            $('.js-cart-product-template').html(output);
+        }
+
+    }
+}
+
+function remove_item_cart(e) {
+    e.preventDefault();
+    let confirm_delete = confirm("Bạn có chắc chắn muốn xóa không?");
+    if (confirm_delete == true) {
+        let key = $(this).data('key');
+        let old_data = JSON.parse(localStorage.getItem('data_cart'));
+        old_data.splice(key);
+        localStorage.setItem('data_cart', JSON.stringify(old_data));
+        $("#product-" + key).remove();
+        num_in_cart();
+        show_cart_total();
+        show_cart();
+    }
+}
+
+function show_cart_total() {
+    let total_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function (sum, current) {
+        return sum + (current.qty * current.price);
+    }, 0);
+    $('.cart-total').html(currencyFormat(total_cart));
+}
+
+function render_to_html(data) {
+    let output = '';
+    $.each(data, function (key, value) {
+        let price = currencyFormat(value.price);
+        let path_img = asset(value.thumbnail);
+        output += `<article class="js-cart-product d-flex justify-content-between" id="product-${key}">
+            <div class="cart-img">
+                <img src="${path_img}" alt="" with="100px" height="150px">
+            </div>
+            <div class="cart-info mt-4">
+                <p class="text-dark">${value.name}</p>
+                <p class="text-dark">${price} x<span class="item-qty text-dark font-italic">${value.qty}</p>
+            </div>
+            <a class="btn-remove-item" data-key="${key}"><i class="far fa-times-circle icon-remove-item"></i></a>
+        </article>`;
+    });
+    return output;
+}
+

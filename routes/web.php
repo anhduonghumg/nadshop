@@ -199,3 +199,4 @@ Route::get('wishlist', [App\Http\Controllers\Client\ProductController::class, 'w
 // CART
 Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');
 Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'show'])->name('client.cart.show');
+// Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy'])->name('client.cart.buy');

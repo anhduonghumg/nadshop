@@ -350,7 +350,6 @@
 </div> --}}
 <script type="text/javascript">
     var is_busy = false;
-
     if(!$("input[name='color']:checked").val()){
         $("input[name='size']").attr('disabled',true);
         $(".btn_size").attr('title','Bạn phải chọn màu trước');
@@ -366,7 +365,6 @@
         $("#add_to_cart").removeAttr('disabled');
         $("#buy_now").removeAttr('disabled');
     }
-
 
     $(document).on('click','.btn_color',function(){
       if(is_busy) return false;
@@ -498,13 +496,11 @@
               })
 
               if (!itemExists) {
-                var add_cart = old_cart_data.push(newCart);
-                if(add_cart){
-                    alert("Thêm sản phẩm vào giỏ hàng thành công.");
-                }
+                  old_cart_data.push(newCart);
               }
              localStorage.setItem('data_cart',JSON.stringify(old_cart_data));
              num_in_cart();
+             openCart();
              is_busy= false;
             },error: function () {
                 alert("error!!!!");

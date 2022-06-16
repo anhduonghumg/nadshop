@@ -131,7 +131,7 @@
            alert("error!!!!");
             },
         });
-});
+ });
 
     $(document).on('click','.btn-add',function(){
         count = count + 1;
@@ -263,6 +263,5 @@
         }
         return result;
     }
-
 </script>
 @endsection

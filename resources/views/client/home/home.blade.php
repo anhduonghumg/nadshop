@@ -93,7 +93,7 @@
                         data-url="{{ route('client.product.detail',$product->id) }}"
                         data-price="{{ $product->product_price }}" class="btn btn-sm text-dark p-0 btn_view"><i
                             class="fas fa-eye text-primary mr-1"></i>Xem chi tiết</a>
-                    <a href="" class="btn btn-sm text-dark p-0"><i
+                    <a class="btn btn-sm text-dark p-0 btn_buy_now" data-id="{{ $product->id }}"><i
                             class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
                 </div>
             </div>
@@ -130,8 +130,9 @@
                         data-url="{{ route('client.product.detail',$product2->id) }}"
                         data-price="{{ $product2->product_price }}" class="btn btn-sm text-dark p-0 btn_view"><i
                             class="fas fa-eye text-primary mr-1"></i>Xem chi tiết</a>
-                    <a href="" class="btn btn-sm text-dark p-0"><i
-                            class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
+                    <a class="btn btn-sm text-dark p-0 btn_buy_now" data-id="{{ $product2->id }}"><i
+                            class="fas fa-shopping-cart text-primary mr-1"></i>Mua
+                        ngay</a>
                 </div>
             </div>
         </div>
@@ -262,6 +263,112 @@
 </div>
 <!-- Vendor End -->
 
+<!-- Modal buy now start-->
+<div class="modal fade" id="modal_cart" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="row">
+                    <div class="col-lg-8 pb-5 px-xl-5">
+                        <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner border">
+                                <div class="carousel-item active">
+                                    <img height="1000px" class="w-100" src="" alt="Image">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
+                                <i class="fa fa-2x fa-angle-left text-dark"></i>
+                            </a>
+                            <a class="carousel-control-next" href="#product-carousel" data-slide="next">
+                                <i class="fa fa-2x fa-angle-right text-dark"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 pb-5">
+                        <h3 class="font-weight-semi-bold">Áo khoác</h3>
+                        <div class="mb-3">
+                            <strong class="pt-1">Còn hàng</strong>
+                        </div>
+                        <h3 class="font-weight-semi-bold mb-4">200.000đ</h3>
+                        <div class="mb-4">
+                            <div class="info-color d-flex">
+                                <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Màu sắc:</p>
+                                <span class="color-name">đỏ</span>
+                            </div>
+                            <div class="my-2">
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="color_check" name="color" id="btn_color"
+                                        autocomplete="off">
+                                    <label class="color-label btn_color" data-color="" data-id="" data-toggle="tooltip"
+                                        title="" style="background-color:" for="btn_color">
+                                        <i class="fas fa-check icon-color"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Kích thước:</p>
+                            <div class="my-2" id="variant_size">
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="size-check" name="size" id="btn_size1"
+                                        autocomplete="off">
+                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                        for="btn_size1">S</label>
+                                </div>
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="size-check" name="size" id="btn_size2"
+                                        autocomplete="off">
+                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                        for="btn_size2">M</label>
+                                </div>
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="size-check" name="size" id="btn_size3"
+                                        autocomplete="off">
+                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                        for="btn_size3">L</label>
+                                </div>
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="size-check" name="size" id="btn_size4"
+                                        autocomplete="off">
+                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                        for="btn_size4">XL</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-2" id="variant_qty">
+                        </div>
+                        <div class="d-flex align-items-center mb-4 pt-2">
+                            <div class="input-group quantity mr-3" style="width: 130px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control bg-secondary text-center product_quantity"
+                                    value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select-action">
+                            <div class="d-flex btn_action">
+                                <button class="btn btn-dark px-3 mr-2" id="add_to_cart">Sỡ hữu ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal buy now end-->
+
 <!-- Modal Account Start -->
 <div class="modal fade login" id="loginModal">
     <div class="modal-dialog login animated">
@@ -330,7 +437,6 @@
         </div>
     </div>
 </div>
-
 <!-- Modal Account End -->
 
 <script type="text/javascript">
@@ -375,6 +481,15 @@
         load_data(selector,data);
     })
 
+    $('body').on('click','.btn_buy_now',buy_now);
+
+
+
+ function buy_now(e){
+        e.preventDefault();
+        $('#modal_cart').modal('show');
+
+ }
     function load_data(selector,data){
         $(".loading").show();
         is_busy = true;
