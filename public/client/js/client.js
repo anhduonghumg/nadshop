@@ -193,7 +193,7 @@ function render_to_html(data) {
     return output;
 }
 
-function test(){
+function test() {
 
 }
 

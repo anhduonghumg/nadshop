@@ -264,108 +264,8 @@
 <!-- Vendor End -->
 
 <!-- Modal buy now start-->
-<div class="modal fade" id="modal_cart" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="row">
-                    <div class="col-lg-8 pb-5 px-xl-5">
-                        <div id="product-carousel" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner border">
-                                <div class="carousel-item active">
-                                    <img height="1000px" class="w-100" src="" alt="Image">
-                                </div>
-                            </div>
-                            <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                                <i class="fa fa-2x fa-angle-left text-dark"></i>
-                            </a>
-                            <a class="carousel-control-next" href="#product-carousel" data-slide="next">
-                                <i class="fa fa-2x fa-angle-right text-dark"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 pb-5">
-                        <h3 class="font-weight-semi-bold">Áo khoác</h3>
-                        <div class="mb-3">
-                            <strong class="pt-1">Còn hàng</strong>
-                        </div>
-                        <h3 class="font-weight-semi-bold mb-4">200.000đ</h3>
-                        <div class="mb-4">
-                            <div class="info-color d-flex">
-                                <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Màu sắc:</p>
-                                <span class="color-name">đỏ</span>
-                            </div>
-                            <div class="my-2">
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="color_check" name="color" id="btn_color"
-                                        autocomplete="off">
-                                    <label class="color-label btn_color" data-color="" data-id="" data-toggle="tooltip"
-                                        title="" style="background-color:" for="btn_color">
-                                        <i class="fas fa-check icon-color"></i>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Kích thước:</p>
-                            <div class="my-2" id="variant_size">
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="size-check" name="size" id="btn_size1"
-                                        autocomplete="off">
-                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
-                                        for="btn_size1">S</label>
-                                </div>
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="size-check" name="size" id="btn_size2"
-                                        autocomplete="off">
-                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
-                                        for="btn_size2">M</label>
-                                </div>
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="size-check" name="size" id="btn_size3"
-                                        autocomplete="off">
-                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
-                                        for="btn_size3">L</label>
-                                </div>
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="size-check" name="size" id="btn_size4"
-                                        autocomplete="off">
-                                    <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
-                                        for="btn_size4">XL</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-2" id="variant_qty">
-                        </div>
-                        <div class="d-flex align-items-center mb-4 pt-2">
-                            <div class="input-group quantity mr-3" style="width: 130px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-minus">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control bg-secondary text-center product_quantity"
-                                    value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="select-action">
-                            <div class="d-flex btn_action">
-                                <button class="btn btn-dark px-3 mr-2" id="add_to_cart">Sỡ hữu ngay</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="show-modal-cart-buy">
+
 </div>
 <!-- Modal buy now end-->
 
@@ -441,6 +341,7 @@
 
 <script type="text/javascript">
     var is_busy = false;
+
     $(document).on('click','.account',function(e){
         e.preventDefault();
         openLoginModal();
@@ -459,7 +360,7 @@
         var data = $(this).attr('data-id');
         var selector = $('.load_data');
         load_data(selector,data);
-    })
+    });
 
     $(document).on('click','.trouser_title',function(e){
         e.preventDefault();
@@ -469,7 +370,7 @@
         var data = $(this).attr('data-id');
         var selector = $('.load_trouser_data');
         load_data(selector,data);
-    })
+    });
 
     $(document).on('click','.accessory_title',function(e){
         e.preventDefault();
@@ -479,18 +380,214 @@
         var data = $(this).attr('data-id');
         var selector = $('.load_accessory_data');
         load_data(selector,data);
-    })
+    });
 
     $('body').on('click','.btn_buy_now',buy_now);
 
+    $('body').on('click','.btn_color',color_check);
+
+    $('body').on('click','.btn_size',function(e){
+        let check_color = $('.color_check').is(':checked');
+        if(check_color == false){
+        e.preventDefault();
+        alert('Bạn phải chọn màu sắc trước');
+        }
+        return true;
+    });
+
+    $('body').on('click','#buy_now',function(e){
+        let check_color = $('.color_check').is(':checked');
+        let check_size = $('.size-check').is(':checked');
+        if(check_color == false || check_size == false){
+        e.preventDefault();
+        alert('Bạn chưa chọn màu hoặc chưa chọn kích cỡ');
+        }else{
+        alert('thành công');
+        }
+    });
 
 
  function buy_now(e){
-        e.preventDefault();
+    e.preventDefault();
+    if(is_busy == true){
+        return false;
+    }
+    let id = $(this).attr('data-id');
+    is_busy = true;
+   $.ajax({
+    url: "{{ route('client.cart.buy') }}",
+    type: 'POST',
+    data: {id:id},
+    dataType: "json",
+    success: function(rsp){
+        let product = rsp.product;
+        let colors = rsp.list_colors;
+        let html = render_buy_now(product,colors);
+        $('.show-modal-cart-buy').html(html);
         $('#modal_cart').modal('show');
+        is_busy = false;
+    },
+    error:function () {
+       alert("error!!!!");
+    }
+ });
+}
 
- }
-    function load_data(selector,data){
+function render_buy_now(data,data2){
+    let output = `<div class="modal fade" id="modal_cart" tabindex="-1" aria-hidden="true" data-backdrop=false>
+                   <div class="modal-dialog modal-xl">
+                       <div class="modal-content">
+                          <div class="modal-body">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="row">
+                        <div class="col-lg-8 pb-5 px-xl-5">
+                            <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner border">
+                                    <div class="carousel-item active">
+                                        <img height="1000px" class="w-100" src="${data.product_thumb}" alt="Image">
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
+                                    <i class="fa fa-2x fa-angle-left text-dark"></i>
+                                </a>
+                                <a class="carousel-control-next" href="#product-carousel" data-slide="next">
+                                    <i class="fa fa-2x fa-angle-right text-dark"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 pb-5">
+                            <h3 class="font-weight-semi-bold">${data.product_name}</h3>
+                            <div class="mb-3">
+                                <strong class="pt-1">Còn hàng</strong>
+                            </div>
+                            <h3 class="font-weight-semi-bold mb-4">${currencyFormat(data.product_price)}</h3>
+                            <div class="mb-4">
+                                <div class="info-color d-flex">
+                                    <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Màu sắc:</p>
+                                    <span class="color-name"></span>
+                                </div>`;
+                 output += `<div class="my-2">`;
+                    $.each(data2, function (key, value){
+                        output += `<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="color_check" name="color" id="color_${value.id}"
+                                autocomplete="off">
+                            <label class="color-label btn_color" data-color="${value.id}" data-id="${value.proId}" data-toggle="tooltip"
+                                title="${value.color_name}" style="background-color:${value.code_color}" for="color_${value.id}">
+                                <i class="fas fa-check icon-color"></i>
+                            </label>
+                          </div>`;
+                    });
+                  output += `</div>
+                            </div>
+                            <div class="mb-3">
+                                <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Kích thước:</p>
+                                <div class="my-2" id="variant_size">
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" class="size-check" name="size" id="btn_size1"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                            for="btn_size1">S</label>
+                                    </div>
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" class="size-check" name="size" id="btn_size2"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                            for="btn_size2">M</label>
+                                    </div>
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" class="size-check" name="size" id="btn_size3"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                            for="btn_size3">L</label>
+                                    </div>
+                                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" class="size-check" name="size" id="btn_size4"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-dark btn_size" data-toggle="tooltip"
+                                            for="btn_size4">XL</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-2" id="variant_qty">
+                            </div>
+                            <div class="d-flex align-items-center mb-4 pt-2">
+                                <div class="input-group quantity mr-3" style="width: 130px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary btn-minus">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control bg-secondary text-center product_quantity"
+                                        value="1">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary btn-plus">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="select-action">
+                                <div class="d-flex btn_action">
+                                    <button class="btn btn-dark px-3 mr-2" id="buy_now">Sỡ hữu ngay</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    return output;
+}
+
+function color_check(){
+    if(is_busy) return false;
+      let id_color = $(this).attr('data-color');
+      let id_product = $(this).attr('data-id');
+      is_busy = true;
+      $.ajax({
+        url: "{{ route('client.product.variant') }}",
+        type: "POST",
+        data: {
+            id_color:id_color,
+            id_product:id_product
+     },
+        dataType: "json",
+        success: function (rsp) {
+            //$('.loading').hide();
+            let show_size = color_check_render(rsp.size);
+            $('.color-name').html(rsp.color_name);
+            $('#variant_size').html(show_size);
+            is_busy = false;
+        },error: function () {
+            //$(".loading").hide();
+            alert("error!!!!");
+        }
+     });
+}
+
+function color_check_render(data){
+    var output = '';
+    if(data.length > 0){
+        $.each(data, function (key, value){
+            output += `<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="size-check" name="size" id="size_${value.id}" autocomplete="off">
+                <label class="btn btn-outline-dark btn_size" data-pro="${value.proId}" data-id="${value.pId}" for="size_${value.id}">${value.size_name}</label>
+            </div>`;
+        });
+        //output += `<p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Số lượng còn lại: ${value.product_qty_stock}</p>`;
+    }else{
+        output += `<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Phiên bản này không còn</p>
+        </div>`;
+    }
+    return output;
+}
+
+
+function load_data(selector,data){
         $(".loading").show();
         is_busy = true;
         $.ajax({
@@ -509,7 +606,8 @@
         });
     }
 
-function openLoginModal(){
+
+    function openLoginModal(){
     showLoginForm();
     setTimeout(function () {
         $('#loginModal').modal('show');
@@ -545,5 +643,7 @@ function showRegisterForm(){
     });
     $('.error').removeClass('alert alert-danger').html('');
 }
+
+
 </script>
 @endsection

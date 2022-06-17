@@ -62,7 +62,7 @@
                 <h6>Tổng tiền:</h6>
                 <span class="show_total"></span>
             </section>
-            <button class="form-control btn-dark mb-2">Tiến hành đặt hàng</button>
+            <a href="{{ route('client.cart.checkout') }}" class="form-control btn btn-dark mb-2">Tiến hành đặt hàng</a>
             <a href="{{ route('client.home') }}" class="form-control btn btn-outline-dark">Mua thêm sản phẩm</a>
         </div>
     </div>

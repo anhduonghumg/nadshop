@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="card-footer d-flex justify-content-between bg-light border">
-            <a href="{{ route('client.product.cat.show',$item->id) }}" data-id="{{ $item->id }}"
+            <a href="{{ route('client.product.detail',$item->id) }}" data-id="{{ $item->id }}"
                 data-name="{{$item->product_name }}" data-img="{{ $item->product_thumb}}"
                 data-url="{{ route('client.product.detail',$item->id) }}" data-price="{{ $item->product_price }}"
                 class="btn btn-sm text-dark p-0 btn_view"><i class="fas fa-eye text-primary mr-1"></i>Xem chi tiết</a>

@@ -162,6 +162,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
     // Route::get('/chart', [App\Http\Controllers\TestController::class, 'chart'])->name('chart');
     // Route::post('/filter-by-date', [App\Http\Controllers\TestController::class, 'filter_by_date'])->name('filter');
+
     // helper
     // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
     // Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');
@@ -199,4 +200,5 @@ Route::get('wishlist', [App\Http\Controllers\Client\ProductController::class, 'w
 // CART
 Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');
 Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'show'])->name('client.cart.show');
-// Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy'])->name('client.cart.buy');
+Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy'])->name('client.cart.buy');
+Route::get('cart/checkout', [App\Http\Controllers\Client\CartController::class, 'checkout'])->name('client.cart.checkout');

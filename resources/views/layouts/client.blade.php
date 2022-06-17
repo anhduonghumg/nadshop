@@ -306,7 +306,8 @@
                         <p class="text-dark font-weight-semi-bold">Tổng tiền tạm tính:</p>
                         <p class="text-dark font-weight-semi-bold cart-total">20.000.000đ</p>
                     </div>
-                    <a href="" class="btn btn-dark btn-order d-block w-100">Tiến hành đặt hàng</a>
+                    <a href="{{ route('client.cart.checkout') }}" class="btn btn-dark btn-order d-block w-100">Tiến hành
+                        đặt hàng</a>
                     <a href="{{ route('client.cart.show') }}"
                         class="cart-detail d-block text-center mt-2 mb-2 text-dark">Xem chi tiết giỏ hàng</a>
                 </div>

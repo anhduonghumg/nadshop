@@ -24,7 +24,6 @@ class CartController extends Controller
         $this->cat = $cat;
     }
 
-
     public function show()
     {
         $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
@@ -52,8 +51,13 @@ class CartController extends Controller
                 'product' => $product,
                 'list_colors' => $list_colors,
             ];
-
             return response()->json($result);
         }
+    }
+
+    public function checkout()
+    {
+        $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
+        return view('client.cart.checkout', compact('category_products'));
     }
 }
