@@ -202,7 +202,6 @@
         </div>
     </div>
     <div class="row px-xl-5 pb-3 load_trouser_data">
-
     </div>
 </div>
 <!-- Products End -->
@@ -341,7 +340,6 @@
 
 <script type="text/javascript">
     var is_busy = false;
-
     $(document).on('click','.account',function(e){
         e.preventDefault();
         openLoginModal();
@@ -402,9 +400,59 @@
         e.preventDefault();
         alert('Bạn chưa chọn màu hoặc chưa chọn kích cỡ');
         }else{
-        alert('thành công');
+            if(is_busy) return false;
+            let product_id = $(this).data('product');
+            let product_variant = $(this).data('variant');
+            let qty = Number($('.popup_quantity').val());
+            is_busy = true;
+            $.ajax({
+                url: "{{ route('client.cart.add') }}",
+                type: "POST",
+                data: {
+                  product_id:product_id,
+                  product_variant:product_variant
+             },
+                dataType: "json",
+                success: function (rsp) {
+                 let name = rsp.product_detail_name;
+                 let price = rsp.product_price;
+                 let thumbnail = rsp.product_details_thumb;
+                 let newCart = {
+                    'id' : product_variant,
+                    'name' : name,
+                    'price' : price,
+                    'thumbnail' : thumbnail,
+                    'qty': qty,
+                }
+
+                if(localStorage.getItem('data_cart') == null){
+                    localStorage.setItem('data_cart','[]');
+                }
+
+                let old_cart_data = JSON.parse(localStorage.getItem('data_cart'));
+                const itemExist = old_cart_data.find(item => {
+                    if(item.id === product_variant) {
+                      item.qty += qty;
+                      return true;
+                    }
+                    return false;
+                  })
+
+                  if (!itemExist) {
+                      old_cart_data.push(newCart);
+                  }
+                 localStorage.setItem('data_cart',JSON.stringify(old_cart_data));
+                 num_in_cart();
+                 openCart();
+                 is_busy= false;
+                },error: function () {
+                    alert("error!!!!");
+                }
+            });
         }
     });
+
+   $('body').on('click','#size_check',size_check);
 
 
  function buy_now(e){
@@ -519,7 +567,7 @@ function render_buy_now(data,data2){
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control bg-secondary text-center product_quantity"
+                                    <input type="text" class="form-control bg-secondary text-center popup_quantity"
                                         value="1">
                                     <div class="input-group-btn">
                                         <button class="btn btn-primary btn-plus">
@@ -529,7 +577,7 @@ function render_buy_now(data,data2){
                                 </div>
                             </div>
                             <div class="select-action">
-                                <div class="d-flex btn_action">
+                                <div class="d-flex btn_buy">
                                     <button class="btn btn-dark px-3 mr-2" id="buy_now">Sỡ hữu ngay</button>
                                 </div>
                             </div>
@@ -574,7 +622,7 @@ function color_check_render(data){
         $.each(data, function (key, value){
             output += `<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 <input type="radio" class="size-check" name="size" id="size_${value.id}" autocomplete="off">
-                <label class="btn btn-outline-dark btn_size" data-pro="${value.proId}" data-id="${value.pId}" for="size_${value.id}">${value.size_name}</label>
+                <label id="size_check" class="btn btn-outline-dark btn_size" data-pro="${value.proId}" data-id="${value.pId}" for="size_${value.id}">${value.size_name}</label>
             </div>`;
         });
         //output += `<p class="text-dark font-weight-medium mb-0 mr-3 mb-2">Số lượng còn lại: ${value.product_qty_stock}</p>`;
@@ -586,6 +634,38 @@ function color_check_render(data){
     return output;
 }
 
+function size_check(){
+    if(is_busy) return false;
+    if($("input[name='color']:checked").val()){
+        let product_variant = $(this).data('pro');
+        let product = $(this).attr('data-id');
+        is_busy = true;
+        $.ajax({
+          url: "{{ route('client.product.change') }}",
+          type: "POST",
+          data: {
+            product_variant:product_variant,
+            product:product
+       },
+          dataType: "json",
+          success: function (rsp) {
+              let show = render_button(rsp.variant_id,rsp.pro_id);
+              $('.btn_buy').html(show);
+              is_busy = false;
+          },error: function () {
+              alert("error!!!!");
+          }
+      });
+    }else{
+        alert('Bạn chưa chọn màu');
+    }
+}
+
+function render_button(data,data2){
+    var output = ''
+    output += `<button class="btn btn-dark px-3 mr-2" id="buy_now" data-variant="${data}" data-product="${data2}">Sỡ hữu ngay</button>`
+    return output;
+}
 
 function load_data(selector,data){
         $(".loading").show();
@@ -643,7 +723,6 @@ function showRegisterForm(){
     });
     $('.error').removeClass('alert alert-danger').html('');
 }
-
 
 </script>
 @endsection

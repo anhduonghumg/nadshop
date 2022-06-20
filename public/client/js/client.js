@@ -58,7 +58,6 @@
         }
     });
 
-
     // Related carousel
     $('.related-carousel').owlCarousel({
         loop: true,
@@ -156,9 +155,9 @@ function remove_item_cart(e) {
     e.preventDefault();
     let confirm_delete = confirm("Bạn có chắc chắn muốn xóa không?");
     if (confirm_delete == true) {
-        let key = $(this).data('key');
+        let key = Number($(this).data('key'));
         let old_data = JSON.parse(localStorage.getItem('data_cart'));
-        old_data.splice(key);
+        old_data.splice(key, 1);
         localStorage.setItem('data_cart', JSON.stringify(old_data));
         $("#product-" + key).remove();
         num_in_cart();
@@ -193,7 +192,4 @@ function render_to_html(data) {
     return output;
 }
 
-function test() {
-
-}
 

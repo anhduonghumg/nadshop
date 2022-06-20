@@ -333,6 +333,14 @@
             $('body').on('click', '.js-toggle-cart', toggleCart);
             $('body').on('click', '.js-add-product', addProduct);
             $('body').on('click', '.btn-remove-item', remove_item_cart);
+            $('body').on('click', '.btn-order', function(e){
+                if(localStorage.getItem('data_wishlist') == null || JSON.parse(localStorage.getItem('data_cart')).length <= 0){
+                e.preventDefault();
+                window.location.href="http://localhost:8080/nadshop";
+                }else{
+                    return true;
+                }
+            });
 
             function addProduct(e) {
                 e.preventDefault();
@@ -353,6 +361,8 @@
                 });
                 return total;
             }
+
+
 /*
 $('.slick-carousel').slick({
     infinite: false,

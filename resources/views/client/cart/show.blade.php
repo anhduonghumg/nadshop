@@ -69,24 +69,21 @@
 </div>
 <!-- Cart End -->
 <script type="text/javascript">
-    let data_cart = localStorage.getItem('data_cart');
     load_cart();
-    show_total_cart();
     $(document).on('click','.btn_delete_cart',function(){
         let confirm_delete = confirm("Bạn có chắc chắn muốn xóa không?");
         if(confirm_delete == true) {
-        let key = $(this).data('key');
-        let old_data = JSON.parse(data_cart);
-        old_data.splice(key);
+        let key = Number($(this).data('key'));
+        let old_data = JSON.parse(localStorage.getItem('data_cart'));
+        old_data.splice(key,1);
         localStorage.setItem('data_cart', JSON.stringify(old_data));
         $("#item-" + key).remove();
-        num_in_cart();
-        show_total_cart();
         load_cart();
+        num_in_cart();
         }
     });
 
-    $('.product_quantity').on('input',function(){
+    $('body').on('input','.product_quantity',function(){
           let qty = Number($(this).val());
           let key = $(this).data('key');
           let id = $(this).data('id');
@@ -103,7 +100,7 @@
         $('#item-' + key + ' .total_price').html(show_total_price);
         num_in_cart();
         show_total_cart();
-    });
+        });
 
     function update_total_cart(){
         let total_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
@@ -119,19 +116,16 @@
 
    function load_cart(){
     if(localStorage.getItem('data_cart') != null){
-        var show_data = JSON.parse(localStorage.getItem('data_cart'));
-        if(show_data.length > 0){
-            var show_cart = render_cart(show_data);
-            $('#show_cart').html(show_cart);
-        }else{
-            var show_empty_cart = empty_cart();
-            $('#show_cart').html(show_empty_cart);
-        }
-    }
+        let show_cart = render_cart();
+        $('#show_cart').html(show_cart);
+         show_total_cart();
+     }
 }
 
-function render_cart(data){
+function render_cart(){
     var output = '';
+    let data = JSON.parse(localStorage.getItem('data_cart'));
+    if(data.length > 0){
     $.each(data, function (key, value){
         var price = currencyFormat(value.price);
         var total_price = value.price * value.qty;
@@ -160,14 +154,12 @@ function render_cart(data){
                         class="fa fa-times"></i></button></td>
         </tr>`;
     });
+}else{
+    output += `<tr><td>Giỏ hàng trống.Nhấn vào đây để mua sắm <a href="http://localhost:8080/nadshop">shopping now</a></td></tr>`;
+}
     return output;
 }
 
-function empty_cart(){
-    var output = '';
-    output += `<tr><td>Giỏ hàng trống.Nhấn vào đây để mua sắm <a href="http://localhost:8080/nadshop">shopping now</a></td></tr>`;
-    return output;
-}
 
 </script>
 @endsection

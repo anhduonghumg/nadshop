@@ -9,19 +9,27 @@ use App\Constants\Constants;
 use App\Models\CategoryProduct;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Models\Product;
+use App\Models\District;
+use App\Models\City;
 
 class CartController extends Controller
 {
     protected $product;
     protected $productRepo;
+    protected $city;
+    protected $district;
     public function __construct(
         Product $product,
         CategoryProduct $cat,
-        ProductRepositoryInterface $productRepo
+        ProductRepositoryInterface $productRepo,
+        City $city,
+        District $district
     ) {
         $this->product = $product;
         $this->productRepo = $productRepo;
         $this->cat = $cat;
+        $this->city = $city;
+        $this->district = $district;
     }
 
     public function show()
@@ -58,6 +66,11 @@ class CartController extends Controller
     public function checkout()
     {
         $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
-        return view('client.cart.checkout', compact('category_products'));
+        $list_city = $this->city->all();
+        return view('client.cart.checkout', compact('category_products', 'list_city'));
+    }
+
+    public function order()
+    {
     }
 }

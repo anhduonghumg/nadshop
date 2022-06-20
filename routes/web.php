@@ -202,3 +202,7 @@ Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add
 Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'show'])->name('client.cart.show');
 Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy'])->name('client.cart.buy');
 Route::get('cart/checkout', [App\Http\Controllers\Client\CartController::class, 'checkout'])->name('client.cart.checkout');
+Route::post('cart/order', [App\Http\Controllers\Client\CartController::class, 'order'])->name('client.cart.order');
+
+// City_District
+Route::post('district', [App\Http\Controllers\Client\DistrictController::class, 'show'])->name('client.district');
