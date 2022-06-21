@@ -119,6 +119,9 @@
         let show_cart = render_cart();
         $('#show_cart').html(show_cart);
          show_total_cart();
+     }else{
+        let html = `<tr><td>Giỏ hàng trống.Nhấn vào đây để mua sắm <a href="http://localhost:8080/nadshop">shopping now</a></td></tr>`;
+        $('#show_cart').html(html);
      }
 }
 

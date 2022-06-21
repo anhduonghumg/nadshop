@@ -25,6 +25,7 @@
     <link href="{{ url('public/client/css/client.css') }}" rel="stylesheet">
     <link href="{{ url('public/client/css/account.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" href="{{ url('public/css/sweetalert2.css') }}">
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.js"
@@ -41,7 +42,7 @@
     <!-- Template Javascript -->
     <script src="{{ url('public/client/js/client.js') }}"></script>
     <script src="{{ url('public/client/js/pagination.js') }}"></script>
-
+    <script src="{{ url('public/js/sweetalert2.min.js') }}"></script>
 </head>
 
 <body>
@@ -266,7 +267,7 @@
                     </p>
                 </div>
                 <div class="col-md-6 px-xl-0 text-center text-md-right">
-                    <img class="img-fluid" src="img/payments.png" alt="">
+                    <img class="img-fluid" src="" alt="">
                 </div>
             </div>
         </div>
@@ -334,7 +335,7 @@
             $('body').on('click', '.js-add-product', addProduct);
             $('body').on('click', '.btn-remove-item', remove_item_cart);
             $('body').on('click', '.btn-order', function(e){
-                if(localStorage.getItem('data_wishlist') == null || JSON.parse(localStorage.getItem('data_cart')).length <= 0){
+                if(localStorage.getItem('data_cart') === null || JSON.parse(localStorage.getItem('data_cart')).length <= 0){
                 e.preventDefault();
                 window.location.href="http://localhost:8080/nadshop";
                 }else{

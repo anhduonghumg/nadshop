@@ -1,3 +1,4 @@
+
 (function ($) {
     "use strict";
 
@@ -108,9 +109,14 @@ function asset(param) {
 }
 
 function num_in_cart() {
-    let num_in_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function (sum, current) {
-        return sum + current.qty;
-    }, 0);
+    let num_in_cart;
+    if (localStorage.getItem('data_cart') === null) {
+        num_in_cart = 0;
+    } else {
+        num_in_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function (sum, current) {
+            return sum + current.qty;
+        }, 0);
+    }
     $('.cart_badge').html(num_in_cart);
 }
 
@@ -136,18 +142,24 @@ function closeCart() {
 }
 
 function show_cart() {
+    let output = '';
     if (localStorage.getItem('data_cart') != null) {
         let show_data = JSON.parse(localStorage.getItem('data_cart'));
         if (show_data.length > 0) {
             let show_cart = render_to_html(show_data);
             $('.js-cart-product-template').html(show_cart);
         } else {
-            let output = `<p class="cart__empty js-cart-empty">
+            output = `<p class="cart__empty js-cart-empty">
                 Chưa có sản phẩm nào trong giỏ hàng.
             </p>`;
             $('.js-cart-product-template').html(output);
         }
 
+    } else {
+        output = `<p class="cart__empty js-cart-empty">
+        Chưa có sản phẩm nào trong giỏ hàng.
+    </p>`;
+        $('.js-cart-product-template').html(output);
     }
 }
 
@@ -167,9 +179,14 @@ function remove_item_cart(e) {
 }
 
 function show_cart_total() {
-    let total_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function (sum, current) {
-        return sum + (current.qty * current.price);
-    }, 0);
+    let total_cart;
+    if (localStorage.getItem('data_cart') === null) {
+        total_cart = 0;
+    } else {
+        total_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function (sum, current) {
+            return sum + (current.qty * current.price);
+        }, 0);
+    }
     $('.cart-total').html(currencyFormat(total_cart));
 }
 
@@ -193,3 +210,60 @@ function render_to_html(data) {
 }
 
 
+function stringToNumber(data) {
+    var result;
+    if (data != null) {
+        result = data.substring(0, data.length - 1);
+        result = result.replace(/\./g, '');
+    }
+    return result;
+}
+
+
+function confirm_warning(data) {
+    Swal.fire({
+        icon: 'warning',
+        text: data
+    });
+}
+
+function confirm_success(data) {
+    Swal.fire({
+        icon: "success",
+        title: data,
+        showConfirmButton: false,
+        timer: 1500
+    })
+}
+
+function confirm_delete() {
+    Swal.fire({
+        title: 'Bạn thật sự muốn xóa?',
+        text: "Bạn không thể hoàn tác lại.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        confirmCancelText: "Hủy"
+    });
+}
+
+function notification(icon = "success", data) {
+    const Toast = Swal.mixin({
+        showCloseButton: true,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+    Toast.fire({
+        icon: icon,
+        title: data
+    });
+}

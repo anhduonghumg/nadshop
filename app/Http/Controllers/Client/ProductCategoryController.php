@@ -14,7 +14,7 @@ class ProductCategoryController extends Controller
 {
     protected $product;
     protected $catProduct;
-    
+
     public function __construct(
         ProductRepositoryInterface $product,
         CategoryProductRepositoryInterface $catProduct

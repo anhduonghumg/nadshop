@@ -27,7 +27,6 @@
     <script src="https://cdn.tiny.cloud/1/numi57lzygq762f9vfvkurk8qjdqln3t6lun4y16ql5iho4u/tinymce/5/tinymce.min.js"
         referrerpolicy="origin">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>

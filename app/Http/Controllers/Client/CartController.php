@@ -11,6 +11,10 @@ use App\Repositories\Product\ProductRepositoryInterface;
 use App\Models\Product;
 use App\Models\District;
 use App\Models\City;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Repositories\Order\OrderRepositoryInterface;
+use App\Models\OrderDetail;
 
 class CartController extends Controller
 {
@@ -18,18 +22,23 @@ class CartController extends Controller
     protected $productRepo;
     protected $city;
     protected $district;
+    protected $order;
     public function __construct(
         Product $product,
         CategoryProduct $cat,
         ProductRepositoryInterface $productRepo,
         City $city,
-        District $district
+        District $district,
+        OrderRepositoryInterface $order,
+        OrderDetail $orderDetail
     ) {
         $this->product = $product;
         $this->productRepo = $productRepo;
         $this->cat = $cat;
         $this->city = $city;
         $this->district = $district;
+        $this->order = $order;
+        $this->orderDetail = $orderDetail;
     }
 
     public function show()
@@ -70,7 +79,64 @@ class CartController extends Controller
         return view('client.cart.checkout', compact('category_products', 'list_city'));
     }
 
-    public function order()
+    public function order(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'fullname' => 'bail|required|max:255',
+            'phone' => 'bail|required|numeric',
+            'address' => 'bail|required|max:255',
+            'city' => 'bail|required',
+            'district' => 'bail|required',
+            'payment' => 'required',
+            'product_name.*' => 'bail|required',
+            'note' => 'max:255'
+        ]);
+
+        if ($validator->fails()) {
+            $error = collect($validator->errors())->unique()->first();
+            return response()->json(['errors' => $error]);
+        }
+
+        if ($request->order_qty == 0) {
+            return response()->json(['errors' => trans('notification.not_select')]);
+        }
+
+        $order_code = get_order_code();
+        $city = $this->city->get_name_city($request->city);
+        $district = $this->district->get_name_city($request->district);
+        $address = get_address($request->address, $district->district_name, $city->city_name);
+        $saveDataOrder = [
+            'order_code' => $order_code,
+            'fullname' => $request->fullname,
+            'phone' => $request->phone,
+            'address' => $address,
+            'email' => $request->email,
+            'order_qty' => $request->order_qty,
+            'order_total' => $request->order_total,
+            'payment' => $request->payment,
+            'note' => $request->note,
+            'user_id' => Auth::id(),
+            'created_at' => now(),
+            'updated_at' => now()
+        ];
+
+        $saveOrder = $this->order->add($saveDataOrder);
+        if ($saveOrder) {
+            $product_name = $request->product_name;
+            foreach ($product_name as $key => $value) {
+                $saveDataOrderDetail = [
+                    'pro_order_qty' => $request->qty[$key],
+                    'product_detail_id' => $product_name[$key],
+                    'product_order_id' => $saveOrder->id
+                ];
+                $this->orderDetail->create($saveDataOrderDetail);
+            }
+            $view = route('client.thank');
+            return response()->json(['success' => $view]);
+        }
+    }
+    public function thank()
+    {
+        return view('client.cart.thank');
     }
 }
