@@ -103,6 +103,20 @@ function currencyFormat(val, unit = 'đ') {
     }
 }
 
+function dateFormat(string_date, dash) {
+    if (string_date == null) {
+        return '';
+    }
+    let date = new Date(string_date);
+    let d = date.getUTCDate();
+    let m = date.getUTCMonth() + 1;
+    let y = date.getUTCFullYear();
+    let h = date.getHours();
+    let mi = date.getMinutes();
+
+    return (d <= 9 ? '0' + d : d) + dash + (m <= 9 ? '0' + m : m) + dash + y + ' ' + (h <= 9 ? '0' + h : h) + ':' + mi;
+}
+
 function asset(param) {
     let path = window.location.origin + '/nadshop/' + param;
     return path;
@@ -217,6 +231,18 @@ function stringToNumber(data) {
         result = result.replace(/\./g, '');
     }
     return result;
+}
+
+function convertStatusOrder(data) {
+    if (data == 'pending') {
+        return "Chờ xác nhận";
+    } else if (data == 'shipping') {
+        return "Đang vận chuyển";
+    } else if (data == 'success') {
+        return "Thành công";
+    } else {
+        return 'Hủy bỏ';
+    }
 }
 
 

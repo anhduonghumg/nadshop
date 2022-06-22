@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Models\OrderDetail;
+use App\Jobs\SendOrderEmail;
+use Illuminate\Support\Str;
+
 
 class CartController extends Controller
 {
@@ -115,7 +118,6 @@ class CartController extends Controller
             'order_total' => $request->order_total,
             'payment' => $request->payment,
             'note' => $request->note,
-            'user_id' => Auth::id(),
             'created_at' => now(),
             'updated_at' => now()
         ];
@@ -131,12 +133,25 @@ class CartController extends Controller
                 ];
                 $this->orderDetail->create($saveDataOrderDetail);
             }
-            $view = route('client.thank');
+
+            $details['email'] = $request->email;
+            $emailJob = new SendOrderEmail($details);
+            dispatch($emailJob);
+            $code = Str::after($order_code, '#');
+            $view = route('client.thank', $code);
             return response()->json(['success' => $view]);
         }
     }
-    public function thank()
+
+    public function thank(Request $request)
     {
-        return view('client.cart.thank');
+        $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
+        $code = $request->code;
+        $check = $this->order->check_code($code);
+        if ($check) {
+            return view('client.cart.thank', compact('category_products', 'code'));
+        } else {
+            return redirect()->route('client.home');
+        }
     }
 }

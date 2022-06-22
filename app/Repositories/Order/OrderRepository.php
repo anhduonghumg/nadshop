@@ -39,4 +39,29 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     {
         return $data->where('order_status', $value)->count();
     }
+
+    public function check_code($code)
+    {
+        $result = $this->model->where('order_code', '#' . $code)->count();
+        if ($result > 0)
+            return true;
+        return false;
+    }
+
+    public function check_order($code)
+    {
+        $result = $this->model->where('order_code', $code)->count();
+        if ($result > 0)
+            return true;
+        return false;
+    }
+
+    public function get_order($code)
+    {
+        $result = $this->model->select('product_orders.*', 'product_order_details.product_order_id')
+            ->join('product_order_details', 'product_orders.id', '=', 'product_order_details.product_order_id')
+            ->where('product_orders.order_code', $code)
+            ->first();
+        return $result;
+    }
 }

@@ -203,7 +203,12 @@ Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'sho
 Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy'])->name('client.cart.buy');
 Route::get('cart/checkout', [App\Http\Controllers\Client\CartController::class, 'checkout'])->name('client.cart.checkout');
 Route::post('cart/order', [App\Http\Controllers\Client\CartController::class, 'order'])->name('client.cart.order');
-Route::get('thank', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
+Route::get('thank/{code}', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
+
+
+// ORDER
+Route::get('order/find', [App\Http\Controllers\Client\OrderController::class, 'find'])->name('client.order.find');
+Route::post('order/show', [App\Http\Controllers\Client\OrderController::class, 'show'])->name('client.order.show');
 
 // City_District
 Route::post('district', [App\Http\Controllers\Client\DistrictController::class, 'show'])->name('client.district');

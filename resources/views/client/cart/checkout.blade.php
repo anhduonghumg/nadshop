@@ -153,7 +153,7 @@
     });
 
     $('body').on('click','.btn_complate_order',function(){
-
+        $('.loading').show();
         if(is_fetching == true) return false;
         let total_cart = stringToNumber($('.show_total_cart').text());
         let total_qty = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
@@ -169,6 +169,7 @@
             data: fm_data,
             dataType: "json",
             success: function (rsp) {
+                $('.loading').hide();
                 if ($.isEmptyObject(rsp.errors)) {
                     localStorage.removeItem('data_cart');
                     window.location.replace(rsp.success);
@@ -177,6 +178,7 @@
                 }
                 is_fetching = false;
             },error: function () {
+                $('.loading').hide();
                 alert("error!!!!");
             },
         });

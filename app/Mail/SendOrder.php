@@ -11,6 +11,7 @@ class SendOrder extends Mailable
 {
     use Queueable, SerializesModels;
 
+    
     public function __construct()
     {
     }

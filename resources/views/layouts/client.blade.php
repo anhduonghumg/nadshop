@@ -111,13 +111,17 @@
                     </form>
                 </div>
                 <div class="col-lg-3 col-6 text-right">
-                    <a href="{{ route('client.product.wishlist') }}" class="btn border">
+                    <a href="{{ route('client.product.wishlist') }}" class="btn border" title="Yêu thích">
                         <i class="fas fa-heart text-primary"></i>
                         <span class="wishlist_badge">0</span>
                     </a>
-                    <a href="{{ route('client.cart.show') }}" class="btn border js-toggle-cart">
+                    <a href="{{ route('client.cart.show') }}" class="btn border js-toggle-cart" title="Giỏ hàng">
                         <i class="fas fa-shopping-cart text-primary"></i>
                         <span class="cart_badge">0</span>
+                    </a>
+                    <a href="{{ route('client.order.find') }}" class="btn border history_order"
+                        title="Tra cứu đơn hàng">
+                        <i class="fas fa-truck text-primary"></i>
                     </a>
                 </div>
             </div>

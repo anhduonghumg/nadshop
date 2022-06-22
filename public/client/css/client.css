@@ -3856,7 +3856,7 @@ input[type="button"].btn-block {
     display: block;
     min-height: 1.5rem;
     padding-left: 1.5rem;
-    color-adjust: exact;
+    /* color-adjust: exact; */
 }
 
 .custom-control-inline {
@@ -10301,10 +10301,48 @@ article p a {
     transition: opacity 250ms ease-in-out, width 0ms ease-in-out 250ms;
 }
 
+.icon-order-success {
+    font-size: 100px;
+    color: green;
+    margin-bottom: 20px;
+}
+
 body.open .lightbox {
     width: 100%;
     opacity: 0.8;
     transition: opacity 250ms ease-in-out, width 0ms ease-in-out;
+}
+
+.wp-check {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 50px;
+    margin-bottom: 150px;
+}
+
+.check-title {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.order-code {
+    margin: 15px auto 2px;
+    display: block;
+    background-color: #e5e5e5;
+    width: 40%;
+    border-radius: 14px;
+    padding: 5px 10px;
+    border: none;
+    color: #6d6e71;
+}
+
+.btn-check {
+    margin-top: 15px;
+    border: none;
+    padding: 5px 25px;
+    border-radius: 15px;
+    background-color: #f12a43;
+    color: #fff;
 }
 
 @keyframes action {

@@ -15,18 +15,15 @@ class SendOrderEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $details;
+    public function __construct($details)
     {
+        $this->details = $details;
     }
 
     public function handle()
     {
         $email = new SendOrder();
-        Mail::to('')->send($email);
+        Mail::to($this->details['email'])->send($email);
     }
 }
