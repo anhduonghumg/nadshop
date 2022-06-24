@@ -60,6 +60,7 @@
                             @else
                             <th scope="col">Ngày tạo</th>
                             @endif
+                            <th scope="col">Phiên bản</th>
                             <th scope="col">Tác vụ</th>
                         </tr>
                     </thead>
@@ -100,6 +101,8 @@
                                         class="fa fa-trash"></i></a>
                             </td>
                             @else
+                            <td><a href="{{ route('admin.product.variant',['id' => $item->id]) }}"
+                                    class='btn_variant'>Danh sách</a></td>
                             <td>
                                 <input type="hidden" class="data-img" data-img="{{
                                         asset(
@@ -144,7 +147,5 @@
 {{-- modal add product detail --}}
 <div id="modalPopup">
 </div>
-<script type="text/javascript">
-
 </script>
 @endsection

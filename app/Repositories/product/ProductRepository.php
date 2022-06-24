@@ -119,4 +119,15 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->get();
         return $result;
     }
+
+    public function get_variant($id)
+    {
+        $result = $this->model
+            ->select('product_details.*')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->where('product_details.product_id', $id)
+            ->orderByDesc('product_details.color_id')
+            ->paginate(20);
+        return $result;
+    }
 }

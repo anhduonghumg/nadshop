@@ -217,4 +217,12 @@ class AdminProductController extends Controller
             }
         }
     }
+
+
+    public function variant(Request $request)
+    {
+        $id = (int)$request->id;
+        $list_variant = $this->productRepo->get_variant($id);
+        return view('admin.product.variant', compact('list_variant'));
+    }
 }

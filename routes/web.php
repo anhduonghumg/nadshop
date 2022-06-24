@@ -93,7 +93,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/admin/product/forceDelete/{id}', [App\Http\Controllers\AdminProductController::class, 'forceDelete'])->name('admin.product.forceDelete');
     Route::post('/admin/product/action', [App\Http\Controllers\AdminProductController::class, 'action'])->name('admin.product.action');
     Route::get('/admin/product/list', [App\Http\Controllers\AdminProductController::class, 'list'])->name('admin.product.list');
-
+    Route::get('/admin/product/variant', [App\Http\Controllers\AdminProductController::class, 'variant'])->name('admin.product.variant');
 
     // Admin/product/detail
     Route::get('/admin/product/detail/show', [App\Http\Controllers\AdminProductDetailController::class, 'show'])->name('admin.product.detail.show');
@@ -204,7 +204,6 @@ Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy
 Route::get('cart/checkout', [App\Http\Controllers\Client\CartController::class, 'checkout'])->name('client.cart.checkout');
 Route::post('cart/order', [App\Http\Controllers\Client\CartController::class, 'order'])->name('client.cart.order');
 Route::get('thank/{code}', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
-
 
 // ORDER
 Route::get('order/find', [App\Http\Controllers\Client\OrderController::class, 'find'])->name('client.order.find');
