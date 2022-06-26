@@ -19,14 +19,13 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
     </script>
     <script src="https://cdn.tiny.cloud/1/numi57lzygq762f9vfvkurk8qjdqln3t6lun4y16ql5iho4u/tinymce/5/tinymce.min.js"
-        referrerpolicy="origin">
-    </script>
+        referrerpolicy="origin"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
@@ -112,7 +111,8 @@
                         <a class="dropdown-item" href="{{ route('admin.user.profile') }}">Thông tin tài
                             khoản</a>
                         <a class="dropdown-item" href="{{ route('admin.user.changePass') }}">Thay đổi mật khẩu</a>
-                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
                             {{ __('auth.Logout') }}
                         </a>
@@ -174,7 +174,7 @@
                         <ul class="sub-menu">
                             <li><a href="{{ route('admin.product.add') }}">Thêm mới</a></li>
                             <li><a href="{{ route('admin.product.list') }}">Danh sách</a></li>
-                            <li><a href="{{ route('admin.product.detail.list') }}">Sản phẩm chi tiết</a></li>
+                            {{-- <li><a href="{{ route('admin.product.detail.list') }}">Sản phẩm chi tiết</a></li> --}}
                             <li><a href="{{ route('admin.catProduct.list') }}">Danh mục</a></li>
                             <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
                             <li><a href="{{ route('admin.color.list') }}">Màu</a></li>
@@ -234,10 +234,10 @@
     <script src="{{ url('public/js/main.js') }}"></script>
     <script src="{{ url('public/js/sweetalert2.min.js') }}"></script>
     <script>
-        setTimeout(function(){
+        setTimeout(function() {
             $('.loader').hide();
             $('#wp-content').show();
-       },500);
+        }, 500);
     </script>
 </body>
 

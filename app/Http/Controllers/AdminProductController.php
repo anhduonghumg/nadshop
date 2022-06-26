@@ -12,6 +12,7 @@ use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class AdminProductController extends Controller
 {
@@ -66,16 +67,27 @@ class AdminProductController extends Controller
                     'product_desc' => ['required', 'string'],
                     'product_status' => ['required'],
                     'product_content' => ['required', 'string'],
-                    'product_thumb' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+                    'product_thumb' => ['required'],
                     'category_product' => ['required'],
                     // 'brand' => ['required'],
-                    'list_product_thumb' => ['required'],
+                    // 'list_product_thumb' => ['required'],
                     'product_status' => ['required']
                 ]
             );
 
             $new_product = $request->product_new ? $request->product_new : 0;
             $best_seller_product = $request->product_best_seller ? $request->product_best_seller : 0;
+            $views = 0;
+
+            if ($request->hasFile('product_thumb')) {
+                $path_img = Constants::PATH_AVATAR;
+                $file = $request->file('product_thumb');
+                $extension = $request->product_thumb->extension();
+                $filename = time() . "." . $extension;
+                // $path = $file->move($path_img, $filename);
+                // $path_avatar = public_path(Constants::PATH_IMAGE . "product/avatar/" . $filename);
+                $image = Image::make($file->getRealPath())->fit(225, 338)->save(storage_path('app/public/images/product/avatar/' . $filename));
+            }
 
             $data = [
                 'product_name' => $request->input('product_name'),
@@ -88,29 +100,32 @@ class AdminProductController extends Controller
                 'product_cat_id' => $request->input('category_product'),
                 'is_product_new' => $new_product,
                 'is_product_bestseller' => $best_seller_product,
+                'views' => $views,
+                'product_thumb' => "storage/" . Constants::PATH_AVATAR . $filename,
                 "created_at" => now(),
                 "updated_at" => now(),
             ];
 
-            if ($request->hasFile('product_thumb')) {
-                $file = $request->product_thumb;
-                $dataImg = $this->uploadImage($file, 'product', Auth::id());
-                $data['product_thumb'] = $dataImg;
-            }
+            $this->productRepo->add($data);
 
-            $product = $this->productRepo->add($data);
-            if ($request->hasFile('list_product_thumb')) {
-                $file = $request->list_product_thumb;
-                $list_thumb = $this->uploadMultipleImage($file, 'product_variant', Auth::id());
-                foreach ($list_thumb as $item) {
-                    $data_image = [
-                        'image' => $item,
-                        'img_name' => $request->product_name,
-                        'product_id' => $product->id,
-                    ];
-                    $this->imageRepo->add($data_image);
-                }
-            }
+            // if ($request->hasFile('product_thumb')) {
+            //     $file = $request->product_thumb;
+            //     $dataImg = $this->uploadImage($file, 'product', Auth::id());
+            //     $data['product_thumb'] = $dataImg;
+            // }
+
+            // if ($request->hasFile('list_product_thumb')) {
+            //     $file = $request->list_product_thumb;
+            //     $list_thumb = $this->uploadMultipleImage($file, 'product_variant', Auth::id());
+            //     foreach ($list_thumb as $item) {
+            //         $data_image = [
+            //             'image' => $item,
+            //             'img_name' => $request->product_name,
+            //             'product_id' => $product->id,
+            //         ];
+            //         $this->imageRepo->add($data_image);
+            //     }
+            // }
             return redirect()->route('admin.product.list')->with('status', trans('notification.add_success'));
         }
     }
@@ -221,8 +236,15 @@ class AdminProductController extends Controller
 
     public function variant(Request $request)
     {
-        $id = (int)$request->id;
-        $list_variant = $this->productRepo->get_variant($id);
-        return view('admin.product.variant', compact('list_variant'));
+        if ($request->ajax()) {
+
+            $id = (int)$request->id;
+            $kw = $request->kw;
+            $list_product_details = $this->productRepo->get_variant($id, $kw);
+            return view('admin.productDetail.listAjax', compact('list_product_details'))->render();
+        }
+        // $id = (int)$request->id;
+        // $list_variant = $this->productRepo->get_variant($id);
+        return view('admin.product.variant');
     }
 }

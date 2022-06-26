@@ -1,21 +1,20 @@
 @extends ('layouts.admin')
 @section('title', 'Danh sách bài viết')
 @section('content')
-<div id="content" class="container-fluid">
-    <div class="card">
-        <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-            <h5>Danh sách sản phẩm chi tiết</h5>
-            <div class="form-search form-inline">
-                {{-- <form class="form-search" action="" method="GET"> --}}
+    <div id="content" class="container-fluid">
+        <div class="card">
+            <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
+                <h5>Danh sách sản phẩm chi tiết</h5>
+                <div class="form-search form-inline">
+                    {{-- <form class="form-search" action="" method="GET"> --}}
                     <input type="text" class="form-control keyword" name="kw" placeholder="Nhập từ khóa..." />
                     <button name="btn-search" class="btn btn-primary" id="btn_search">Tìm kiếm</button>
                     <input type="hidden" data-url="{{ route('admin.product.detail.list') }}" class="url">
-                    {{--
-                </form> --}}
+                    {{-- </form> --}}
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            {{-- <div class="analytic">
+            <div class="card-body">
+                {{-- <div class="analytic">
                 <a href="{{ request()->url() }}" class="text-primary">Kích hoạt<span class="text-muted">|</span></a>
                 <a href="{{ request()->url() }}?status=pending" class="text-primary">Chờ duyệt<span class="text-muted">
                         |</span></a>
@@ -58,7 +57,7 @@
                             <td>{{ $item-> product_detail_name}}</td>
                             <td>{{ currentcyFormat($item-> product_price) }}</td>
                             <td>{{ formatDateToDMY($item-> created_at) }}</td>
-                            @if($item->product_qty_stock > 0)
+                            @if ($item->product_qty_stock > 0)
                             <td>
                                 <span class="badge badge-success">Còn hàng</span>
                             </td>
@@ -90,173 +89,183 @@
                 </table>
             </form>
             {{ $list_product_details->links('layouts.paginationlink')}} --}}
+            </div>
         </div>
     </div>
-</div>
-<div id="modalPopupEdit"></div>
-<div id="modalPopupDetail"></div>
-<script type="text/javascript">
-    loadData(1,"");
-    $(document).on('click','.show-prodetail',function(){
-        var id = $(this).attr('data-id');
-        $(".loadajax").show();
-        $.ajax({
-            url: "{{ route('admin.product.detail.show') }}",
-            type: "GET",
-            dataType: "html",
-            data: {id:id},
-            success: function (rsp) {
-                $(".loadajax").hide();
-                $("#modalPopupDetail").html(rsp);
-                $(".modal-detail").modal("show");
-            },
-            error: function () {
-                $(".loadajax").hide();
-                alert("error!!!!");
-            },
+    <div id="modalPopupEdit"></div>
+    <div id="modalPopupDetail"></div>
+    <script type="text/javascript">
+        loadData(1, "");
+        $(document).on('click', '.show-prodetail', function() {
+            var id = $(this).attr('data-id');
+            $(".loadajax").show();
+            $.ajax({
+                url: "{{ route('admin.product.detail.show') }}",
+                type: "GET",
+                dataType: "html",
+                data: {
+                    id: id
+                },
+                success: function(rsp) {
+                    $(".loadajax").hide();
+                    $("#modalPopupDetail").html(rsp);
+                    $(".modal-detail").modal("show");
+                },
+                error: function() {
+                    $(".loadajax").hide();
+                    alert("error!!!!");
+                },
+            });
         });
-    });
 
-    $(document).on("click", ".edit-prodetail", function () {
-        $(".loadajax").show();
-        var url_edit = $(this).attr("data-url");
-        var proId = $(this).attr("data-id");
-        var data = { proId: proId };
-        $.ajax({
-            url: url_edit,
-            type: "GET",
-            dataType: "json",
-            data: data,
-            success: function (rsp) {
-                var color = rsp.list_product_color;
-                var size = rsp.list_product_size;
-                var image = rsp.list_image;
-                var product_detail = rsp.product_detail;
-                var url_update = rsp.url_update;
-                var show = showToHtml(
-                    url_update,
-                    color,
-                    size,
-                    image,
-                    product_detail
-                );
-                $(".loadajax").hide();
-                $("#modalPopupEdit").html(show);
-                $(".edit-modal").modal("show");
-            },
-            error: function () {
-                $(".loadajax").hide();
-                alert("error!!!!");
-            },
-        });
-    });
+        // $(document).on('click', '#add_variant', function() {
 
-    $(document).on("click", "#btn_edit", function () {
-        $(".loadajax").show();
-        var page = $(location).attr('href').split('page=')[1];
-        var id = $(".proDetailId").attr("data-id");
-        var url_update = $(".proDetailId").attr("data-url");
-        var product_detail_name = $("#product_name").val();
-        var product_price = $("#product_price").val();
-        var product_discount = $("#product_discount").val();
-        var product_qty_stock = $("#stock").val();
-        var product_color = $("#color").val();
-        var product_size = $("#size_ver").val();
-        var product_details_thumb = $("#thumbnail").val();
-        var data = {
-            id: id,
-            product_detail_name: product_detail_name,
-            product_price: product_price,
-            product_discount: product_discount,
-            product_qty_stock: product_qty_stock,
-            product_color: product_color,
-            product_size: product_size,
-            product_details_thumb: product_details_thumb,
-        };
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
+        // });
+
+        $(document).on("click", ".edit-prodetail", function() {
+            $(".loadajax").show();
+            var url_edit = $(this).attr("data-url");
+            var proId = $(this).attr("data-id");
+            var data = {
+                proId: proId
+            };
+            $.ajax({
+                url: url_edit,
+                type: "GET",
+                dataType: "json",
+                data: data,
+                success: function(rsp) {
+                    var color = rsp.list_product_color;
+                    var size = rsp.list_product_size;
+                    var image = rsp.list_image;
+                    var product_detail = rsp.product_detail;
+                    var url_update = rsp.url_update;
+                    var show = showToHtml(
+                        url_update,
+                        color,
+                        size,
+                        image,
+                        product_detail
+                    );
+                    $(".loadajax").hide();
+                    $("#modalPopupEdit").html(show);
+                    $(".edit-modal").modal("show");
+                },
+                error: function() {
+                    $(".loadajax").hide();
+                    alert("error!!!!");
+                },
+            });
         });
-        $.ajax({
-            url: url_update,
-            type: "POST",
-            data: data,
-            dataType: "json",
-            success: function (data) {
-                $(".loadajax").hide();
-                if ($.isEmptyObject(data.errors)) {
-                    confirm_success(data.success);
-                    $('#myModal').modal('hide');
+
+        $(document).on("click", "#btn_edit", function() {
+            $(".loadajax").show();
+            var page = $(location).attr('href').split('page=')[1];
+            var id = $(".proDetailId").attr("data-id");
+            var url_update = $(".proDetailId").attr("data-url");
+            var product_detail_name = $("#product_name").val();
+            var product_price = $("#product_price").val();
+            var product_discount = $("#product_discount").val();
+            var product_qty_stock = $("#stock").val();
+            var product_color = $("#color").val();
+            var product_size = $("#size_ver").val();
+            var product_details_thumb = $("#thumbnail").val();
+            var data = {
+                id: id,
+                product_detail_name: product_detail_name,
+                product_price: product_price,
+                product_discount: product_discount,
+                product_qty_stock: product_qty_stock,
+                product_color: product_color,
+                product_size: product_size,
+                product_details_thumb: product_details_thumb,
+            };
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+            $.ajax({
+                url: url_update,
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function(data) {
+                    $(".loadajax").hide();
+                    if ($.isEmptyObject(data.errors)) {
+                        confirm_success(data.success);
+                        $('#myModal').modal('hide');
+                        loadData(page);
+                    } else {
+                        confirm_warning(data.errors);
+                    }
+                },
+                error: function() {
+                    $(".loadajax").hide();
+                    alert("error!!!!");
+                },
+            });
+
+        });
+
+        $(document).on("click", ".delete-prodetail", function() {
+            var url_delete = $(this).attr("data-url");
+            var page = $(location).attr('href').split('page=')[1];
+            var id = $(this).attr("data-id");
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+            });
+            $.ajax({
+                url: url_delete,
+                type: "POST",
+                dataType: "json",
+                data: {
+                    id: id
+                },
+                beforeSend: function() {
+                    return confirm("Bạn thực sự muốn xóa?");
+                },
+                success: function(rsp) {
+                    $(".loadajax").hide();
+                    confirm_success(rsp.success);
                     loadData(page);
-                } else {
-                    confirm_warning(data.errors);
-                }
-            },
-            error: function () {
-                $(".loadajax").hide();
-                alert("error!!!!");
-            },
+                },
+                error: function() {
+                    $(".loadajax").hide();
+                    alert("error!!!!");
+                },
+            });
         });
 
-    });
-
-    $(document).on("click", ".delete-prodetail", function () {
-        var url_delete = $(this).attr("data-url");
-        var page = $(location).attr('href').split('page=')[1];
-        var id = $(this).attr("data-id");
-        $.ajaxSetup({
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
+        $(document).on('click', '#btn_search', function() {
+            var url = $('.url').attr('data-url');
+            var query = $('.keyword').val();
+            var page = 1;
+            history.pushState(null, '', url + "?kw=" + query);
+            loadData(page, query);
         });
-        $.ajax({
-            url: url_delete,
-            type: "POST",
-            dataType: "json",
-            data: {id:id},
-            beforeSend:function(){
-               return confirm("Bạn thực sự muốn xóa?");
-             },
-            success: function (rsp) {
-                $(".loadajax").hide();
-                confirm_success(rsp.success);
-                loadData(page);
-            },
-            error: function () {
-                $(".loadajax").hide();
-                alert("error!!!!");
-            },
+
+        $(document).on('click', '.pagination a', function(event) {
+            event.preventDefault();
+            var url = "http://localhost:8080/nadshop/admin/product/detail/list";
+            var page = $(this).attr('href').split('page=')[1];
+            var query = $('.keyword').val();
+            if (query != "") {
+                history.pushState(null, '', url + "?page=" + page + "&kw=" + query);
+            } else {
+                history.pushState(null, '', url + "?page=" + page);
+            }
+            loadData(page, query);
         });
-    });
 
-    $(document).on('click', '#btn_search', function(){
-        var url = $('.url').attr('data-url');
-        var query = $('.keyword').val();
-        var page = 1;
-        history.pushState(null, '', url +"?kw="+query);
-        loadData(page,query);
-       });
-
-    $(document).on('click', '.pagination a', function(event){
-        event.preventDefault();
-        var url = "http://localhost:8080/nadshop/admin/product/detail/list";
-        var page = $(this).attr('href').split('page=')[1];
-        var query = $('.keyword').val();
-        if(query != ""){
-            history.pushState(null, '', url + "?page=" +page +"&kw="+query);
-        }else{
-            history.pushState(null, '', url + "?page=" +page);
-        }
-        loadData(page,query);
-       });
-
-       function showToHtml(url, color, size, image, product_detail) {
-        var output = ``;
-        output += `<div class="modal fade draggable edit-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby=""
+        function showToHtml(url, color, size, image, product_detail) {
+            var output = ``;
+            output += `<div class="modal fade draggable edit-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby=""
         aria-hidden="true">
         <div class="modal-dialog modal-lg ui-draggable">`;
-        output += `<div class="modal-content p-3">
+            output += `<div class="modal-content p-3">
                 <form method='POST' id="fm_update">
                     @csrf
                     <div class="modal-header ui-dranggale-handle" style="cursor: move;">
@@ -271,10 +280,10 @@
                                 aria-selected="true">Tab</a>
                         </li>
                     </ul>`;
-        output += `<div class="tab-content" id="myTabContent">
+            output += `<div class="tab-content" id="myTabContent">
                         <input type="hidden" name="reqID" value="" id="req-id">
                         <div class="tab-pane fade show active" id="p_1" role="tabpanel" aria-labelledby="p_1-tab">`;
-        output += `<div class="row">
+            output += `<div class="row">
                                 <div class="col-sm-6 col-xs-12">
                                     <div class="form-group row">
                                         <label for="product_name" class="col-sm-4 control-label">Tên sản
@@ -307,45 +316,45 @@
                                                 placeholder="Số lượng sản phẩm" name="product_qty_stock" value="${product_detail.product_qty_stock}">
                                         </div>
                                     </div>`;
-        output += `<div class="form-group row">
+            output += `<div class="form-group row">
                                         <label for="color" class="col-sm-4 control-label">Màu:</label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="color" name="product_color">
                                                 <option value="">Chọn màu</option>`;
-        $.each(color, function (key, value) {
-            let selected =
-                value.id == product_detail.color_id ? "selected" : null;
+            $.each(color, function(key, value) {
+                let selected =
+                    value.id == product_detail.color_id ? "selected" : null;
 
-            output += `<option value="${value.id}" ${selected}>${value.color_name}</option>`;
-        });
-        output += `</select></div></div>`;
-        output += `<div class="form-group row">
+                output += `<option value="${value.id}" ${selected}>${value.color_name}</option>`;
+            });
+            output += `</select></div></div>`;
+            output += `<div class="form-group row">
                                         <label for="size_ver" class="col-sm-4 control-label">Kích
                                             cỡ/bản:</label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="size_ver" name="product_size">`;
-        output += `<option value="">Chọn kích cỡ/phiên bản</option>`;
-        $.each(size, function (key, value) {
-            let selected =
-                value.id == product_detail.size_id ? "selected" : null;
-            output += `<option value="${value.id}" ${selected}>${value.size_name}</option>`;
-        });
-        output += `</select></div></div></div>
+            output += `<option value="">Chọn kích cỡ/phiên bản</option>`;
+            $.each(size, function(key, value) {
+                let selected =
+                    value.id == product_detail.size_id ? "selected" : null;
+                output += `<option value="${value.id}" ${selected}>${value.size_name}</option>`;
+            });
+            output += `</select></div></div></div>
                                 <div class="col-sm-6 col-xs-12">
                                     <div class="form-group row ">
                                         <label for="" class="col-sm-4 control-label">Ảnh:</label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="thumbnail" name="product_thumbnail">
                                                 <option value="">Chọn ảnh chi tiết</option>`;
-        $.each(image, function (key, value) {
-            let selected =
-                value.image == product_detail.product_details_thumb
-                    ? "selected"
-                    : null;
-            output += `<option value="${value.image}" ${selected}>${value.img_name}</option>`;
-        });
-        output += `</select></div></div></div></div></div></div>`;
-        output += `<div class="modal-footer">
+            $.each(image, function(key, value) {
+                let selected =
+                    value.image == product_detail.product_details_thumb ?
+                    "selected" :
+                    null;
+                output += `<option value="${value.image}" ${selected}>${value.img_name}</option>`;
+            });
+            output += `</select></div></div></div></div></div></div>`;
+            output += `<div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="button" name="btn_edit" class="btn btn-primary" id="btn_edit">Lưu</buton>
                     </div>
@@ -355,25 +364,26 @@
         </div>
     </div>
     `;
-        return output;
-    }
+            return output;
+        }
 
-    function loadData(page,query){
-        $(".loadajax").show();
-        $.ajax({
-            url: "{{ route('admin.product.detail.list') }}" + "?page=" + page +"&kw="+query,
-            type: "GET",
-            //data: { kw:kw },
-            dataType: "html",
-            success: function (rsp) {
-                $(".loadajax").hide();
-                $('.card .card-body').html(rsp);
-                //console.log(rsp);
-            },error: function () {
-           alert("error!!!!");
-            },
-        });
-    }
-</script>
+        function loadData(page, query) {
+            $(".loadajax").show();
+            $.ajax({
+                url: "{{ route('admin.product.detail.list') }}" + "?page=" + page + "&kw=" + query,
+                type: "GET",
+                //data: { kw:kw },
+                dataType: "html",
+                success: function(rsp) {
+                    $(".loadajax").hide();
+                    $('.card .card-body').html(rsp);
+                    //console.log(rsp);
+                },
+                error: function() {
+                    alert("error!!!!");
+                },
+            });
+        }
+    </script>
 
 @endsection

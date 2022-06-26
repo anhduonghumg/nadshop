@@ -136,7 +136,7 @@ $(document).ready(function () {
                 <div class="form-group row ">
                 <label for="" class="col-sm-4 control-label">Ảnh chi tiết:</label>
                 <div class="col-sm-8">
-                    <select id="selectThumb" class="form-control thumbnail" name="product_details_thumb[]">
+                <select id="selectThumb" class="form-control thumbnail" name="product_details_thumb[]">
                         <option value="" selected>Chọn ảnh chi tiết</option>`;
                 $.each(resp.list_image, function (key, value) {
                     output += `<option data-image="http://localhost:8080/nadshop/${value.image}" value="${value.image}"></option>`;
@@ -167,7 +167,7 @@ $(document).ready(function () {
 
     // save product detail
     $(document).on('click', '#btn_save', function () {
-        $('.loadajax').show();
+        // $('.loadajax').show();
         var url_save = $('#url_product_detail').attr('data-url');
         // var fm_data = $('#fm_detail_product').serialize();
         var id = $('#url_product_detail').attr('data-id');
@@ -204,36 +204,38 @@ $(document).ready(function () {
         $(".thumbnail").each(function () {
             product_details_thumb.push($(this).val());
         });
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $.ajax({
-            type: "POST",
-            url: url_save,
-            data: {
-                id: id,
-                product_detail_name: product_detail_name,
-                product_price: product_price,
-                product_color: product_color,
-                product_size: product_size,
-                product_details_thumb: product_details_thumb,
-                product_qty_stock: product_qty_stock,
-                product_discount: product_discount,
-                cost_price: cost_price,
-            },
-            dataType: "json",
-            success: function (data) {
-                $('.loadajax').hide();
-                if ($.isEmptyObject(data.errors)) {
-                    confirm_success(data.success);
-                    $('.close').click();
-                } else {
-                    confirm_warning(data.errors);
-                }
-            }
-        });
+        console.log(product_size);
+        // $.ajax({
+        //     type: "POST",
+        //     url: url_save,
+        //     data: {
+        //         id: id,
+        //         product_detail_name: product_detail_name,
+        //         product_price: product_price,
+        //         product_color: product_color,
+        //         product_size: product_size,
+        //         product_details_thumb: product_details_thumb,
+        //         product_qty_stock: product_qty_stock,
+        //         product_discount: product_discount,
+        //         cost_price: cost_price,
+        //     },
+        //     dataType: "json",
+        //     success: function (data) {
+        //         $('.loadajax').hide();
+        //         if ($.isEmptyObject(data.errors)) {
+        //             confirm_success(data.success);
+        //             $('.close').click();
+        //         } else {
+        //             confirm_warning(data.errors);
+        //         }
+        //     }
+        // });
     });
 
     $(document).on("click", "ul li a#add_work", function () {

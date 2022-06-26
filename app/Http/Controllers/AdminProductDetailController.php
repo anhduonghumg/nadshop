@@ -98,10 +98,11 @@ class AdminProductDetailController extends Controller
     {
         if ($request->ajax()) {
             $kw = $request->kw;
-            $list_product_details = $this->productDetailRepo->get_list_product_details($kw, 'id', 1);
+            $id = $request->id;
+
+            $list_product_details = $this->productDetailRepo->get_list_product_details($id, $kw, 'id', 1);
             return view('admin.productDetail.listAjax', compact('list_product_details'))->render();
         }
-        // $list_product_details = $this->productDetailRepo->get_list_product_details();
         return view('admin.productDetail.list');
     }
 

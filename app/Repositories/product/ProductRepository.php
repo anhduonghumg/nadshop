@@ -120,14 +120,16 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $result;
     }
 
-    public function get_variant($id)
+    public function get_variant($id, $kw)
     {
         $result = $this->model
             ->select('product_details.*')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->where('product_details.product_id', $id)
+            ->where('product_detail_name', 'LIKE', "%{$kw}%")
             ->orderByDesc('product_details.color_id')
-            ->paginate(20);
+            ->paginate(1);
+        // ->withPath("http://localhost/nadshop/admin/product/variant?id=" . $id);
         return $result;
     }
 }

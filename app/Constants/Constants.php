@@ -18,6 +18,7 @@ class Constants
     const FORCE_DELETE = 'forceDelete';
     const EMPTY = NULL;
     const PATH_IMAGE = 'storage/app/public/images/';
+    const PATH_AVATAR = 'app/public/images/product/avatar/';
     const PAGINATE = 15;
     const TRUE = 1;
     const FALSE = 0;
