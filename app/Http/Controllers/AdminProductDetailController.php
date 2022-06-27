@@ -54,6 +54,59 @@ class AdminProductDetailController extends Controller
         return response()->json($result);
     }
 
+    public function addVariant(Request $request)
+    {
+        $id = (int)$request->id;
+        $list_product_color = $this->colorRepo->get_list_color_product();
+        $list_product_size = $this->sizeRepo->get_list_size_product();
+        $list_image = $this->imgRepo->get_list_image_product($id);
+        $info_product = $this->productRepo->find($id);
+        // $url_add_product_detail = route('admin.product.detail.store');
+        return view('admin.product.add_variant', compact('list_product_color', 'list_product_size', 'list_image', 'info_product', 'id'))->render();
+    }
+
+    public function storeVariant(Request $request)
+    {
+        if ($request->ajax()) {
+            $validator = Validator::make($request->all(), [
+                'product_detail_name' => 'bail|required|unique:product_details,product_detail_name',
+                'cost_price' => 'bail|required|numeric',
+                'product_price' => 'bail|required|numeric',
+                'product_discount' => 'bail|required|numeric',
+                'product_qty_stock' => 'bail|required|numeric',
+                'product_color' => 'bail|required',
+                'product_size' => 'bail|required',
+            ]);
+
+            if ($validator->fails()) {
+                $error = collect($validator->errors())->unique()->first();
+                return response()->json(['errors' => $error]);
+            }
+
+            if ($request->thumbnail == '') {
+                return response()->json(['errors' => 'Không được để trống ảnh chi tiết']);
+            }
+
+            $saveData = [
+                'product_detail_name' => $request->product_detail_name,
+                'product_detail_slug' => Str::slug($request->product_detail_name),
+                'product_details_thumb' => $request->thumbnail,
+                'cost_price' => $request->cost_price,
+                'product_price' => $request->product_price,
+                'product_discount' => $request->product_discount,
+                'product_qty_stock' => $request->product_qty_stock,
+                'color_id' => $request->product_color,
+                'size_id' => $request->product_size,
+                'user_id' => Auth::id(),
+                'product_id' => $request->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+            $this->productDetailRepo->add($saveData);
+            return response()->json(['success' => trans('notification.add_success')]);
+        }
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -137,12 +190,15 @@ class AdminProductDetailController extends Controller
             'product_qty_stock' => 'bail|required|numeric',
             'product_color' => 'bail|required',
             'product_size' => 'bail|required',
-            'product_details_thumb' => 'bail|required',
         ]);
 
         if ($validator->fails()) {
             $error = collect($validator->errors())->unique()->first();
             return response()->json(['errors' => $error]);
+        }
+
+        if ($request->product_details_thumb == '') {
+            return response()->json(['errors' => 'Không được để trống ảnh chi tiết']);
         }
 
         $saveData = [

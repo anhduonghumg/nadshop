@@ -67,10 +67,10 @@ class AdminProductController extends Controller
                     'product_desc' => ['required', 'string'],
                     'product_status' => ['required'],
                     'product_content' => ['required', 'string'],
-                    'product_thumb' => ['required'],
+                    'product_thumb' => ['required', 'mimes:jpeg,jpg,png', 'max:10000'],
                     'category_product' => ['required'],
                     // 'brand' => ['required'],
-                    // 'list_product_thumb' => ['required'],
+                    'list_product_thumb' => ['required'],
                     'product_status' => ['required']
                 ]
             );
@@ -106,7 +106,26 @@ class AdminProductController extends Controller
                 "updated_at" => now(),
             ];
 
-            $this->productRepo->add($data);
+            $product = $this->productRepo->add($data);
+
+            if ($request->hasFile('list_product_thumb')) {
+                // $path_img = Constants::PATH_IMAGE . "product/origin/";
+                $files = $request->file('list_product_thumb');
+                foreach ($files as $item) {
+                    $extension = $item->extension();
+                    $filename = time() . "." . $extension;
+                    Image::make($item->getRealPath())->fit(225, 338)->save(storage_path('app/public/images/product/detail/' . $filename));
+                    Image::make($item->getRealPath())->fit(697, 1405)->save(storage_path('app/public/images/product/avatar/' . $filename));
+                    Image::make($item->getRealPath())->fit(54, 81)->save(storage_path('app/public/images/product/thumb/' . $filename));
+                    Image::make($item->getRealPath())->fit(27, 27)->save(storage_path('app/public/images/product/icon/' . $filename));
+                    $data_image = [
+                        'image' => $filename,
+                        'img_name' => $request->product_name,
+                        'product_id' => $product->id,
+                    ];
+                    $this->imageRepo->add($data_image);
+                }
+            }
 
             // if ($request->hasFile('product_thumb')) {
             //     $file = $request->product_thumb;

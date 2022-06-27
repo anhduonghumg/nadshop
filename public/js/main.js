@@ -2,7 +2,6 @@
 $(document).ready(function () {
 
     var COUNT_TAB_WORK = 1;
-
     $(".nav-link.active .sub-menu").slideDown();
 
     $(document).on('click', '#sidebar-menu .arrow', function () {
@@ -34,6 +33,7 @@ $(document).ready(function () {
 
     // add product detail
     $(document).on("click", "#add_product_detail", function () {
+        $('#selectThumb').ddslick();
         COUNT_TAB_WORK = 1;
         var url = $('#add_product_detail').attr('data-url');
         var proId = $(this).attr('data-id');
@@ -133,13 +133,13 @@ $(document).ready(function () {
                 });
                 output += `</select></div></div></div>
                 <div class="col-sm-6 col-xs-12">
-                <div class="form-group row ">
+                <div class="form-group">
                 <label for="" class="col-sm-4 control-label">Ảnh chi tiết:</label>
                 <div class="col-sm-8">
                 <select id="selectThumb" class="form-control thumbnail" name="product_details_thumb[]">
                         <option value="" selected>Chọn ảnh chi tiết</option>`;
                 $.each(resp.list_image, function (key, value) {
-                    output += `<option data-image="http://localhost:8080/nadshop/${value.image}" value="${value.image}"></option>`;
+                    output += `<option data-imagesrc="http://localhost:8080/nadshop/storage/app/public/images/product/thumb/${value.image}" value="${value.image}"></option>`;
                 });
                 output += `</select></div></div></div></div></div></div>
                             <div class="modal-footer">
@@ -158,12 +158,17 @@ $(document).ready(function () {
                 $('.loadajax').css('display', 'none');
                 $('#modalPopup').empty().html(output);
                 $('.detail-modal').modal('show');
+                $('.thumbnail').ddslick();
+
             }, error: function () {
                 $('.loadajax').css('display', 'none');
                 alert("error!!!!");
             }
         });
+
     });
+
+
 
     // save product detail
     $(document).on('click', '#btn_save', function () {

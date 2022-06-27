@@ -66,13 +66,13 @@
                             <small class=" text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        {{-- <div class="form-group">
+                        <div class="form-group">
                             <label for="">Ảnh chi tiết sản phẩm</label>
                             <input class="form-control" type="file" id="images" name="list_product_thumb[]" multiple>
                             @error('list_product_thumb')
                             <small class=" text-danger">{{ $message }}</small>
                             @enderror
-                        </div> --}}
+                        </div>
                         <div class="form-group">
                             <label for="">Danh mục sản phẩm</label>
                             <select class="form-control" id="" name="category_product">

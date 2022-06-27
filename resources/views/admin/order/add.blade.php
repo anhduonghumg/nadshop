@@ -198,7 +198,7 @@
         fm_data.push({ name: "order_qty", value: total_qty });
         $('.loadajax').show();
         $.ajax({
-            url: "{{ route('') }}",
+            url: "{{ route('admin.order.store') }}",
             type: "post",
             data: fm_data,
             dataType: "json",
@@ -263,5 +263,6 @@
         }
         return result;
     }
+
 </script>
 @endsection

@@ -1,20 +1,21 @@
 @extends ('layouts.admin')
 @section('title', 'Danh sách bài viết')
 @section('content')
-    <div id="content" class="container-fluid">
-        <div class="card">
-            <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-                <h5>Danh sách sản phẩm chi tiết</h5>
-                <div class="form-search form-inline">
-                    {{-- <form class="form-search" action="" method="GET"> --}}
+<div id="content" class="container-fluid">
+    <div class="card">
+        <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
+            <h5>Danh sách sản phẩm chi tiết</h5>
+            <div class="form-search form-inline">
+                {{-- <form class="form-search" action="" method="GET"> --}}
                     <input type="text" class="form-control keyword" name="kw" placeholder="Nhập từ khóa..." />
                     <button name="btn-search" class="btn btn-primary" id="btn_search">Tìm kiếm</button>
                     <input type="hidden" data-url="{{ route('admin.product.detail.list') }}" class="url">
-                    {{-- </form> --}}
-                </div>
+                    {{--
+                </form> --}}
             </div>
-            <div class="card-body">
-                {{-- <div class="analytic">
+        </div>
+        <div class="card-body">
+            {{-- <div class="analytic">
                 <a href="{{ request()->url() }}" class="text-primary">Kích hoạt<span class="text-muted">|</span></a>
                 <a href="{{ request()->url() }}?status=pending" class="text-primary">Chờ duyệt<span class="text-muted">
                         |</span></a>
@@ -89,13 +90,13 @@
                 </table>
             </form>
             {{ $list_product_details->links('layouts.paginationlink')}} --}}
-            </div>
         </div>
     </div>
-    <div id="modalPopupEdit"></div>
-    <div id="modalPopupDetail"></div>
-    <script type="text/javascript">
-        loadData(1, "");
+</div>
+<div id="modalPopupEdit"></div>
+<div id="modalPopupDetail"></div>
+<script type="text/javascript">
+    loadData(1, "");
         $(document).on('click', '.show-prodetail', function() {
             var id = $(this).attr('data-id');
             $(".loadajax").show();
@@ -118,10 +119,7 @@
             });
         });
 
-        // $(document).on('click', '#add_variant', function() {
-
-        // });
-
+/*
         $(document).on("click", ".edit-prodetail", function() {
             $(".loadajax").show();
             var url_edit = $(this).attr("data-url");
@@ -150,6 +148,7 @@
                     $(".loadajax").hide();
                     $("#modalPopupEdit").html(show);
                     $(".edit-modal").modal("show");
+                    //$("#thumbnail").ddslick();
                 },
                 error: function() {
                     $(".loadajax").hide();
@@ -238,7 +237,7 @@
                 },
             });
         });
-
+        */
         $(document).on('click', '#btn_search', function() {
             var url = $('.url').attr('data-url');
             var query = $('.keyword').val();
@@ -260,6 +259,7 @@
             loadData(page, query);
         });
 
+        /*
         function showToHtml(url, color, size, image, product_detail) {
             var output = ``;
             output += `<div class="modal fade draggable edit-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby=""
@@ -341,7 +341,7 @@
             });
             output += `</select></div></div></div>
                                 <div class="col-sm-6 col-xs-12">
-                                    <div class="form-group row ">
+                                    <div class="form-group">
                                         <label for="" class="col-sm-4 control-label">Ảnh:</label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="thumbnail" name="product_thumbnail">
@@ -364,8 +364,10 @@
         </div>
     </div>
     `;
+
             return output;
         }
+         */
 
         function loadData(page, query) {
             $(".loadajax").show();
@@ -384,6 +386,6 @@
                 },
             });
         }
-    </script>
+</script>
 
 @endsection

@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-6 col-xs-12">
-                                <div class="form-group row ">
+                                <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Ảnh:</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" id="thumbnail" name="product_thumbnail[]">

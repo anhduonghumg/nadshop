@@ -1,111 +1,108 @@
 @extends ('layouts.admin')
 @section('title', 'Danh sách bài viết')
 @section('content')
-    <div id="content" class="container-fluid">
-        <div class="card">
-            <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-                <h5>Danh sách sản phẩm chi tiết</h5>
-                <div class="form-search form-inline">
-                    <form class="form-search" action="" method="GET">
-                        <input type="text" class="form-control keyword" name="kw" placeholder="Nhập từ khóa..." />
-                        <button type="button" name="btn-search" class="btn btn-primary" id="btn_search">Tìm kiếm</button>
-                        <input type="hidden" data-url="{{ route('admin.product.detail.list') }}" class="url">
-                    </form>
-                </div>
+<div id="content" class="container-fluid">
+    <div class="card">
+        <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
+            <h5>Danh sách sản phẩm chi tiết</h5>
+            <div class="form-search form-inline">
+                <form class="form-search" action="" method="GET">
+                    <input type="text" class="form-control keyword" name="kw" placeholder="Nhập từ khóa..." />
+                    <button type="button" name="btn-search" class="btn btn-primary" id="btn_search">Tìm kiếm</button>
+                    <input type="hidden" data-url="{{ route('admin.product.detail.list') }}" class="url">
+                </form>
             </div>
-            <div class="card-body">
-                {{-- <div class="analytic">
-                    <a href="{{ request()->url() }}" class="text-primary">Kích hoạt<span class="text-muted">|</span></a>
-                    <a href="{{ request()->url() }}?status=pending" class="text-primary">Chờ duyệt<span
-                            class="text-muted">
-                            |</span></a>
-                    <a href="{{ request()->url() }}?status=trash" class="text-primary">Vô hiệu hóa<span
-                            class="text-muted"></span></a>
-                </div>
-                <form action="{{ route('admin.product.action') }}" method="POST">
-                    @csrf
-                    <div class="form-action form-inline py-3">
-                        <select class="form-control mr-1" name="act" id="">
+        </div>
+        <div class="card-body">
+            {{-- <div class="analytic">
+                <a href="{{ request()->url() }}" class="text-primary">Kích hoạt<span class="text-muted">|</span></a>
+                <a href="{{ request()->url() }}?status=pending" class="text-primary">Chờ duyệt<span class="text-muted">
+                        |</span></a>
+                <a href="{{ request()->url() }}?status=trash" class="text-primary">Vô hiệu hóa<span
+                        class="text-muted"></span></a>
+            </div>
+            <form action="{{ route('admin.product.action') }}" method="POST">
+                @csrf
+                <div class="form-action form-inline py-3">
+                    <select class="form-control mr-1" name="act" id="">
                         <option>Chọn</option>
                         @foreach ($list_act as $k => $v)
                         <option value="{{ $k }}">{{ $v }}</option>
                         @endforeach
                     </select>
-                        <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" />
-                    </div>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">STT</th>
-                                <th scope="col">Ảnh</th>
-                                <th scope="col">Tên sản phẩm</th>
-                                <th scope="col">Giá</th>
-                                <th scope="col">Ngày tạo</th>
-                                <th scope="col">Trạng thái</th>
-                                <th scope="col">Tác vụ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($list_variant->total() > 0)
-                                @php
-                                    $temp = 0;
-                                @endphp
-                                @foreach ($list_variant as $item)
-                                    @php
-                                        $temp++;
-                                    @endphp
-                                    <tr>
-                                        <th scope="row">{{ $temp }}</th>
-                                        <td>
-                                            <img src="{{ asset($item->product_details_thumb) }}" width="80px"
-                                                height="80px" alt="" />
-                                        </td>
-                                        <td>{{ $item->product_detail_name }}</td>
-                                        <td>{{ currentcyFormat($item->product_price) }}</td>
-                                        <td>{{ formatDateToDMY($item->created_at) }}</td>
-                                        @if ($item->product_qty_stock > 0)
-                                            <td>
-                                                <span class="badge badge-success">Còn hàng</span>
-                                            </td>
-                                        @else
-                                            <td>
-                                                <span class="badge badge-dark">Hết hàng</span>
-                                            </td>
-                                        @endif
-                                        <td>
-                                            <a class="btn btn-success btn-sm rounded-0 text-white edit-prodetail"
-                                                type="button" data-id="{{ $item->id }}"
-                                                data-url="{{ route('admin.product.detail.edit') }}" data-placement="top"
-                                                title="Edit"><i class="fa fa-edit"></i></a>
-                                            <a class="btn btn-danger btn-sm rounded-0 text-white delete-prodetail"
-                                                type="button" data-id="{{ $item->id }}"
-                                                data-url="{{ route('admin.product.detail.delete') }}"
-                                                data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
-                                            <a class="btn btn-primary btn-sm rounded-0 text-white show-prodetail"
-                                                type="button" data-id="{{ $item->id }}" data-url=""
-                                                data-placement="top" title="Detail"><i class="fa fa-asterisk"
-                                                    aria-hidden="true"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                    <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" />
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Tác vụ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if ($list_variant->total() > 0)
+                        @php
+                        $temp = 0;
+                        @endphp
+                        @foreach ($list_variant as $item)
+                        @php
+                        $temp++;
+                        @endphp
+                        <tr>
+                            <th scope="row">{{ $temp }}</th>
+                            <td>
+                                <img src="{{ asset($item->product_details_thumb) }}" width="80px" height="80px"
+                                    alt="" />
+                            </td>
+                            <td>{{ $item->product_detail_name }}</td>
+                            <td>{{ currentcyFormat($item->product_price) }}</td>
+                            <td>{{ formatDateToDMY($item->created_at) }}</td>
+                            @if ($item->product_qty_stock > 0)
+                            <td>
+                                <span class="badge badge-success">Còn hàng</span>
+                            </td>
                             @else
-                                <tr>
-                                    <td colspan="7" class="bg-white">
-                                        <p>Không có bản ghi nào.</p>
-                                    </td>
-                                </tr>
+                            <td>
+                                <span class="badge badge-dark">Hết hàng</span>
+                            </td>
                             @endif
-                        </tbody>
-                    </table>
-                </form>
-                {{ $list_variant->links('layouts.paginationlink') }} --}}
-            </div>
+                            <td>
+                                <a class="btn btn-success btn-sm rounded-0 text-white edit-prodetail" type="button"
+                                    data-id="{{ $item->id }}" data-url="{{ route('admin.product.detail.edit') }}"
+                                    data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger btn-sm rounded-0 text-white delete-prodetail" type="button"
+                                    data-id="{{ $item->id }}" data-url="{{ route('admin.product.detail.delete') }}"
+                                    data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
+                                <a class="btn btn-primary btn-sm rounded-0 text-white show-prodetail" type="button"
+                                    data-id="{{ $item->id }}" data-url="" data-placement="top" title="Detail"><i
+                                        class="fa fa-asterisk" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <tr>
+                            <td colspan="7" class="bg-white">
+                                <p>Không có bản ghi nào.</p>
+                            </td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </form>
+            {{ $list_variant->links('layouts.paginationlink') }} --}}
         </div>
     </div>
-    <div id="modalPopupEdit"></div>
-    <div id="modalPopupDetail"></div>
-    <script type="text/javascript">
-        load_variant(1, "");
+</div>
+<div id="modalPopupEdit"></div>
+<div id="modalPopupDetail">
+</div>
+<script type="text/javascript">
+    load_variant(1, "");
 
         $(document).on('click', '.show-prodetail', function() {
             var id = $(this).attr('data-id');
@@ -124,6 +121,56 @@
                 },
                 error: function() {
                     $(".loadajax").hide();
+                    alert("error!!!!");
+                },
+            });
+        });
+
+        $(document).on('click','#add_variant',function(){
+            let id = getParameter('id');
+            $(".loadajax").show();
+            $.ajax({
+                url: "{{ route('admin.product.detail.addVariant') }}",
+                type: "GET",
+                dataType: "html",
+                data: {
+                    id: id
+                },
+                success: function(rsp) {
+                    $(".loadajax").hide();
+                    $('#modalPopupDetail').html(rsp);
+                    $('.variant_modal').modal('show');
+                    $('#select_thumbnail').ddslick();
+                },
+                error: function() {
+                    $(".loadajax").hide();
+                    alert("error!!!!");
+                },
+            });
+        })
+
+        $(document).on('click','#btn_save_variant',function(){
+              $('.loadajax').show();
+              let id = $(this).data('id');
+              let thumbnail = $('.dd-selected-value').val();
+              let fm_data = $('#fm_variant_product').serializeArray();
+              fm_data.push({ name: "id", value: id });
+              fm_data.push({ name: "thumbnail", value: thumbnail });
+              $.ajax({
+                url: "{{ route('admin.product.detail.storeVariant') }}",
+                type: "post",
+                data: fm_data,
+                dataType: "json",
+                success: function (rsp) {
+                    $('.loadajax').hide();
+                    if ($.isEmptyObject(rsp.errors)) {
+                        confirm_success(rsp.success);
+                        $('.variant_modal').modal('hide');
+                        load_variant(1,'');
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
+                },error: function () {
                     alert("error!!!!");
                 },
             });
@@ -157,6 +204,7 @@
                     $(".loadajax").hide();
                     $("#modalPopupEdit").html(show);
                     $(".edit-modal").modal("show");
+                    $('#thumbnail').ddslick();
                 },
                 error: function() {
                     $(".loadajax").hide();
@@ -166,7 +214,7 @@
         });
 
         $(document).on("click", "#btn_edit", function() {
-            $(".loadajax").show();
+            //$(".loadajax").show();
             var page = $(location).attr('href').split('page=')[1];
             var id = $(".proDetailId").attr("data-id");
             var url_update = $(".proDetailId").attr("data-url");
@@ -176,7 +224,7 @@
             var product_qty_stock = $("#stock").val();
             var product_color = $("#color").val();
             var product_size = $("#size_ver").val();
-            var product_details_thumb = $("#thumbnail").val();
+            var product_details_thumb = $(".dd-selected-value").val();
             var data = {
                 id: id,
                 product_detail_name: product_detail_name,
@@ -202,7 +250,7 @@
                     if ($.isEmptyObject(data.errors)) {
                         confirm_success(data.success);
                         $('#myModal').modal('hide');
-                        loadData(page);
+                        load_variant(1,'');
                     } else {
                         confirm_warning(data.errors);
                     }
@@ -212,7 +260,6 @@
                     alert("error!!!!");
                 },
             });
-
         });
 
         $(document).on("click", ".delete-prodetail", function() {
@@ -280,7 +327,6 @@
                 success: function(rsp) {
                     $(".loadajax").hide();
                     $('.card .card-body').html(rsp);
-                    // console.log(rsp);
                 },
                 error: function() {
                     alert("error!!!!");
@@ -352,7 +398,6 @@
             $.each(color, function(key, value) {
                 let selected =
                     value.id == product_detail.color_id ? "selected" : null;
-
                 output += `<option value="${value.id}" ${selected}>${value.color_name}</option>`;
             });
             output += `</select></div></div>`;
@@ -369,7 +414,7 @@
             });
             output += `</select></div></div></div>
                                 <div class="col-sm-6 col-xs-12">
-                                    <div class="form-group row ">
+                                    <div class="form-group">
                                         <label for="" class="col-sm-4 control-label">Ảnh:</label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="thumbnail" name="product_thumbnail">
@@ -379,7 +424,7 @@
                     value.image == product_detail.product_details_thumb ?
                     "selected" :
                     null;
-                output += `<option value="${value.image}" ${selected}>${value.img_name}</option>`;
+                    output += `<option data-imagesrc="http://localhost:8080/nadshop/storage/app/public/images/product/thumb/${value.image}" value="${value.image}" ${selected}></option>`;
             });
             output += `</select></div></div></div></div></div></div>`;
             output += `<div class="modal-footer">
@@ -404,5 +449,5 @@
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
-    </script>
+</script>
 @endsection

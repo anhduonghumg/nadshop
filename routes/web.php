@@ -104,6 +104,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/admin/product/detail/store', [App\Http\Controllers\AdminProductDetailController::class, 'store'])->name('admin.product.detail.store');
     Route::post('/admin/product/detail/delete', [App\Http\Controllers\AdminProductDetailController::class, 'delete'])->name('admin.product.detail.delete');
     Route::get('/admin/product/detail/test', [App\Http\Controllers\AdminProductDetailController::class, 'test'])->name('admin.product.detail.test');
+    Route::get('/admin/product/detail/addVariant', [App\Http\Controllers\AdminProductDetailController::class, 'addVariant'])->name('admin.product.detail.addVariant');
+    Route::post('/admin/product/detail/storeVariant', [App\Http\Controllers\AdminProductDetailController::class, 'storeVariant'])->name('admin.product.detail.storeVariant');
 
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
@@ -164,11 +166,11 @@ Route::middleware('auth', 'verified')->group(function () {
     // Route::post('/filter-by-date', [App\Http\Controllers\TestController::class, 'filter_by_date'])->name('filter');
 
     // helper
-    // Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
-    // Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');
-    // Route::get('/admin/helper/string', [App\Http\Controllers\AdminHelperController::class, 'string'])->name('admin.helper.string');
-    // Route::get('/admin/helper/path', [App\Http\Controllers\AdminHelperController::class, 'path'])->name('admin.helper.path');
-    // Route::get('/admin/helper/miscellaneous', [App\Http\Controllers\AdminHelperController::class, 'miscellaneous'])->name('admin.helper.miscellaneous');
+    Route::get('/admin/collection/test', [App\Http\Controllers\AdminCollectionTestController::class, 'test'])->name('admin.collection.test');
+    Route::get('/admin/helper/array', [App\Http\Controllers\AdminHelperController::class, 'array'])->name('admin.helper.array');
+    Route::get('/admin/helper/string', [App\Http\Controllers\AdminHelperController::class, 'string'])->name('admin.helper.string');
+    Route::get('/admin/helper/path', [App\Http\Controllers\AdminHelperController::class, 'path'])->name('admin.helper.path');
+    Route::get('/admin/helper/miscellaneous', [App\Http\Controllers\AdminHelperController::class, 'miscellaneous'])->name('admin.helper.miscellaneous');
 
     // upload file
     // Route::get('/admin/file/view', [App\Http\Controllers\AdminFileController::class, 'view'])->name('admin.file.view');
@@ -182,7 +184,7 @@ Route::middleware('auth', 'verified')->group(function () {
     // Route::get('/image/upload',  [App\Http\Controllers\ImageController::class, 'upload'])->name('image.upload');
 
     // city district
-    Route::get('/test', [App\Http\Controllers\TestController::class, 'paginatejs'])->name('test');
+    // Route::get('/test', [App\Http\Controllers\TestController::class, 'paginatejs'])->name('test');
 });
 
 Route::get('user/signin', [App\Http\Controllers\Client\UserController::class, 'login']);
@@ -195,7 +197,7 @@ Route::post('product/variant', [App\Http\Controllers\Client\ProductController::c
 Route::post('product/change', [App\Http\Controllers\Client\ProductController::class, 'change'])->name('client.product.change');
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
 Route::get('wishlist', [App\Http\Controllers\Client\ProductController::class, 'wishlist'])->name('client.product.wishlist');
-// Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
+Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
 
 // CART
 Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');

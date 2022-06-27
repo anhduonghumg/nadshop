@@ -28,7 +28,8 @@
                             <td scope="row">1</td>
                             <td scope="col">{{ $product->product_detail_name }}</td>
                             <td scope="col">
-                                <img src="{{ asset($product->product_details_thumb) }}" height="80" width="80" alt="" />
+                                <img src="{{ asset('storage/app/public/images/product/thumb').'/'.$product->product_details_thumb }}"
+                                    height="80" width="80" alt="" />
                             </td>
                             <td scope="col">{{ currentcyFormat($product->product_price) }}</td>
                             <td scope="col">{{ $product->product_discount }}</td>
