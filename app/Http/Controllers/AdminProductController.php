@@ -252,7 +252,6 @@ class AdminProductController extends Controller
         }
     }
 
-
     public function variant(Request $request)
     {
         if ($request->ajax()) {
@@ -265,5 +264,15 @@ class AdminProductController extends Controller
         // $id = (int)$request->id;
         // $list_variant = $this->productRepo->get_variant($id);
         return view('admin.product.variant');
+    }
+
+    public function filter(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $filter = $request->filter;
+            $list_products = $this->productRepo->get_product_by_filter($filter);
+            return view('admin.product.filter', compact('list_products'))->render();
+        }
     }
 }

@@ -94,7 +94,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/admin/product/action', [App\Http\Controllers\AdminProductController::class, 'action'])->name('admin.product.action');
     Route::get('/admin/product/list', [App\Http\Controllers\AdminProductController::class, 'list'])->name('admin.product.list');
     Route::get('/admin/product/variant', [App\Http\Controllers\AdminProductController::class, 'variant'])->name('admin.product.variant');
-
+    Route::post('/admin/product/filter', [App\Http\Controllers\AdminProductController::class, 'filter'])->name('admin.product.filter');
     // Admin/product/detail
     Route::get('/admin/product/detail/show', [App\Http\Controllers\AdminProductDetailController::class, 'show'])->name('admin.product.detail.show');
     Route::get('/admin/product/detail/list', [App\Http\Controllers\AdminProductDetailController::class, 'list'])->name('admin.product.detail.list');

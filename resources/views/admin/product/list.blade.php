@@ -35,13 +35,32 @@
             <form action="{{ route('admin.product.action') }}" method="POST">
                 @csrf
                 <div class="form-action form-inline py-3">
-                    <select class="form-control mr-1" name="act" id="">
-                        <option>Chọn</option>
-                        @foreach ($list_act as $k => $v)
-                        <option value="{{ $k }}">{{ $v }}</option>
-                        @endforeach
-                    </select>
-                    <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" />
+                    <section class='action'>
+                        <select class="form-control mr-1" name="act" id="">
+                            <option>Chọn</option>
+                            @foreach ($list_act as $k => $v)
+                            <option value="{{ $k }}">{{ $v }}</option>
+                            @endforeach
+                        </select>
+                        <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" />
+                    </section>
+                    @if (request()->input('status') == Constants::ACTIVE || !request()->input('status'))
+                    <section class='filter'>
+                        {{-- <form action="{{ route('admin.product.filter') }}" method="POST"> --}}
+                            <select class="form-control ml-3 mr-1" name="product_filter" id="product_filter">
+                                <option value="">Chọn</option>
+                                <option value="new">Sản phẩm mới</option>
+                                <option value="best_sell">Sản phẩm bán chạy</option>
+                                <option value="top_view">Sản phẩm xem nhiều</option>
+                            </select>
+                            <button type="button" id="btn_filter" name="btn_filter" class="btn btn-primary">Lọc</button>
+                            {{--
+                        </form> --}}
+                    </section>
+                    <a href="{{ route('admin.product.add') }}" type="button" class="btn btn-primary ml-3"
+                        name='btn_add_new_product'>Thêm mới</a>
+                    <button class="btn btn-success ml-3" name='btn_export_excel'>Xuất excel</button>
+                    @endif
                 </div>
                 <table class="table table-striped">
                     <thead>
@@ -147,5 +166,26 @@
 {{-- modal add product detail --}}
 <div id="modalPopup">
 </div>
+<script type="text/javascript">
+    $(document).on('click','#btn_filter',function(){
+       let filter = $('#product_filter').val();
+       $(".loadajax").show();
+       $.ajax({
+           url: "{{ route('admin.product.filter') }}",
+           type: "POST",
+           dataType: "html",
+           data: {
+               id: id
+           },
+           success: function(rsp) {
+               $(".loadajax").hide();
+               $('cart-body').html(rsp);
+           },
+           error: function() {
+               $(".loadajax").hide();
+               alert("error!!!!");
+           },
+       });
+    });
 </script>
 @endsection
