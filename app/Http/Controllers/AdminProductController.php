@@ -269,10 +269,18 @@ class AdminProductController extends Controller
     public function filter(Request $request)
     {
         if ($request->ajax()) {
-
             $filter = $request->filter;
-            $list_products = $this->productRepo->get_product_by_filter($filter);
-            return view('admin.product.filter', compact('list_products'))->render();
+            if ($filter == 'new') {
+                $list_products = $this->productRepo->get_product_by_filter('is_product_new');
+            } elseif ($filter == 'best_sell') {
+                $list_products = $this->productRepo->get_product_by_filter('is_product_bestseller');
+            } elseif ($filter == 'top_view') {
+                $list_products = $this->productRepo->get_product_view();
+            } else {
+                $list_products = $this->productRepo->get_list_products_status(Constants::PUBLIC, '', $paginate = 20, $orderBy = 'views');
+            }
+            $list_act = ['delete' => 'Xóa'];
+            return view('admin.product.filter', compact('list_products', 'list_act'))->render();
         }
     }
 }

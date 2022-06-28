@@ -16,5 +16,7 @@ interface ProductRepositoryInterface extends RepositoryInterface
     public function get_product_by_cat($id);
     public function get_color_by_product($id);
     public function get_size_by_product($color, $product);
-    public function get_variant($id,$kw);
+    public function get_variant($id, $kw);
+    public function get_product_by_filter($filter);
+    public function get_product_view();
 }

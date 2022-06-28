@@ -132,4 +132,32 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         // ->withPath("http://localhost/nadshop/admin/product/variant?id=" . $id);
         return $result;
     }
+
+    public function get_product_by_filter($filter)
+    {
+        $product = $this->model
+            ->leftjoin('m_users', 'm_users.id', '=', 'products.user_id')
+            ->leftjoin('brands', 'brands.id', '=', 'products.brand_id')
+            ->leftJoin('category_products', 'category_products.id', '=', 'products.product_cat_id')
+            ->select('products.id', 'products.product_name', 'products.product_status', 'products.product_thumb', 'm_users.fullname', 'category_products.category_product_name', 'products.created_at')
+            ->where('products.product_status', Constants::PUBLIC)
+            ->where('products.deleted_at', '=', Constants::EMPTY)
+            ->where("products.{$filter}", 1)
+            ->orderByDesc("products.views")
+            ->paginate(20);
+        return $product;
+    }
+    public function get_product_view()
+    {
+        $product = $this->model
+            ->leftjoin('m_users', 'm_users.id', '=', 'products.user_id')
+            ->leftjoin('brands', 'brands.id', '=', 'products.brand_id')
+            ->leftJoin('category_products', 'category_products.id', '=', 'products.product_cat_id')
+            ->select('products.id', 'products.product_name', 'products.product_status', 'products.product_thumb', 'm_users.fullname', 'category_products.category_product_name', 'products.created_at')
+            ->where('products.product_status', Constants::PUBLIC)
+            ->where('products.deleted_at', '=', Constants::EMPTY)
+            ->orderByDesc("products.views")
+            ->paginate(1);
+        return $product;
+    }
 }
