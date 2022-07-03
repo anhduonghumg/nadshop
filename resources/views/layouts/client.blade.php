@@ -341,7 +341,7 @@
             $('body').on('click', '.btn-order', function(e){
                 if(localStorage.getItem('data_cart') === null || JSON.parse(localStorage.getItem('data_cart')).length <= 0){
                 e.preventDefault();
-                window.location.href="http://localhost:8080/nadshop";
+                window.location.href="http://localhost/nadshop";
                 }else{
                     return true;
                 }

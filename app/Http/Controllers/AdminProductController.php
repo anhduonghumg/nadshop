@@ -13,6 +13,8 @@ use App\Repositories\Image\ImageRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminProductController extends Controller
 {
@@ -282,5 +284,10 @@ class AdminProductController extends Controller
             $list_act = ['delete' => 'Xóa'];
             return view('admin.product.filter', compact('list_products', 'list_act'))->render();
         }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
     }
 }

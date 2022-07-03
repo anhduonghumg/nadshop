@@ -134,6 +134,22 @@ Route::middleware('auth', 'verified')->group(function () {
     // Route::get('/admin/size/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.color.forceDelete');
     Route::post('/admin/size/action', [App\Http\Controllers\AdminSizeController::class, 'action'])->name('admin.size.action');
 
+    Route::get('/admin/coupon/list', [App\Http\Controllers\AdminCouponController::class, 'list'])->name('admin.coupon.list');
+    Route::post('/admin/coupon/add', [App\Http\Controllers\AdminCouponController::class, 'add'])->name('admin.coupon.add');
+    Route::get('/admin/coupon/edit/{id}', [App\Http\Controllers\AdminCouponController::class, 'edit'])->name('admin.coupon.edit');
+    Route::post('/admin/coupon/update/{id}', [App\Http\Controllers\AdminCouponController::class, 'update'])->name('admin.coupon.update');
+    Route::get('/admin/coupon/delete/{id}', [App\Http\Controllers\AdminCouponController::class, 'delete'])->name('admin.coupon.delete');
+    // Route::get('/admin/size/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.color.forceDelete');
+    Route::post('/admin/coupon/action', [App\Http\Controllers\AdminCouponController::class, 'action'])->name('admin.coupon.action');
+
+    Route::get('/admin/slider/list', [App\Http\Controllers\AdminSliderController::class, 'list'])->name('admin.slider.list');
+    Route::post('/admin/slider/add', [App\Http\Controllers\AdminSliderController::class, 'add'])->name('admin.slider.add');
+    Route::get('/admin/slider/edit/{id}', [App\Http\Controllers\AdminSliderController::class, 'edit'])->name('admin.slider.edit');
+    Route::post('/admin/slider/update/{id}', [App\Http\Controllers\AdminSliderController::class, 'update'])->name('admin.slider.update');
+    Route::get('/admin/slider/delete/{id}', [App\Http\Controllers\AdminSliderController::class, 'delete'])->name('admin.slider.delete');
+    // Route::get('/admin/brand/forceDelete/{id}', [App\Http\Controllers\AdminBrandController::class, 'forceDelete'])->name('admin.brand.forceDelete');
+    Route::post('/admin/slider/action', [App\Http\Controllers\AdminSliderController::class, 'action'])->name('admin.slider.action');
+
     // Admin/order
     Route::get('/admin/order/list', [App\Http\Controllers\AdminOrderController::class, 'list'])->name('admin.order.list');
     Route::get('/admin/order/add', [App\Http\Controllers\AdminOrderController::class, 'add'])->name('admin.order.add');
@@ -161,6 +177,10 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/admin/permission/edit', [App\Http\Controllers\AdminPermissionController::class, 'edit'])->name('admin.permission.edit');
     Route::post('/admin/permission/update', [App\Http\Controllers\AdminPermissionController::class, 'update'])->name('admin.permission.update');
     Route::post('/admin/permission/delete', [App\Http\Controllers\AdminPermissionController::class, 'delete'])->name('admin.permission.delete');
+
+    // Export excel
+    Route::post('/admin/product/export-csv', [App\Http\Controllers\AdminProductController::class, 'export'])->name('admin.product.export');
+    // Route::post('/import-csv', 'ProductController@import_csv');
 
     // Route::get('/chart', [App\Http\Controllers\TestController::class, 'chart'])->name('chart');
     // Route::post('/filter-by-date', [App\Http\Controllers\TestController::class, 'filter_by_date'])->name('filter');

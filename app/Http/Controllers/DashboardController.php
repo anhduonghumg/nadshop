@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Statistical;
+use App\Models\OrderDetail;
 
 class DashboardController extends Controller
 {
@@ -42,39 +43,67 @@ class DashboardController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            $first_day_this_month = now()->startOfMonth()->format('d/m/Y');
-            $early_last_month = now()->subMonth()->startOfMonth()->format('d/m/Y');
-            $end_last_month = now()->subMonth()->endOfMonth()->format('d/m/Y');
-            $last_week = now()->subDays(7)->format('d/m/Y');
-            $last_year = now()->subDays(20)->format('d/m/Y');
-            $now = now()->format('d/m/Y');
+            $first_day_this_month = now()->startOfMonth()->format('Y/m/d');
+            $early_last_month = now()->subMonth()->startOfMonth()->format('Y/m/d');
+            $end_last_month = now()->subMonth()->endOfMonth()->format('Y/m/d');
+            $last_week = now()->subDays(7)->format('Y/m/d');
+            $last_year = now()->subDays(20)->format('Y/m/d');
+            $now = now()->format('Y/m/d');
             if ($data['filter'] == 'lastWeek') {
-                $get = Statistical::whereBetween('date', [$last_week, $now])
-                    ->orderBy('date', 'ASC')
-                    ->get();
+                $get = OrderDetail::selectRaw("SUM(product_orders.order_qty) as total_qty,SUM(product_orders.order_total) as total_price,product_orders.order_date")
+                ->join('product_orders', 'product_orders.id','product_order_details.product_order_id')
+                ->join('product_details','product_details.id','product_order_details.product_detail_id')
+                ->where('product_orders.order_status','=','success')
+                ->whereBetween('product_orders.order_date',[$last_week,$now])
+                ->orderBy('product_orders.order_date','ASC')
+                ->get();
+                // Statistical::whereBetween('date', [$last_week, $now])
+                //     ->orderBy('date', 'ASC')
+                //     ->get();
                 // return response()->json(['rs' => $now]);
             } elseif ($data['filter'] == 'lastMonth') {
-                $get = Statistical::whereBetween('date', [$early_last_month, $end_last_month])
-                    ->orderBy('date', 'ASC')
-                    ->get();
+                $get = OrderDetail::selectRaw("SUM(product_orders.order_qty) as total_qty,SUM(product_orders.order_total) as total_price,product_orders.order_date")
+                ->join('product_orders', 'product_orders.id','product_order_details.product_order_id')
+                ->join('product_details','product_details.id','product_order_details.product_detail_id')
+                ->where('product_orders.order_status','success')
+                ->whereBetween('product_orders.order_date',[$early_last_month,$end_last_month])
+                ->orderBy('product_orders.order_date','ASC')
+                ->get();
+                // $get = Statistical::whereBetween('date', [$early_last_month, $end_last_month])
+                //     ->orderBy('date', 'ASC')
+                //     ->get();
             } elseif ($data['filter'] == 'thisMonth') {
-                $get = Statistical::whereBetween('date', [$first_day_this_month, $now])
-                    ->orderBy('date', 'ASC')
-                    ->get();
+                $get = OrderDetail::selectRaw("SUM(product_orders.order_qty) as total_qty,SUM(product_orders.order_total) as total_price,product_orders.order_date")
+                ->join('product_orders', 'product_orders.id','product_order_details.product_order_id')
+                ->join('product_details','product_details.id','product_order_details.product_detail_id')
+                ->where('product_orders.order_status','success')
+                ->whereBetween('product_orders.order_date',[$first_day_this_month,$now])
+                ->orderBy('product_orders.order_date','ASC')
+                ->get();
+                // $get = Statistical::whereBetween('date', [$first_day_this_month, $now])
+                //     ->orderBy('date', 'ASC')
+                //     ->get();
             } elseif ($data['filter'] == 'lastYear') {
-                $sql = Statistical::whereBetween('date', [$last_year, $now])
-                    ->orderBy('date', 'ASC')
-                    ->get();
-                return response()->json(['rs' => $sql]);
+                $get = OrderDetail::selectRaw("SUM(product_orders.order_qty) as total_qty,SUM(product_orders.order_total) as total_price,product_orders.order_date")
+                ->join('product_orders', 'product_orders.id','product_order_details.product_order_id')
+                ->join('product_details','product_details.id','product_order_details.product_detail_id')
+                ->where('product_orders.order_status','success')
+                ->whereBetween('product_orders.order_date',[$last_year,$now])
+                ->orderBy('product_orders.order_date','ASC')
+                ->get();
+                // $sql = Statistical::whereBetween('date', [$last_year, $now])
+                //     ->orderBy('date', 'ASC')
+                //     ->get();
+                // return response()->json(['rs' => $sql]);
             }
 
             foreach ($get as $key => $val) {
                 $chart_data[] = array(
-                    'period' => $val->date,
-                    'order' => $val->total_order,
-                    'sales' => $val->sales,
-                    'profit' => $val->profit,
-                    'qty' => $val->qty,
+                    'period' => $val->order_date,
+                    'order' => $val->total_qty,
+                    'sales' => $val->total_price,
+                    // 'profit' => $val->profit,
+                    // 'qty' => $val->qty,
                 );
             }
 
@@ -86,8 +115,8 @@ class DashboardController extends Controller
     function load_chart(Request $request)
     {
         if ($request->ajax()) {
-            $thirty_day = now()->subDays(30)->format('d/m/Y');
-            $now = now()->format('d/m/Y');
+            $thirty_day = now()->subDays(30)->format('Y/m/d');
+            $now = now()->format('Y/m/d');
             $get = Statistical::whereBetween('date', [$thirty_day, $now])
                 ->orderBy('date', 'ASC')
                 ->get();

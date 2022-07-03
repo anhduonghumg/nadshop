@@ -120,7 +120,7 @@
         $('#show_cart').html(show_cart);
          show_total_cart();
      }else{
-        let html = `<tr><td>Giỏ hàng trống.Nhấn vào đây để mua sắm <a href="http://localhost:8080/nadshop">shopping now</a></td></tr>`;
+        let html = `<tr><td>Giỏ hàng trống.Nhấn vào đây để mua sắm <a href="http://localhost/nadshop">shopping now</a></td></tr>`;
         $('#show_cart').html(html);
      }
 }
@@ -158,7 +158,7 @@ function render_cart(){
         </tr>`;
     });
 }else{
-    output += `<tr><td>Giỏ hàng trống.Nhấn vào đây để mua sắm <a href="http://localhost:8080/nadshop">shopping now</a></td></tr>`;
+    output += `<tr><td>Giỏ hàng trống.Nhấn vào đây để mua sắm <a href="http://localhost/nadshop">shopping now</a></td></tr>`;
 }
     return output;
 }

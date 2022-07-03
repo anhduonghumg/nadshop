@@ -139,7 +139,7 @@ $(document).ready(function () {
                 <select id="selectThumb" class="form-control thumbnail" name="product_details_thumb[]">
                         <option value="" selected>Chọn ảnh chi tiết</option>`;
                 $.each(resp.list_image, function (key, value) {
-                    output += `<option data-imagesrc="http://localhost:8080/nadshop/storage/app/public/images/product/thumb/${value.image}" value="${value.image}"></option>`;
+                    output += `<option data-imagesrc="http://localhost/nadshop/storage/app/public/images/product/thumb/${value.image}" value="${value.image}"></option>`;
                 });
                 output += `</select></div></div></div></div></div></div>
                             <div class="modal-footer">

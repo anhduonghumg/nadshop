@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','Size')
+@section('title','Slider')
 @section('content')
 <div id="content" class="container-fluid">
     <div class="row">
@@ -34,14 +34,14 @@
                         {{ session('status') }}
                     </div>
                     @endif
-                    {{-- <div class="analytic">
+                    <div class="analytic">
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
                             hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chờ
                             duyệt<span class="text-muted">({{ $count[2] }}) |</span></a>
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
                             hóa<span class="text-muted">({{ $count[1] }})</span></a>
-                    </div> --}}
+                    </div>
                     <form action="{{ route('admin.size.action') }}" method="POST">
                         @csrf
                         <div class="form-action form-inline py-3">

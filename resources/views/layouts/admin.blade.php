@@ -19,8 +19,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
     </script>
@@ -111,7 +111,8 @@
                         <a class="dropdown-item" href="{{ route('admin.user.profile') }}">Thông tin tài
                             khoản</a>
                         <a class="dropdown-item" href="{{ route('admin.user.changePass') }}">Thay đổi mật khẩu</a>
-                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
                             {{ __('auth.Logout') }}
                         </a>
@@ -193,6 +194,19 @@
                         </ul>
                     </li>
                     <li class="nav-link">
+                        <a href="{{ url('admin/coupon/list') }}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Quản lý mã giảm giá
+                        </a>
+                        <i class="arrow fas fa-angle-right"></i>
+                        <ul class="sub-menu">
+                            {{-- <li><a href="{{ url('admin/coupon/add') }}">Thêm mới</a></li> --}}
+                            <li><a href="{{ url('admin/coupon/list') }}">Danh sách</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link">
                         <a href="{{ url('admin/user/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -204,6 +218,19 @@
                         <ul class="sub-menu">
                             <li><a href="{{ url('admin/user/add') }}">Thêm mới</a></li>
                             <li><a href="{{ url('admin/user/list') }}">Danh sách</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{{ url('admin/slider/list') }}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Quản lí slider
+                        </a>
+                        <i class="arrow fas fa-angle-right"></i>
+                        <ul class="sub-menu">
+                            {{-- <li><a href="{{ url('admin/slider/add') }}">Thêm mới</a></li> --}}
+                            <li><a href="{{ url('admin/slider/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
                     <li class="nav-link">

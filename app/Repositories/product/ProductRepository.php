@@ -157,7 +157,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->where('products.product_status', Constants::PUBLIC)
             ->where('products.deleted_at', '=', Constants::EMPTY)
             ->orderByDesc("products.views")
-            ->paginate(1);
+            ->paginate(20);
         return $product;
     }
 }

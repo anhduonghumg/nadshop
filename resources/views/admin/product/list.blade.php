@@ -1,6 +1,13 @@
 @extends('layouts.admin')
 @section('title', 'Danh sách bài viết')
 @section('content')
+    <style>
+        #form-excel {
+            position: absolute;
+            top: 122px;
+            left: 598px;
+        }
+    </style>
     <div id="content" class="container-fluid">
         <div class="card">
             @if (session('status'))
@@ -59,7 +66,6 @@
                                 </section>
                                 <a href="{{ route('admin.product.add') }}" type="button" class="btn btn-primary ml-3"
                                     name='btn_add_new_product'>Thêm mới</a>
-                                <button class="btn btn-success ml-3" name='btn_export_excel'>Xuất excel</button>
                             @endif
                         </div>
                         <div id="show_filter_data">
@@ -164,6 +170,11 @@
                             {{ $list_products->links('layouts.paginationlink') }}
                         </div>
                     </form>
+                    <form action="{{ route('admin.product.export') }}" method="POST" id="form-excel">
+                        @csrf
+                        <input type="submit" id="export_excel" value="Xuất excel" name="export_csv"
+                            class="btn btn-success ml-2">
+                    </form>
                 </div>
         </div>
     </div>
@@ -193,6 +204,20 @@
             load_filter(filter, page);
             // alert(filter);
         });
+
+        // $(document).on('click', '#export_excel', function() {
+        //     $.ajax({
+        //         url: "{{ route('admin.product.export') }}",
+        //         type: "POST",
+        //         dataType: "html",
+        //         success: function(rsp) {
+        //             alert('xuất thành công');
+        //         },
+        //         error: function() {
+        //             alert("error!!!!");
+        //         },
+        //     });
+        // });
 
         function load_filter(data, page) {
             $.ajax({

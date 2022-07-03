@@ -219,6 +219,7 @@ class AdminOrderController extends Controller
                 'order_status' => $request->order_status,
                 'payment' => $request->payment,
                 'note' => $request->note,
+                'order_date' => now()->format('Y/m/d'),
                 'user_id' => Auth::id(),
                 'created_at' => now(),
                 'updated_at' => now()

@@ -163,6 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -233,7 +234,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Constants' => App\Constants\Constants::class,
         'Category' => App\Helpers\Category::class,
-
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

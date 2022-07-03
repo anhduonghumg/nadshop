@@ -15,7 +15,7 @@
                         <section class="form-group">
                             <label for="code">Mã đơn hàng</label>
                             <input type="text" class="form-control" id="code" name="code"
-                                value="{{$info_orders->order_code}}" disabled>
+                                value="{{ $info_orders->order_code }}" disabled>
                         </section>
                         <section class="form-group">
                             <label for="status">Trạng thái đơn hàng</label>
@@ -32,12 +32,12 @@
                             <input type="text" class="form-control" id="phone" name="phone"
                                 value="{{ $info_orders->phone }}" disabled>
                         </section>
-                        @if($info_orders->email != null)
-                        <section class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email" name="email"
-                                value="{{ $info_orders->email }}" disabled>
-                        </section>
+                        @if ($info_orders->email != null)
+                            <section class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" id="email" name="email"
+                                    value="{{ $info_orders->email }}" disabled>
+                            </section>
                         @endif
                         <section class="form-group">
                             <label for="address">Địa chỉ nhận</label>
@@ -49,11 +49,11 @@
                             <input type="text" class="form-control" id="payment" name="address"
                                 value="{{ $info_orders->payment }}" disabled>
                         </section>
-                        @if($info_orders->note != null)
-                        <section class="form-group">
-                            <label for="note">Ghi chú</label>
-                            <textarea class="form-control" name="note" disabled>{{ $info_orders->note }}</textarea>
-                        </section>
+                        @if ($info_orders->note != null)
+                            <section class="form-group">
+                                <label for="note">Ghi chú</label>
+                                <textarea class="form-control" name="note" disabled>{{ $info_orders->note }}</textarea>
+                            </section>
                         @endif
                     </div>
                     <div class="col-sm-7">
@@ -71,29 +71,34 @@
                                         <th scope="col">Thành tiền</th>
                                     </tr>
                                 </thead>
-                                @if($list_product_order->isNotEmpty())
-                                @php $temp = 0; @endphp
-                                <tbody>
-                                    @foreach ($list_product_order as $item)
-                                    @php $temp++; @endphp
-                                    <tr>
-                                        <td scope="col">{{ $temp }}</td>
-                                        <td scope="col"><img src="{{ asset($item->product_details_thumb) }}"
-                                                width='80px' height="80px" alt=""></td>
-                                        <td scope="col">{{ $item->product_detail_name}}</td>
-                                        <td scope="col">{{ currentcyFormat($item->product_price) }}</td>
-                                        <td scope="col">{{ $item->pro_order_qty }}</td>
-                                        <td scope="col">{{ currentcyFormat($item->pro_order_qty *
-                                            $item->product_price)}}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
+                                @if ($list_product_order->isNotEmpty())
+                                    @php $temp = 0; @endphp
+                                    <tbody>
+                                        @foreach ($list_product_order as $item)
+                                            @php $temp++; @endphp
+                                            <tr>
+                                                <td scope="col">{{ $temp }}</td>
+                                                <td scope="col"><img
+                                                        src="{{ asset('storage/app/public/images/product/thumb/' . $item->product_details_thumb) }}"
+                                                        width='80px' height="80px" alt=""></td>
+                                                <td scope="col">{{ $item->product_detail_name }}</td>
+                                                <td scope="col">
+                                                    {{ currentcyFormat($item->product_price - ($item->product_price * $item->product_discount) / 100) }}
+                                                </td>
+                                                <td scope="col">{{ $item->pro_order_qty }}</td>
+                                                <td scope="col">
+                                                    {{ currentcyFormat($item->pro_order_qty * ($item->product_price - ($item->product_price * $item->product_discount) / 100)) }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
                                 @endif
                             </table>
                             <div class="order-value text-right">
-                                <strong>Tổng số lượng sản phẩm: <span>{{ $info_orders->order_qty }}</span></strong><br>
-                                <strong>Tổng tiền: <span>{{ currentcyFormat($info_orders->order_total)
-                                        }}</span></strong>
+                                <strong>Tổng số lượng sản phẩm:
+                                    <span>{{ $info_orders->order_qty }}</span></strong><br>
+                                <strong>Tổng tiền:
+                                    <span>{{ currentcyFormat($info_orders->order_total) }}</span></strong>
                             </div>
                         </section>
                     </div>

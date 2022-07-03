@@ -13,7 +13,7 @@
             <option value="{{ $k }}">{{ $v }}</option>
             @endforeach
         </select> --}}
-        <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" />
+        {{-- <input type="submit" name="btn_action" value="Áp dụng" class="btn btn-primary" /> --}}
         <button type="button" id="add_variant" class="btn btn-primary btn_add_variant ml-3" name="btn_add_variant">Thêm
             mới</button>
     </div>
