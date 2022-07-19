@@ -236,5 +236,4 @@ return [
         'Category' => App\Helpers\Category::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
-
 ];

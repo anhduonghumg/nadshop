@@ -215,6 +215,7 @@ function load_data(){
 
 
 function pagination(data,total){
+    if(data.length > 0){
     $('#pagination').pagination({
         dataSource: data,
         locator: 'data',
@@ -223,8 +224,13 @@ function pagination(data,total){
         callback: function(data, pagination){
            var show = show_data(data);
            $('.filter-here').html(show);
+           $('#pagination').show();
         }
     })
+}else{
+    $('.filter-here').html('<p>Không có dữ liệu.</p>');
+    $('#pagination').hide();
+}
 }
 
 function show_data(data){

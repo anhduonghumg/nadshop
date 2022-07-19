@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CategoryProduct;
 use Illuminate\Http\Request;
 use App\Constants\Constants;
+use App\Models\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\CategoryProduct\CategoryProductRepositoryInterface;
 
@@ -35,14 +36,50 @@ class HomeController extends Controller
         $list_menu_shirt = $this->cat->get_cat_menu(Constants::SHIRT_MEN);
         $list_menu_trousers = $this->cat->get_cat_menu(Constants::TROUSERS_MEN);
         $list_menu_accessories = $this->cat->get_cat_menu(Constants::ACCESSORIES_MEN);
-
+        $list_shirt = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->where(function ($query) {
+                $query->where('is_product_new', 1)
+                    ->orWhere('is_product_bestseller', 1);
+            })->where('product_status', Constants::PUBLIC)
+            ->where('product_name', 'like', '%Áo%')
+            ->orderByDesc('views')
+            ->take($take)
+            ->get();
+        $list_trousers = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->where(function ($query) {
+                $query->where('is_product_new', 1)
+                    ->orWhere('is_product_bestseller', 1);
+            })->where('product_status', Constants::PUBLIC)
+            ->where('product_name', 'like', '%Quần%')
+            ->orderByDesc('views')
+            ->take($take)
+            ->get();
+        $list_accessories = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->where(function ($query) {
+                $query->where('is_product_new', 1)
+                    ->orWhere('is_product_bestseller', 1);
+            })->where(function ($query) {
+                $query->where('product_cat_id', 27)
+                    ->orWhere('product_cat_id', 28)
+                    ->orWhere('product_cat_id', 29)
+                    ->orWhere('product_cat_id', 30);
+            })->where('product_status', Constants::PUBLIC)
+            ->orderByDesc('views')
+            ->take($take)
+            ->get();
         return view('client.home.home', compact(
             'category_products',
             'list_product_new',
             'list_product_best_sell',
             'list_menu_shirt',
             'list_menu_accessories',
-            'list_menu_trousers'
+            'list_menu_trousers',
+            'list_shirt',
+            'list_trousers',
+            'list_accessories'
         ));
     }
 }

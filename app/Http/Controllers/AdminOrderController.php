@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Constants\Constants;
+use App\Models\Customer;
 
 class AdminOrderController extends Controller
 {
@@ -226,6 +227,29 @@ class AdminOrderController extends Controller
             ];
 
             $saveOrder = $this->order->add($saveDataOrder);
+            $check_customer = Customer::where('fullname', $request->fullname)->where('phone', $request->phone)->first();
+            if ($check_customer) {
+                $data_customer = [
+                    'fullname' => $request->fullname,
+                    'email' => $request->email,
+                    'address' => $address,
+                    'phone' => $request->phone,
+                    'total_order' => (int)$request->order_qty + (int)$check_customer->total_order,
+                    'total_spend' => (int)$request->order_total + (int)$check_customer->total_spend,
+                ];
+                Customer::where('id', $check_customer->id)->update($data_customer);
+            } else {
+                $data_customer = [
+                    'fullname' => $request->fullname,
+                    'email' => $request->email,
+                    'address' => $address,
+                    'phone' => $request->phone,
+                    'total_order' => (int)$request->order_qty,
+                    'total_spend' => (int)$request->order_total,
+                ];
+                Customer::create($data_customer);
+            }
+
             if ($saveOrder) {
                 $product_name = $request->product_name;
                 foreach ($product_name as $key => $value) {
