@@ -235,7 +235,8 @@
             <td class="total_price">${total}</td>
             <td class="remove_product_cart" data-key="${key}"><i class="far fa-trash-alt"></i></td>
             <input type='hidden' name="product_name[]" value="${value.id}">
-            <input type='hidden' class='profit' value="${profit}">
+            <input type='hidden' class='cost_price' value="${value.cost_price}">
+            <input type='hidden' class='price' value="${value.price}">
             <input type='hidden' class='show_profit' value="${profit}">
         </tr>`;
             });
@@ -254,8 +255,9 @@
             let qty = Number($(this).val());
             let key = $(this).data('key');
             let id = $(this).data('id');
-            let profit = $('#pro-' + key + ' .profit').val();
-            let show_profit = profit * qty;
+            let price_product = $('#pro-' + key + ' .price').val();
+            let cost_price = $('#pro-' + key + ' .cost_price').val();
+            let show_profit = (price_product * qty) - (cost_price * qty);
             let old_cart_data = JSON.parse(localStorage.getItem('data_cart'));
             const total = old_cart_data.find(item => {
                 if (item.id === id) {
