@@ -35,12 +35,12 @@
                     </div>
                     @endif
                     <div class="analytic">
-                        <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
+                        {{-- <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
                             hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chờ
                             duyệt<span class="text-muted">({{ $count[2] }}) |</span></a>
                         <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
-                            hóa<span class="text-muted">({{ $count[1] }})</span></a>
+                            hóa<span class="text-muted">({{ $count[1] }})</span></a> --}}
                     </div>
                     <form action="{{ route('admin.size.action') }}" method="POST">
                         @csrf

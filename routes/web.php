@@ -233,3 +233,7 @@ Route::post('order/show', [App\Http\Controllers\Client\OrderController::class, '
 
 // City_District
 Route::post('district', [App\Http\Controllers\Client\DistrictController::class, 'show'])->name('client.district');
+
+// Search
+Route::get('search', [App\Http\Controllers\Client\SearchController::class, 'show'])->name('client.search');
+Route::post('searchAjax', [App\Http\Controllers\Client\SearchController::class, 'searchAjax'])->name('client.ajax');

@@ -252,7 +252,6 @@
 
 <script type="text/javascript">
     load_chart();
-
     var chart = new Morris.Bar({
         element: 'chart',
         lineColors: ['#819C79','#fc8710','#FF6541','#A4ADD3','#766B56'],
@@ -260,26 +259,34 @@
         hideHover: 'auto',
         gridTextSize: 12,
         xkey: 'period',
-        ykeys: ['order','sales','profit','qty'],
-        labels: ['Đơn hàng','Doanh số','Lợi nhuận','Số lượng']
+        ykeys: ['sale','profit'],
+        labels: ['Doanh số','Lợi nhuận'],
       });
 
+
     $(document).on('click','#btn-dashboard-filter',function(){
-        var from_date = $('#datepicker').val();
-        var to_date = $('#datepicker2').val();
-        //$(".loadajax").show();
+        var from_date = $('#datepicker').val() ? $('#datepicker').val() : '';
+        var to_date = $('#datepicker2').val() ? $('#datepicker2').val() : '';
+        $(".loadajax").show();
         $.ajax({
             url: "{{ route('dashboard.filter.date') }}",
             type: "POST",
             data: { from_date:from_date,to_date:to_date },
             dataType: "json",
             success: function (rsp) {
-              chart.setData(rsp);
+                $(".loadajax").hide();
+                if($.isEmptyObject(rsp.errors)){
+                    chart.setData(rsp);
+                }else{
+                    confirm_warning(rsp.errors);
+                }
             },error: function () {
+            $(".loadajax").hide();
            alert("error!!!!");
             },
         });
     })
+
 
     $(document).on('change','.dashboard-filter',function(){
         var filter = $(this).val();

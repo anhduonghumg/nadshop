@@ -45,7 +45,7 @@
         });
 
         var editor_config = {
-            path_absolute: "http://localhost:8080/nadshop/",
+            path_absolute: "http://localhost/nadshop/",
             selector: 'textarea.tinytextarea',
             relative_urls: false,
             plugins: [
@@ -176,9 +176,9 @@
                             <li><a href="{{ route('admin.product.list') }}">Danh sách</a></li>
                             {{-- <li><a href="{{ route('admin.product.detail.list') }}">Sản phẩm chi tiết</a></li> --}}
                             <li><a href="{{ route('admin.catProduct.list') }}">Danh mục</a></li>
-                            {{-- <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
+                            <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
                             <li><a href="{{ route('admin.color.list') }}">Màu</a></li>
-                            <li><a href="{{ route('admin.size.list') }}">Size</a></li> --}}
+                            <li><a href="{{ route('admin.size.list') }}">Size</a></li>
                         </ul>
                     </li>
                     <li class="nav-link">

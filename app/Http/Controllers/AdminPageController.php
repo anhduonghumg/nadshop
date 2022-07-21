@@ -164,9 +164,4 @@ class AdminPageController extends Controller
             }
         }
     }
-
-    public function v()
-    {
-        return 1;
-    }
 }

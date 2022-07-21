@@ -88,7 +88,7 @@ class AdminProductController extends Controller
                 $filename = time() . "." . $extension;
                 // $path = $file->move($path_img, $filename);
                 // $path_avatar = public_path(Constants::PATH_IMAGE . "product/avatar/" . $filename);
-                $image = Image::make($file->getRealPath())->fit(225, 338)->save(storage_path('app/public/images/product/avatar/' . $filename));
+                $image = Image::make($file->getRealPath())->fit(261, 340)->save(storage_path('app/public/images/product/main/' . $filename));
             }
 
             $data = [
@@ -117,7 +117,7 @@ class AdminProductController extends Controller
                     $extension = $item->extension();
                     $filename = time() . "." . $extension;
                     Image::make($item->getRealPath())->fit(225, 338)->save(storage_path('app/public/images/product/detail/' . $filename));
-                    Image::make($item->getRealPath())->fit(697, 1405)->save(storage_path('app/public/images/product/avatar/' . $filename));
+                    Image::make($item->getRealPath())->fit(697, 1045)->save(storage_path('app/public/images/product/avatar/' . $filename));
                     Image::make($item->getRealPath())->fit(54, 81)->save(storage_path('app/public/images/product/thumb/' . $filename));
                     Image::make($item->getRealPath())->fit(27, 27)->save(storage_path('app/public/images/product/icon/' . $filename));
                     $data_image = [
@@ -257,7 +257,6 @@ class AdminProductController extends Controller
     public function variant(Request $request)
     {
         if ($request->ajax()) {
-
             $id = (int)$request->id;
             $kw = $request->kw;
             $list_product_details = $this->productRepo->get_variant($id, $kw);

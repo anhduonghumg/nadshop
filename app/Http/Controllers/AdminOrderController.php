@@ -217,6 +217,7 @@ class AdminOrderController extends Controller
                 'email' => $request->email,
                 'order_qty' => $request->order_qty,
                 'order_total' => $request->order_total,
+                'order_profit' => $request->profit,
                 'order_status' => $request->order_status,
                 'payment' => $request->payment,
                 'note' => $request->note,
@@ -264,6 +265,7 @@ class AdminOrderController extends Controller
             }
         }
     }
+
 
     public function edit(Request $request, $id)
     {

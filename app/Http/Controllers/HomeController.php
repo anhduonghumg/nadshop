@@ -36,7 +36,7 @@ class HomeController extends Controller
         $list_menu_shirt = $this->cat->get_cat_menu(Constants::SHIRT_MEN);
         $list_menu_trousers = $this->cat->get_cat_menu(Constants::TROUSERS_MEN);
         $list_menu_accessories = $this->cat->get_cat_menu(Constants::ACCESSORIES_MEN);
-        $list_shirt = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+        $list_shirt = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'product_details.product_discount')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->where(function ($query) {
                 $query->where('is_product_new', 1)
@@ -44,9 +44,10 @@ class HomeController extends Controller
             })->where('product_status', Constants::PUBLIC)
             ->where('product_name', 'like', '%Áo%')
             ->orderByDesc('views')
+            ->distinct()
             ->take($take)
             ->get();
-        $list_trousers = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+        $list_trousers = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'product_details.product_discount')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->where(function ($query) {
                 $query->where('is_product_new', 1)
@@ -54,9 +55,10 @@ class HomeController extends Controller
             })->where('product_status', Constants::PUBLIC)
             ->where('product_name', 'like', '%Quần%')
             ->orderByDesc('views')
+            ->distinct()
             ->take($take)
             ->get();
-        $list_accessories = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+        $list_accessories = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'product_details.product_discount')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->where(function ($query) {
                 $query->where('is_product_new', 1)
@@ -68,6 +70,7 @@ class HomeController extends Controller
                     ->orWhere('product_cat_id', 30);
             })->where('product_status', Constants::PUBLIC)
             ->orderByDesc('views')
+            ->distinct()
             ->take($take)
             ->get();
         return view('client.home.home', compact(

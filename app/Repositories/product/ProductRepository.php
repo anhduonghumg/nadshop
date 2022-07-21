@@ -74,7 +74,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function get_list_product($column, $take)
     {
         $result = $this->model
-            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'product_details.product_discount')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->where("products.{$column}", Constants::TRUE)
             ->where('products.product_status', Constants::PUBLIC)
@@ -88,7 +88,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function get_product_by_cat($id)
     {
         $result = $this->model
-            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'category_products.category_product_name')
+            ->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'category_products.category_product_name', 'product_details.product_discount')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->join('category_products', 'products.product_cat_id', '=', 'category_products.id')
             ->where('category_products.id', $id)
@@ -124,12 +124,12 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $result = $this->model
             ->select('product_details.*')
-            ->join('product_details', 'products.id', '=', 'product_details.product_id')
+            ->leftjoin('product_details', 'products.id', '=', 'product_details.product_id')
             ->where('product_details.product_id', $id)
             ->where('product_detail_name', 'LIKE', "%{$kw}%")
             ->orderByDesc('product_details.color_id')
-            ->paginate(1);
-        // ->withPath("http://localhost/nadshop/admin/product/variant?id=" . $id);
+            ->paginate(20);
+            // ->withPath("http://localhost/nadshop/admin/product/variant?id=" . $id);
         return $result;
     }
 

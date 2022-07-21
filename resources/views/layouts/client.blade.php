@@ -28,8 +28,8 @@
     <link rel="stylesheet" href="{{ url('public/css/sweetalert2.css') }}">
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
     </script>
@@ -48,10 +48,10 @@
 <body>
     <script type="text/javascript">
         $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
     </script>
     <style>
         .slick-carousel img {
@@ -99,14 +99,11 @@
                     </a>
                 </div>
                 <div class="col-lg-6 col-6 text-left">
-                    <form action="">
+                    <form action="{{ route('client.search') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search for products">
-                            <div class="input-group-append">
-                                <span class="input-group-text bg-transparent text-primary">
-                                    <i class="fa fa-search"></i>
-                                </span>
-                            </div>
+                            <input type="text" class="form-control btn_search" name="key"
+                                value="{{ request()->input('key') }}" placeholder="Tìm kiếm gì đó...">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                         </div>
                     </form>
                 </div>
@@ -143,22 +140,21 @@
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
                                 @foreach ($category_products as $cat)
-                                <div class="nav-item dropdown">
-                                    @if($cat->parent_id == 0)
-                                    <a href="{{ Route('client.product.cat.show',$cat->id) }}"
-                                        class="nav-link dropdown-toggle" data-toggle="dropdown">{{
-                                        $cat-> category_product_name}}</a>
-                                    <div class="dropdown-menu rounded-0 m-0">
-                                        @foreach ($category_products as $cat2)
-                                        @if($cat2->parent_id !=0 && $cat2->parent_id == $cat->id)
-                                        <a href="{{ route('client.product.cat.show',$cat2->id) }}"
-                                            class="nav-item nav-link">{{
-                                            $cat2-> category_product_name}}</a>
+                                    <div class="nav-item dropdown">
+                                        @if ($cat->parent_id == 0)
+                                            <a href="{{ Route('client.product.cat.show', $cat->id) }}"
+                                                class="nav-link dropdown-toggle"
+                                                data-toggle="dropdown">{{ $cat->category_product_name }}</a>
+                                            <div class="dropdown-menu rounded-0 m-0">
+                                                @foreach ($category_products as $cat2)
+                                                    @if ($cat2->parent_id != 0 && $cat2->parent_id == $cat->id)
+                                                        <a href="{{ route('client.product.cat.show', $cat2->id) }}"
+                                                            class="nav-item nav-link">{{ $cat2->category_product_name }}</a>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         @endif
-                                        @endforeach
                                     </div>
-                                    @endif
-                                </div>
                                 @endforeach
                                 <a href="" class="nav-item nav-link">Album</a>
                                 <a href="" class="nav-item nav-link">Tin tức</a>
@@ -211,14 +207,16 @@
                                         class="fa fa-angle-right mr-2"></i>Home</a>
                                 <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our
                                     Shop</a>
-                                <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop
+                                <a class="text-dark mb-2" href="detail.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Shop
                                     Detail</a>
                                 <a class="text-dark mb-2" href="cart.html"><i
                                         class="fa fa-angle-right mr-2"></i>Shopping
                                     Cart</a>
                                 <a class="text-dark mb-2" href="checkout.html"><i
                                         class="fa fa-angle-right mr-2"></i>Checkout</a>
-                                <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact
+                                <a class="text-dark" href="contact.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Contact
                                     Us</a>
                             </div>
                         </div>
@@ -229,14 +227,16 @@
                                         class="fa fa-angle-right mr-2"></i>Home</a>
                                 <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our
                                     Shop</a>
-                                <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop
+                                <a class="text-dark mb-2" href="detail.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Shop
                                     Detail</a>
                                 <a class="text-dark mb-2" href="cart.html"><i
                                         class="fa fa-angle-right mr-2"></i>Shopping
                                     Cart</a>
                                 <a class="text-dark mb-2" href="checkout.html"><i
                                         class="fa fa-angle-right mr-2"></i>Checkout</a>
-                                <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact
+                                <a class="text-dark" href="contact.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Contact
                                     Us</a>
                             </div>
                         </div>
@@ -263,7 +263,8 @@
             <div class="row border-top border-light mx-xl-5 py-4">
                 <div class="col-md-6 px-xl-0">
                     <p class="mb-md-0 text-center text-md-left text-dark">
-                        &copy; <a class="text-dark font-weight-semi-bold" href="#">Your Site Name</a>. All Rights
+                        &copy; <a class="text-dark font-weight-semi-bold" href="#">Your Site Name</a>. All
+                        Rights
                         Reserved.
                         Designed
                         by
@@ -311,7 +312,8 @@
                         <p class="text-dark font-weight-semi-bold">Tổng tiền tạm tính:</p>
                         <p class="text-dark font-weight-semi-bold cart-total">20.000.000đ</p>
                     </div>
-                    <a href="{{ route('client.cart.checkout') }}" class="btn btn-dark btn-order d-block w-100">Tiến hành
+                    <a href="{{ route('client.cart.checkout') }}" class="btn btn-dark btn-order d-block w-100">Tiến
+                        hành
                         đặt hàng</a>
                     <a href="{{ route('client.cart.show') }}"
                         class="cart-detail d-block text-center mt-2 mb-2 text-dark">Xem chi tiết giỏ hàng</a>
@@ -324,93 +326,94 @@
 
     <script type="text/javascript">
         num_in_cart();
-            var total_wl = 0;
-            if (localStorage.getItem('data_wishlist') == null) {
-                total_wl = 0;
-            } else {
-                total_wl += JSON.parse(localStorage.getItem('data_wishlist')).length;
-            }
-            $('.wishlist_badge').html(total_wl);
+        var total_wl = 0;
+        if (localStorage.getItem('data_wishlist') == null) {
+            total_wl = 0;
+        } else {
+            total_wl += JSON.parse(localStorage.getItem('data_wishlist')).length;
+        }
+        $('.wishlist_badge').html(total_wl);
 
-            var cartOpen = false;
-            var numberOfProducts = 0;
+        var cartOpen = false;
+        var numberOfProducts = 0;
 
-            $('body').on('click', '.js-toggle-cart', toggleCart);
-            $('body').on('click', '.js-add-product', addProduct);
-            $('body').on('click', '.btn-remove-item', remove_item_cart);
-            $('body').on('click', '.btn-order', function(e){
-                if(localStorage.getItem('data_cart') === null || JSON.parse(localStorage.getItem('data_cart')).length <= 0){
+        $('body').on('click', '.js-toggle-cart', toggleCart);
+        $('body').on('click', '.js-add-product', addProduct);
+        $('body').on('click', '.btn-remove-item', remove_item_cart);
+        $('body').on('click', '.btn-order', function(e) {
+            if (localStorage.getItem('data_cart') === null || JSON.parse(localStorage.getItem('data_cart'))
+                .length <= 0) {
                 e.preventDefault();
-                window.location.href="http://localhost/nadshop";
-                }else{
-                    return true;
-                }
+                window.location.href = "http://localhost/nadshop";
+            } else {
+                return true;
+            }
+        });
+
+        function addProduct(e) {
+            e.preventDefault();
+            openCart();
+            $('.js-cart-empty').addClass('hide');
+            var product = $('.js-cart-product-template').html();
+            $('.js-cart-products').prepend(product);
+            numberOfProducts++;
+        }
+
+        // function get total price of cart
+        function getTotalPrice() {
+            var total = 0;
+            $('.js-cart-product').each(function() {
+                var price = $(this).find('.item-price').text();
+                var qty = $(this).find('.item-qty').text();
+                total += price * qty;
+            });
+            return total;
+        }
+
+
+        /*
+        $('.slick-carousel').slick({
+            infinite: false,
+            vertical: true,
+            verticalSwiping: true,
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            prevArrow: $('.top-arrow'),
+            nextArrow: $('.bottom-arrow')
+        });
+        */
+
+        /*
+              ============ Viewd ===========
+                   $(document).on('click', '.btn_view', function (e) {
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+            var price = $(this).data('price');
+            var image = $(this).data('img');
+            var url = $(this).data('url');
+            var viewedItem = {
+                'id': id,
+                'url': url,
+                'name': name,
+                'price': price,
+                'image': image
+            }
+            if (localStorage.getItem('data_viewed') == null) {
+                localStorage.setItem('data_viewed', '[]');
+            }
+
+            var viewed = JSON.parse(localStorage.getItem('data_viewed'));
+            var matches = $.grep(viewed, function (obj) {
+                return obj.id == id;
             });
 
-            function addProduct(e) {
-                e.preventDefault();
-                openCart();
-                $('.js-cart-empty').addClass('hide');
-                var product = $('.js-cart-product-template').html();
-                $('.js-cart-products').prepend(product);
-                numberOfProducts++;
+            if (!matches.length) {
+                viewed.push(viewedItem);
             }
 
-            // function get total price of cart
-            function getTotalPrice() {
-                var total = 0;
-                $('.js-cart-product').each(function() {
-                    var price = $(this).find('.item-price').text();
-                    var qty = $(this).find('.item-qty').text();
-                    total += price * qty;
-                });
-                return total;
-            }
-
-
-/*
-$('.slick-carousel').slick({
-    infinite: false,
-    vertical: true,
-    verticalSwiping: true,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    prevArrow: $('.top-arrow'),
-    nextArrow: $('.bottom-arrow')
-});
-*/
-
-    /*
-      ============ Viewd ===========
-           $(document).on('click', '.btn_view', function (e) {
-    var id = $(this).data('id');
-    var name = $(this).data('name');
-    var price = $(this).data('price');
-    var image = $(this).data('img');
-    var url = $(this).data('url');
-    var viewedItem = {
-        'id': id,
-        'url': url,
-        'name': name,
-        'price': price,
-        'image': image
-    }
-    if (localStorage.getItem('data_viewed') == null) {
-        localStorage.setItem('data_viewed', '[]');
-    }
-
-    var viewed = JSON.parse(localStorage.getItem('data_viewed'));
-    var matches = $.grep(viewed, function (obj) {
-        return obj.id == id;
-    });
-
-    if (!matches.length) {
-        viewed.push(viewedItem);
-    }
-
-    localStorage.setItem('data_viewed', JSON.stringify(viewed));
-});
-*/
+            localStorage.setItem('data_viewed', JSON.stringify(viewed));
+        });
+        */
     </script>
 </body>
 
