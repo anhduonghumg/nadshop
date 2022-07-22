@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Danh sách bài viết')
+@section('title', 'Danh sách sản phẩm')
 @section('content')
     <style>
         #form-excel {

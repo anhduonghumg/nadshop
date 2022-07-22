@@ -208,7 +208,7 @@ function render_to_html(data) {
     let output = '';
     $.each(data, function (key, value) {
         let price = currencyFormat(value.price);
-        let path_img = asset(value.thumbnail);
+        let path_img = asset('storage/app/public/images/product/thumb/') + value.thumbnail;
         output += `<article class="js-cart-product d-flex justify-content-between" id="product-${key}">
             <div class="cart-img">
                 <img src="${path_img}" alt="" with="100px" height="150px">

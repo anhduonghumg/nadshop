@@ -85,7 +85,7 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             $id = (int)$request->id;
-            $list_product = $this->product->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price')
+            $list_product = $this->product->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price','product_details.product_discount')
                 ->join('product_details', 'products.id', '=', 'product_details.product_id')
                 ->where('products.product_cat_id', $id)
                 ->orderByDesc('products.id')
@@ -104,7 +104,7 @@ class ProductController extends Controller
             $size = $request->size_filter;
             $price = $request->price_filter;
             $sort_by = isset($request->sort_by) ? $request->sort_by : 'new';
-            $list_product = Product::select('products.id', 'products.product_name', 'product_details.product_price', 'products.product_thumb')
+            $list_product = Product::select('products.id', 'products.product_name', 'product_details.product_price', 'products.product_thumb', 'product_details.product_discount')
                 ->join('product_details', 'product_details.product_id', '=', 'products.id')
                 ->where('products.product_cat_id', $id)
                 ->distinct();

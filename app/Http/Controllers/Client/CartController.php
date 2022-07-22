@@ -54,7 +54,7 @@ class CartController extends Controller
     {
         if ($request->ajax()) {
             $variant_id = $request->product_variant;
-            $product_info = ProductDetail::where('id', $variant_id)->first(['product_detail_name', 'product_price', 'product_details_thumb']);
+            $product_info = ProductDetail::where('id', $variant_id)->first(['product_detail_name', 'product_price', 'product_details_thumb', 'product_discount', 'cost_price']);
             return response()->json($product_info);
         }
     }

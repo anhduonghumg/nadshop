@@ -266,6 +266,7 @@ class AdminOrderController extends Controller
         }
     }
 
+
     public function edit(Request $request, $id)
     {
         $order = $this->order->find($id);

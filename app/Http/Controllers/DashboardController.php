@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Statistical;
 use App\Models\OrderDetail;
 use App\Constants\Constants;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
