@@ -140,7 +140,7 @@ class AdminOrderController extends Controller
     {
         if ($request->ajax()) {
             $id = isset($request->product) ? $request->product : null;
-            $product = $this->product->get_product_detail_by_id($id, ['product_price']);
+            $product = $this->product->get_product_detail_by_id($id, ['product_price', 'cost_price']);
             return response()->json(['product' => $product]);
         }
         $list_city = $this->city->all();
@@ -217,6 +217,7 @@ class AdminOrderController extends Controller
                 'email' => $request->email,
                 'order_qty' => $request->order_qty,
                 'order_total' => $request->order_total,
+                'order_profit' => $request->profit,
                 'order_status' => $request->order_status,
                 'payment' => $request->payment,
                 'note' => $request->note,

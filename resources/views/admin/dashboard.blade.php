@@ -74,6 +74,27 @@
     </div>
     <div class="card">
         <div class="card-header font-weight-bold">
+            THỐNG KÊ BÁN HÀNG THEO THÁNG
+        </div>
+        <div class="card-body">
+            <form class='d-flex' autocomplete="off">
+                <div class="col-md-3">
+                    <span for="">Từ tháng</span>
+                    <input type="text" name="datepicker" id='datepicker_month' class='form-control datepickerMonth'>
+                    <button type="button" id="btn-dashboard-filter" class='btn btn-sm btn-primary'>Lọc</button>
+                </div>
+                <div class="col-md-3">
+                    <span for="">Đến đến tháng</span>
+                    <input type="text" name="datepicker2" id='datepicker_month2' class='form-control datepickerMonth'>
+                </div>
+            </form>
+            <div class="col-md-12">
+                <div id="chart_month" style=""></div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header font-weight-bold">
             ĐƠN HÀNG MỚI
         </div>
         <div class="card-body">
@@ -248,11 +269,42 @@
             dayNamesMin: ["T2","T3","T4","T5","T6","T7","CN"],
           });
       });
+
+      $(function() {
+        function setDate(target, year, month, string) {
+          var myDate;
+          if ($(target).is("#datepicker_month")) {
+            day = 1;
+            myDate = $.datepicker.parseDate("dd-mm-yy", year + "-" + month + "-01");
+          } else {
+            myDate = new Date(year, month, 0);
+          }
+          if (string) {
+            $(target).val($.datepicker.formatDate("dd-mm-yy", myDate));
+          } else {
+            $(target).datepicker("setDate", myDate);
+          }
+        }
+
+        $('.datepickerMonth').datepicker({
+          changeMonth: true,
+          changeYear: true,
+          showButtonPanel: true,
+          dateFormat: 'yy-mm-dd',
+          onChangeMonthYear: function(yy, mm) {
+            setDate(this, yy, mm, true);
+          },
+          onClose: function(dateText, inst) {
+            if ($(this).is("#datepicker_month")) {
+              setDate("#datepicker_month2", inst.selectedYear, inst.selectedMonth + 1, true);
+            }
+          }
+        });
+      });
 </script>
 
 <script type="text/javascript">
     load_chart();
-
     var chart = new Morris.Bar({
         element: 'chart',
         lineColors: ['#819C79','#fc8710','#FF6541','#A4ADD3','#766B56'],
@@ -260,26 +312,34 @@
         hideHover: 'auto',
         gridTextSize: 12,
         xkey: 'period',
-        ykeys: ['order','sales','profit','qty'],
-        labels: ['Đơn hàng','Doanh số','Lợi nhuận','Số lượng']
+        ykeys: ['sale','profit'],
+        labels: ['Doanh số','Lợi nhuận'],
       });
 
+
     $(document).on('click','#btn-dashboard-filter',function(){
-        var from_date = $('#datepicker').val();
-        var to_date = $('#datepicker2').val();
-        //$(".loadajax").show();
+        var from_date = $('#datepicker').val() ? $('#datepicker').val() : '';
+        var to_date = $('#datepicker2').val() ? $('#datepicker2').val() : '';
+        $(".loadajax").show();
         $.ajax({
             url: "{{ route('dashboard.filter.date') }}",
             type: "POST",
             data: { from_date:from_date,to_date:to_date },
             dataType: "json",
             success: function (rsp) {
-              chart.setData(rsp);
+                $(".loadajax").hide();
+                if($.isEmptyObject(rsp.errors)){
+                    chart.setData(rsp);
+                }else{
+                    confirm_warning(rsp.errors);
+                }
             },error: function () {
+            $(".loadajax").hide();
            alert("error!!!!");
             },
         });
     })
+
 
     $(document).on('change','.dashboard-filter',function(){
         var filter = $(this).val();

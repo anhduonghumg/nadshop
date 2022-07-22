@@ -213,7 +213,6 @@ function load_data(){
     });
 }
 
-
 function pagination(data,total){
     if(data.length > 0){
     $('#pagination').pagination({
