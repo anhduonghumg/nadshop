@@ -116,6 +116,7 @@ class CartController extends Controller
             'email' => $request->email,
             'order_qty' => $request->order_qty,
             'order_total' => $request->order_total,
+            'order_profit' => $request->profit,
             'payment' => $request->payment,
             'note' => $request->note,
             'created_at' => now(),

@@ -434,10 +434,12 @@
                         let price = rsp.product_price - (rsp.product_price * rsp.product_discount /
                             100);
                         let thumbnail = rsp.product_details_thumb;
+                        let cost_price = rsp.cost_price;
                         let newCart = {
                             'id': product_variant,
                             'name': name,
                             'price': price,
+                            'cost_price': cost_price,
                             'thumbnail': thumbnail,
                             'qty': qty,
                         }

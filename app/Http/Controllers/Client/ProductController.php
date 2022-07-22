@@ -10,6 +10,7 @@ use App\Constants\Constants;
 use Illuminate\Support\Arr;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Models\Color;
+use App\Models\Comment;
 
 class ProductController extends Controller
 {
@@ -85,7 +86,7 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             $id = (int)$request->id;
-            $list_product = $this->product->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price','product_details.product_discount')
+            $list_product = $this->product->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'product_details.product_discount')
                 ->join('product_details', 'products.id', '=', 'product_details.product_id')
                 ->where('products.product_cat_id', $id)
                 ->orderByDesc('products.id')
@@ -149,6 +150,19 @@ class ProductController extends Controller
                 'list_product' => $list_product
             ];
             return response()->json($result);
+        }
+    }
+
+    public function show_comment(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id_product ? (int)$request->id_product : '';
+            $list_comment = Comment::where('comment_product_id', $id)->get();
+            $total_comment = $list_comment->count();
+            $view = view('client.product.comment', compact('list_comment', 'total_comment'))->render();
+            return response()->json($view);
+        } else {
+            return redirect()->route('client.home');
         }
     }
 }

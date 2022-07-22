@@ -31,6 +31,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/filter-by-date', [App\Http\Controllers\DashboardController::class, 'filter_by_date'])->name('dashboard.filter.date');
     Route::post('/filter', [App\Http\Controllers\DashboardController::class, 'filter'])->name('dashboard.filter');
     Route::post('/load-chart', [App\Http\Controllers\DashboardController::class, 'load_chart'])->name('load.chart');
+    Route::post('/filter-month', [App\Http\Controllers\DashboardController::class, 'filter_month'])->name('load.chartMonth');
+    Route::post('/filter-year', [App\Http\Controllers\DashboardController::class, 'filter_year'])->name('load.chartYear');
     // Admin/user
     Route::get('/admin/user/list', [App\Http\Controllers\AdminUserController::class, 'list'])->name('admin.user.list');
     Route::get('/admin/user/add', [App\Http\Controllers\AdminUserController::class, 'add'])->name('admin.user.add');
@@ -218,7 +220,7 @@ Route::post('product/change', [App\Http\Controllers\Client\ProductController::cl
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
 Route::get('wishlist', [App\Http\Controllers\Client\ProductController::class, 'wishlist'])->name('client.product.wishlist');
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
-
+Route::post('product/comment',[App\Http\Controllers\Client\ProductController::class,'show_comment'])->name('client.product.comment');
 // CART
 Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');
 Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'show'])->name('client.cart.show');
@@ -237,3 +239,5 @@ Route::post('district', [App\Http\Controllers\Client\DistrictController::class, 
 // Search
 Route::get('search', [App\Http\Controllers\Client\SearchController::class, 'show'])->name('client.search');
 Route::post('searchAjax', [App\Http\Controllers\Client\SearchController::class, 'searchAjax'])->name('client.ajax');
+
+

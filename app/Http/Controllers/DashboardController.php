@@ -50,11 +50,79 @@ class DashboardController extends Controller
 
             foreach ($get as $key => $val) {
                 $chart_data[] = array(
-                    'period' => $val->order_date,
+                    $day = Carbon::createFromFormat('Y-m-d', $val->order_date)->format('d/m/Y'),
+                    'period' => $day,
+                    'sale' => $val->sale,
+                    'profit' => $val->profit,
+                );
+            }
+            $data = json_encode($chart_data);
+            return $data;
+        }
+    }
+    function filter_month(Request $request)
+    {
+        if ($request->ajax()) {
+            $chart_data = array();
+            $from_month = $request->from_month;
+            $to_month = $request->to_month;
+            if ($from_month == null || $to_month == null) {
+                return response()->json(['errors' => 'Vui lòng chọn tháng']);
+            }
+
+            if ($from_month > $to_month) {
+                return response()->json(['errors' => 'Tháng bắt đầu không được lớn hơn ngày kết thúc']);
+            }
+
+            $format_from_date = Carbon::createFromFormat('d/m/Y', $from_month)->startOfMonth()->format('Y-m-d');
+            $format_to_date = Carbon::createFromFormat('d/m/Y', $to_month)->lastOfMonth()->format('Y-m-d');
+            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,MONTH(product_orders.order_date) as month_order")
+                ->where('product_orders.order_status', '=', 'success')
+                ->whereBetween('product_orders.order_date', [$format_from_date, $format_to_date])
+                ->groupBy('month_order')
+                ->orderBy('month_order', 'ASC')
+                ->get();
+
+            foreach ($get as $key => $val) {
+                $chart_data[] = array(
+                    'period' => "Tháng " . $val->month_order,
                     'sale' => $val->sale,
                     'profit' => $val->profit,
                     'product_qty' => $val->product_qty,
                     'order_qty' => $val->order_qty,
+                );
+            }
+            $data = json_encode($chart_data);
+            return $data;
+        }
+    }
+
+    function filter_year(Request $request)
+    {
+        if ($request->ajax()) {
+            $chart_data = array();
+            $from_year = $request->fromYear;
+            $to_year = $request->toYear;
+            if ($from_year == null || $to_year == null) {
+                return response()->json(['errors' => 'Vui lòng chọn năm']);
+            }
+
+            if ($from_year > $to_year) {
+                return response()->json(['errors' => 'Năm bắt đầu không được lớn hơn Năm kết thúc']);
+            }
+
+            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,YEAR(product_orders.order_date) as year_order")
+                ->where('product_orders.order_status', '=', 'success')
+                ->whereRaw("product_orders.order_status = 'success' and YEAR(product_orders.order_date) BETWEEN '{$from_year}' and '{$to_year}'")
+                ->groupBy('year_order')
+                ->orderBy('year_order', 'ASC')
+                ->get();
+
+            foreach ($get as $key => $val) {
+                $chart_data[] = array(
+                    'period' => $val->year_order,
+                    'sale' => $val->sale,
+                    'profit' => $val->profit,
                 );
             }
             $data = json_encode($chart_data);
@@ -137,12 +205,11 @@ class DashboardController extends Controller
                 ->get();
 
             foreach ($get as $key => $val) {
+                $day = Carbon::createFromFormat('Y-m-d', $val->order_date)->format('d/m/Y');
                 $chart_data[] = array(
-                    'period' => $val->order_date,
+                    'period' => $day,
                     'sale' => $val->sale,
                     'profit' => $val->profit,
-                    'product_qty' => $val->product_qty,
-                    'order_qty' => $val->order_qty,
                 );
             }
 
