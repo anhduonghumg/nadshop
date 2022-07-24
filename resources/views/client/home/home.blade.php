@@ -91,9 +91,8 @@
                                 </div>
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
-                                <a href="{{ route('client.product.detail', $product->id) }}"
-                                    data-id="{{ $product->id }}" data-name="{{ $product->product_name }}"
-                                    data-img="{{ $product->product_thumb }}"
+                                <a href="{{ route('client.product.detail', $product->id) }}" data-id="{{ $product->id }}"
+                                    data-name="{{ $product->product_name }}" data-img="{{ $product->product_thumb }}"
                                     data-url="{{ route('client.product.detail', $product->id) }}"
                                     data-price="{{ $product->product_price - ($product->product_price * $product->product_discount) / 100 }}"
                                     class="btn btn-sm text-dark p-0 btn_view"><i
@@ -312,11 +311,11 @@
                             </div>
                             <div class="error"></div>
                             <div class="form loginBox">
-                                <form method="" action="">
-                                    <input id="username" class="form-control" type="text"
-                                        placeholder="Tên đăng nhập" name="password">
-                                    <input id="password" class="form-control" type="password" placeholder="Mật khẩu"
-                                        name="password">
+                                <form method="">
+                                    <input id="email_login" class="form-control" type="text" placeholder="email"
+                                        name="email">
+                                    <input id="password_login" class="form-control" type="password"
+                                        placeholder="Mật khẩu" name="password">
                                     <input class="btn btn-default btn-login" type="button" value="Đăng nhập">
                                 </form>
                             </div>
@@ -324,17 +323,15 @@
                     </div>
                     <div class="box">
                         <div class="content registerBox" style="display:none;">
-                            <div class="form">
-                                <form method="" html="{:multipart=>true}" data-remote="true" action=""
-                                    accept-charset="UTF-8">
-                                    <input id="email" class="form-control" type="text" placeholder="Email"
-                                        name="email">
-                                    <input id="password" class="form-control" type="password" placeholder="Password"
-                                        name="password">
-                                    <input id="password_confirmation" class="form-control" type="password"
-                                        placeholder="Repeat Password" name="password_confirmation">
-                                    <input class="btn btn-default btn-register" type="button" value="Tạo tài khoản"
-                                        name="commit">
+                            <div class="form" id="">
+                                <form id="form_reg" method="" html="{:multipart=>true}" data-remote="true"
+                                    action="" accept-charset="UTF-8">
+                                    <input class="form-control" type="text" placeholder="Họ tên" name="fullname">
+                                    <input class="form-control" type="text" placeholder="Số điện thọai"
+                                        name="phone">
+                                    <input class="form-control" type="text" placeholder="email" name="email">
+                                    <input class="form-control" type="password" placeholder="Password" name="password">
+                                    <input class="btn btn-default btn-register" type="button" value="Tạo tài khoản">
                                 </form>
                             </div>
                         </div>
@@ -394,6 +391,52 @@
             var data = $(this).attr('data-id');
             var selector = $('.load_accessory_data');
             load_data(selector, data);
+        });
+
+        $(document).on('click', '.btn-login', function() {
+            let email = $('#email_login').val();
+            let password = $('#password_login').val();
+            let current_url = window.location.href;
+            $.ajax({
+                url: "{{ route('client.login') }}",
+                type: 'POST',
+                data: {
+                    email: email,
+                    password: password,
+                    current_url: current_url
+                },
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        window.location.href = rsp.success;
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
+                },
+                error: function() {
+                    alert("error!!!!");
+                }
+            });
+        });
+
+        $(document).on('click', '.btn-register', function() {
+            let form_reg = $("#form_reg").serialize();
+            $.ajax({
+                url: "{{ route('client.register') }}",
+                type: 'POST',
+                data: form_reg,
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        confirm_success(rsp.success);
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
+                },
+                error: function() {
+                    alert("error!!!!");
+                }
+            });
         });
 
         $('body').on('click', '.btn_buy_now', buy_now);

@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware'], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
@@ -180,6 +180,10 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/admin/permission/update', [App\Http\Controllers\AdminPermissionController::class, 'update'])->name('admin.permission.update');
     Route::post('/admin/permission/delete', [App\Http\Controllers\AdminPermissionController::class, 'delete'])->name('admin.permission.delete');
 
+    // Admin/comment
+    Route::get('/admin/comment/list', [App\Http\Controllers\AdminCommentController::class, 'show'])->name('admin.comment.list');
+    Route::post('/admin/comment/approve', [App\Http\Controllers\AdminCommentController::class, 'approve'])->name('admin.approveComment');
+    Route::post('/admin/comment/reply', [App\Http\Controllers\AdminCommentController::class, 'reply'])->name('admin.replyComment');
     // Export excel
     Route::post('/admin/product/export-csv', [App\Http\Controllers\AdminProductController::class, 'export'])->name('admin.product.export');
     // Route::post('/import-csv', 'ProductController@import_csv');
@@ -220,7 +224,10 @@ Route::post('product/change', [App\Http\Controllers\Client\ProductController::cl
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
 Route::get('wishlist', [App\Http\Controllers\Client\ProductController::class, 'wishlist'])->name('client.product.wishlist');
 Route::post('load_product', [App\Http\Controllers\Client\ProductController::class, 'load_product'])->name('client.product.load');
-Route::post('product/comment',[App\Http\Controllers\Client\ProductController::class,'show_comment'])->name('client.product.comment');
+Route::post('product/comment', [App\Http\Controllers\Client\ProductController::class, 'show_comment'])->name('client.product.comment');
+Route::post('product/comment/add', [App\Http\Controllers\Client\ProductController::class, 'add_comment'])->name('client.addComment');
+Route::get('product/comment/load', [App\Http\Controllers\Client\ProductController::class, 'load_comment'])->name('client.loadComment');
+Route::post('product/rating', [App\Http\Controllers\Client\ProductController::class, 'rating'])->name('client.insertRating');
 // CART
 Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');
 Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'show'])->name('client.cart.show');
@@ -228,7 +235,12 @@ Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy
 Route::get('cart/checkout', [App\Http\Controllers\Client\CartController::class, 'checkout'])->name('client.cart.checkout');
 Route::post('cart/order', [App\Http\Controllers\Client\CartController::class, 'order'])->name('client.cart.order');
 Route::get('thank/{code}', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
-
+Route::post('cart/changePayment', [App\Http\Controllers\Client\CartController::class, 'changePayment'])->name('client.change.payment');
+Route::post('vnpay_payment', [App\Http\Controllers\Client\CartController::class, 'vnpayPayment'])->name('vnpay_payment');
+Route::get('cart/checkvnpay', [App\Http\Controllers\Client\CartController::class, 'checkVnpay'])->name('check_vnpay');
+Route::post('confirm_vnpay', [App\Http\Controllers\Client\CartController::class, 'confirmVnpay'])->name('confirm_vnpay');
+// Route::get('', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
+// Route::get('thank/{code}', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
 // ORDER
 Route::get('order/find', [App\Http\Controllers\Client\OrderController::class, 'find'])->name('client.order.find');
 Route::post('order/show', [App\Http\Controllers\Client\OrderController::class, 'show'])->name('client.order.show');
@@ -240,4 +252,11 @@ Route::post('district', [App\Http\Controllers\Client\DistrictController::class, 
 Route::get('search', [App\Http\Controllers\Client\SearchController::class, 'show'])->name('client.search');
 Route::post('searchAjax', [App\Http\Controllers\Client\SearchController::class, 'searchAjax'])->name('client.ajax');
 
-
+// Login
+Route::post('userRegister', [App\Http\Controllers\Client\UserController::class, 'register'])->name('client.register');
+Route::post('userLogin', [App\Http\Controllers\Client\UserController::class, 'login'])->name('client.login');
+Route::get('userLogout', [App\Http\Controllers\Client\UserController::class, 'logout'])->name('client.logout');
+Route::get('profile', [App\Http\Controllers\Client\UserController::class, 'profile'])->name('client.profile');
+Route::get('profile/edit', [App\Http\Controllers\Client\UserController::class, 'profileEdit'])->name('client.profileEdit');
+Route::get('profile/changePass', [App\Http\Controllers\Client\UserController::class, 'profileChangePass'])->name('client.changePass');
+Route::get('order/history', [App\Http\Controllers\Client\UserController::class, 'orderHistory'])->name('client.orderHistory');

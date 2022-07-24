@@ -228,18 +228,8 @@ class AdminOrderController extends Controller
             ];
 
             $saveOrder = $this->order->add($saveDataOrder);
-            $check_customer = Customer::where('fullname', $request->fullname)->where('phone', $request->phone)->first();
-            if ($check_customer) {
-                $data_customer = [
-                    'fullname' => $request->fullname,
-                    'email' => $request->email,
-                    'address' => $address,
-                    'phone' => $request->phone,
-                    'total_order' => (int)$request->order_qty + (int)$check_customer->total_order,
-                    'total_spend' => (int)$request->order_total + (int)$check_customer->total_spend,
-                ];
-                Customer::where('id', $check_customer->id)->update($data_customer);
-            } else {
+            $check_customer = Customer::where('fullname', $request->fullname)->where('email', $request->email)->first();
+            if (!$check_customer) {
                 $data_customer = [
                     'fullname' => $request->fullname,
                     'email' => $request->email,
@@ -250,7 +240,6 @@ class AdminOrderController extends Controller
                 ];
                 Customer::create($data_customer);
             }
-
             if ($saveOrder) {
                 $product_name = $request->product_name;
                 foreach ($product_name as $key => $value) {
@@ -337,6 +326,17 @@ class AdminOrderController extends Controller
                 } elseif ($act == Constants::SUCCESS) {
                     $data = ['order_status' => Constants::SUCCESS];
                     $this->order->update($data, $list_check);
+                    foreach ($list_check as $id) {
+                        $order = Order::where('id', $id)->first();
+                        $check_customer = Customer::where('fullname', $order->fullname)->where('email', $order->email)->first();
+                        if ($check_customer) {
+                            $data_customer = [
+                                'total_order' => (int)$order->order_qty + (int)$check_customer->total_order,
+                                'total_spend' => (int)$order->order_total + (int)$check_customer->total_spend,
+                            ];
+                            Customer::where('id', $check_customer->id)->update($data_customer);
+                        }
+                    }
                     return response()->json(['success' => trans('notification.update_order')]);
                 } elseif ($act == Constants::CANCEL) {
                     $data = ['order_status' => Constants::CANCEL];

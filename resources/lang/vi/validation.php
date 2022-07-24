@@ -200,6 +200,8 @@ return [
         'product_name.*' => 'tên sản phẩm',
         'note' => 'ghi chú',
         'role_name' => 'tên quyền',
-        'role_permission'  => 'nhóm quyền'
+        'role_permission'  => 'nhóm quyền',
+        'comment' => 'nội dung bình luận',
+        'comment_name' => 'tên bình luận',
     ],
 ];

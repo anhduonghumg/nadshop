@@ -11,6 +11,8 @@ use Illuminate\Support\Arr;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Models\Color;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Rating;
 
 class ProductController extends Controller
 {
@@ -35,12 +37,15 @@ class ProductController extends Controller
             ->where('products.id', $pro_id)
             ->first();
         $list_colors = $this->productRepo->get_color_by_product($id);
+        $rating = Rating::where('product_id', $pro_id)->avg('rating');
+        $rating = round($rating);
+        $count_rating = Rating::where('product_id', $pro_id)->count();
         $view = $product->views;
         $view = $view + 1;
         $data = ['views' => $view];
         $this->product->where('products.id', $pro_id)->update($data);
         // $list_size = $this->product->get_size_by_product();
-        return view('client.product.detail', compact('product', 'category_products', 'list_colors', 'pro_id'));
+        return view('client.product.detail', compact('product', 'category_products', 'list_colors', 'pro_id', 'rating', 'count_rating'));
     }
 
     public function variant(Request $request)
@@ -157,12 +162,65 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             $id = $request->id_product ? (int)$request->id_product : '';
-            $list_comment = Comment::where('comment_product_id', $id)->get();
+            $list_comment = Comment::where('comment_product_id', $id)->where('comment_status', 1)->where('comment_parent', 0)->orderByDesc('id')->get();
+            $sub_comment = Comment::where('comment_product_id', $id)->where('comment_status', 1)->where('comment_parent', '>', 0)->orderByDesc('id')->get();
             $total_comment = $list_comment->count();
-            $view = view('client.product.comment', compact('list_comment', 'total_comment'))->render();
+            $view = view('client.product.comment', compact('list_comment', 'total_comment', 'sub_comment'))->render();
             return response()->json($view);
         } else {
             return redirect()->route('client.home');
+        }
+    }
+
+    public function add_comment(Request $request)
+    {
+        if ($request->ajax()) {
+            $validator = Validator::make($request->all(), [
+                'comment' => 'bail|required|string',
+                'comment_name' => 'bail|required|string'
+            ]);
+
+            if ($validator->fails()) {
+                $error = collect($validator->errors())->unique()->first();
+                return response()->json(['errors' => $error]);
+            }
+
+            $saveData = [
+                'comment' => $request->comment,
+                'comment_name' => $request->comment_name,
+                'comment_status' => 0,
+                'comment_product_id' => $request->id_product,
+                'comment_date' => now(),
+                'comment_parent' => 0
+            ];
+
+            Comment::create($saveData);
+            return response()->json(['success' => trans('notification.add_success')]);
+        }
+    }
+
+    public function load_comment(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id ? (int)$request->id : '';
+            $list_comment = Comment::where('comment_product_id', $id)->where('comment_status', 1)->where('comment_parent', 0)->orderByDesc('id')->get();
+            $sub_comment = Comment::where('comment_product_id', $id)->where('comment_status', 1)->where('comment_parent', '>', 0)->orderByDesc('id')->get();
+            $total_comment = $list_comment->count();
+            $view = view('client.product.comment', compact('list_comment', 'total_comment', 'sub_comment'))->render();
+            return response()->json($view);
+        } else {
+            return redirect()->route('client.home');
+        }
+    }
+    public function rating(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+            $rating = new Rating();
+            $rating->product_id = $data['product_id'];
+            $rating->rating = $data['index'];
+            $rating->save();
+            return response()->json(['success' => "Bạn đã đánh giá sản phẩm {$request->index} sao"]);
         }
     }
 }

@@ -181,6 +181,18 @@
                             <li><a href="{{ route('admin.size.list') }}">Size</a></li>
                         </ul>
                     </li>
+                    <li class="nav-link active">
+                        <a href="{{ url('admin/comment/list') }}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Quản lý bình luận
+                        </a>
+                        <i class="arrow fas fa-angle-down"></i>
+                        <ul class="sub-menu">
+                            <li><a href="{{ route('admin.comment.list') }}">Danh sách</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-link">
                         <a href="{{ url('admin/order/list') }}">
                             <div class="nav-link-icon d-inline-flex">

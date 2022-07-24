@@ -160,10 +160,29 @@
                                 <a href="" class="nav-item nav-link">Tin tức</a>
                             </div>
                             <div class="navbar-nav ml-auto py-0">
-                                <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
-                                        aria-hidden="true"></i>
-                                    Tài
-                                    khoản</a>
+                                @if (request()->session()->get('client_login') == true)
+                                    {{-- <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
+                                            aria-hidden="true"></i>
+                                        {{ request()->session()->get('name') }}</a> --}}
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {{ request()->session()->get('client_name') }}
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="{{ route('client.profile') }}">Thông tin
+                                                cá
+                                                nhân</a>
+                                            <a class="dropdown-item" href="{{ route('client.logout') }}">Đăng
+                                                xuất</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
+                                            aria-hidden="true"></i>
+                                        Tài
+                                        khoản</a>
+                                @endif
                                 {{-- < a href="" class="nav-item nav-link">Đăng ký</> --}}
                                 {{-- < span class='auth'><i class="fa fa-user" aria-hidden="true"></i></> --}}
                             </div>
