@@ -10,6 +10,11 @@ class AdminCouponController extends Controller
 
     public function __construct()
     {
+        $this->middleware(function ($request, $next) {
+            session(['module_active' => 'coupon']);
+
+            return $next($request);
+        });
     }
 
     public function list(Request $request)

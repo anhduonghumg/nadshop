@@ -13,6 +13,15 @@ use Intervention\Image\ImageManagerStatic as Image;
 class AdminSliderController extends Controller
 {
     use ImageUpload;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            session(['module_active' => 'slider']);
+
+            return $next($request);
+        });
+    }
     public function list(Request $request)
     {
         $status = $request->input('status');

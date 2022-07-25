@@ -11,6 +11,14 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            session(['module_active' => 'dashboard']);
+
+            return $next($request);
+        });
+    }
     function index()
     {
         $order_success = Order::where('order_status', Constants::SUCCESS)->count();

@@ -203,5 +203,6 @@ return [
         'role_permission'  => 'nhóm quyền',
         'comment' => 'nội dung bình luận',
         'comment_name' => 'tên bình luận',
+        'birthday' => 'ngày sinh'
     ],
 ];

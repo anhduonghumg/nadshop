@@ -164,6 +164,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/admin/order/delete', [App\Http\Controllers\AdminOrderController::class, 'delete'])->name('admin.order.delete');
     Route::post('/admin/order/action', [App\Http\Controllers\AdminOrderController::class, 'action'])->name('admin.order.action');
 
+    // Admin/customer
+    Route::get('/admin/customer/list', [App\Http\Controllers\AdminCustomerController::class, 'list'])->name('admin.customer.list');
+    Route::get('/admin/customer/export', [App\Http\Controllers\AdminCustomerController::class, 'export'])->name('admin.customer.export');
     // Admin/role
     Route::get('/admin/role/list', [App\Http\Controllers\AdminRoleController::class, 'list'])->name('admin.role.list');
     Route::get('/admin/role/add', [App\Http\Controllers\AdminRoleController::class, 'add'])->name('admin.role.add');
@@ -213,6 +216,8 @@ Route::middleware('auth', 'verified')->group(function () {
     // Route::get('/test', [App\Http\Controllers\TestController::class, 'paginatejs'])->name('test');
 });
 
+// CLIENT
+
 Route::get('user/signin', [App\Http\Controllers\Client\UserController::class, 'login']);
 Route::get('user/signup', [App\Http\Controllers\Client\UserController::class, 'register']);
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('client.home');
@@ -228,8 +233,10 @@ Route::post('product/comment', [App\Http\Controllers\Client\ProductController::c
 Route::post('product/comment/add', [App\Http\Controllers\Client\ProductController::class, 'add_comment'])->name('client.addComment');
 Route::get('product/comment/load', [App\Http\Controllers\Client\ProductController::class, 'load_comment'])->name('client.loadComment');
 Route::post('product/rating', [App\Http\Controllers\Client\ProductController::class, 'rating'])->name('client.insertRating');
+
 // CART
 Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');
+Route::post('cart/buy_now', [App\Http\Controllers\Client\CartController::class, 'buy_now'])->name('client.cart.buy_now');
 Route::get('cart/show', [App\Http\Controllers\Client\CartController::class, 'show'])->name('client.cart.show');
 Route::post('cart/buy', [App\Http\Controllers\Client\CartController::class, 'buy'])->name('client.cart.buy');
 Route::get('cart/checkout', [App\Http\Controllers\Client\CartController::class, 'checkout'])->name('client.cart.checkout');
@@ -244,7 +251,9 @@ Route::post('confirm_vnpay', [App\Http\Controllers\Client\CartController::class,
 // ORDER
 Route::get('order/find', [App\Http\Controllers\Client\OrderController::class, 'find'])->name('client.order.find');
 Route::post('order/show', [App\Http\Controllers\Client\OrderController::class, 'show'])->name('client.order.show');
-
+Route::post('order/detail', [App\Http\Controllers\Client\OrderController::class, 'detail'])->name('client.order.detail');
+Route::post('order/cancel', [App\Http\Controllers\Client\OrderController::class, 'cancel'])->name('client.order.cancel');
+Route::post('order/confirm', [App\Http\Controllers\Client\OrderController::class, 'confirm'])->name('client.order.confirm');
 // City_District
 Route::post('district', [App\Http\Controllers\Client\DistrictController::class, 'show'])->name('client.district');
 
@@ -258,5 +267,10 @@ Route::post('userLogin', [App\Http\Controllers\Client\UserController::class, 'lo
 Route::get('userLogout', [App\Http\Controllers\Client\UserController::class, 'logout'])->name('client.logout');
 Route::get('profile', [App\Http\Controllers\Client\UserController::class, 'profile'])->name('client.profile');
 Route::get('profile/edit', [App\Http\Controllers\Client\UserController::class, 'profileEdit'])->name('client.profileEdit');
+Route::post('profile/update', [App\Http\Controllers\Client\UserController::class, 'profileUpdate'])->name('client.customerUpdateInfo');
 Route::get('profile/changePass', [App\Http\Controllers\Client\UserController::class, 'profileChangePass'])->name('client.changePass');
-Route::get('order/history', [App\Http\Controllers\Client\UserController::class, 'orderHistory'])->name('client.orderHistory');
+Route::post('changePass', [App\Http\Controllers\Client\UserController::class, 'changePass'])->name('client.updatePass');
+Route::get('profile/order/history', [App\Http\Controllers\Client\UserController::class, 'orderHistory'])->name('client.orderHistory');
+Route::post('profile/order/detail', [App\Http\Controllers\Client\UserController::class, 'orderDetail'])->name('client.orderDetail');
+Route::post('profile/order/cancel', [App\Http\Controllers\Client\UserController::class, 'orderCancel'])->name('client.orderCancel');
+Route::post('profile/order/cancelConfirm', [App\Http\Controllers\Client\UserController::class, 'orderCancelConfirm'])->name('client.orderCancelConfirm');

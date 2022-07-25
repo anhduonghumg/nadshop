@@ -19,6 +19,7 @@ use App\Jobs\SendOrderEmail;
 use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\Customer;
+use App\Models\Rating;
 
 class CartController extends Controller
 {
@@ -60,6 +61,15 @@ class CartController extends Controller
         }
     }
 
+    public function buy_now(Request $request)
+    {
+        if ($request->ajax()) {
+            $variant_id = $request->product_variant;
+            $product_info = ProductDetail::where('id', $variant_id)->first(['product_detail_name', 'product_price', 'product_details_thumb', 'product_discount', 'cost_price']);
+            return response()->json($product_info);
+        }
+    }
+
     public function buy(Request $request)
     {
         if ($request->ajax()) {
@@ -67,10 +77,15 @@ class CartController extends Controller
             $product = Product::join('product_details', 'product_details.product_id', '=', 'products.id')
                 ->where('products.id', $id)
                 ->first();
+            $rating = Rating::where('product_id', $id)->avg('rating');
+            $rating = round($rating);
+            $count_rating = Rating::where('product_id', $id)->count();
             $list_colors = $this->productRepo->get_color_by_product($id);
             $result = [
                 'product' => $product,
                 'list_colors' => $list_colors,
+                'rating' => $rating,
+                'count_rating' => $count_rating
             ];
             return response()->json($result);
         }

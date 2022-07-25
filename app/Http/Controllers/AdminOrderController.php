@@ -30,6 +30,11 @@ class AdminOrderController extends Controller
         District $district,
         OrderDetail $orderDetail
     ) {
+        $this->middleware(function ($request, $next) {
+            session(['module_active' => 'order']);
+
+            return $next($request);
+        });
         $this->order = $order;
         $this->product = $product;
         $this->status = $status;

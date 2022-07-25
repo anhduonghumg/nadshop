@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
         integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.6.0/dt-1.12.1/datatables.min.css" />
     <link rel="stylesheet" href="{{ url('public/css/style.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/app.css') }}">
     <link rel="stylesheet" href="{{ url('public/css/sweetalert2.css') }}">
@@ -19,6 +20,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
@@ -33,6 +35,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="https://cdn.rawgit.com/prashantchaudhary/ddslick/master/jquery.ddslick.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.6.0/dt-1.12.1/datatables.min.js"></script>
     <title>@yield('title')</title>
 </head>
 
@@ -124,10 +127,13 @@
             </div>
         </nav>
         <!-- end nav  -->
+        @php
+            $module_active = session('module_active');
+        @endphp
         <div id="page-body" class="d-flex">
             <div id="sidebar" class="bg-white">
                 <ul id="sidebar-menu">
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'dashboard' ? 'active' : '' }}">
                         <a href="{{ url('dashboard') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -136,7 +142,7 @@
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'page' ? 'active' : '' }}">
                         <a href="{{ url('admin/page/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -149,7 +155,7 @@
                             <li><a href="{{ url('admin/page/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'post' ? 'active' : '' }}">
                         <a href="{{ url('admin/post/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -163,7 +169,7 @@
                             <li><a href="{{ url('admin/post/cat/list') }}">Danh mục</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link active">
+                    <li class="nav-link {{ $module_active == 'product' ? 'active' : '' }}">
                         <a href="{{ url('admin/product/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -181,7 +187,7 @@
                             <li><a href="{{ route('admin.size.list') }}">Size</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link active">
+                    <li class="nav-link {{ $module_active == 'comment' ? 'active' : '' }}">
                         <a href="{{ url('admin/comment/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -193,7 +199,7 @@
                             <li><a href="{{ route('admin.comment.list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'order' ? 'active' : '' }}">
                         <a href="{{ url('admin/order/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -205,7 +211,7 @@
                             <li><a href="{{ url('admin/order/list') }}">Đơn hàng</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'coupon' ? 'active' : '' }}">
                         <a href="{{ url('admin/coupon/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -218,7 +224,7 @@
                             <li><a href="{{ url('admin/coupon/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'user' ? 'active' : '' }}">
                         <a href="{{ url('admin/user/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -232,7 +238,20 @@
                             <li><a href="{{ url('admin/user/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'customer' ? 'active' : '' }}">
+                        <a href="{{ url('admin/customer/list') }}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Quản lý khách hàng
+                        </a>
+                        <i class="arrow fas fa-angle-right"></i>
+
+                        <ul class="sub-menu">
+                            <li><a href="{{ url('admin/customer/list') }}">Danh sách</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link {{ $module_active == 'slider' ? 'active' : '' }}">
                         <a href="{{ url('admin/slider/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -245,7 +264,7 @@
                             <li><a href="{{ url('admin/slider/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link {{ $module_active == 'role' ? 'active' : '' }}">
                         <a href="{{ url('admin/role/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>

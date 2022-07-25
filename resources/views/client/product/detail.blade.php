@@ -672,6 +672,61 @@
             });
         })
 
+        $(document).on('click', '#buy_now', function() {
+            if (is_busy) return false;
+            var product_id = $(this).data('product');
+            var product_variant = $(this).data('variant');
+            var qty = Number($('.product_quantity').val());
+            is_busy = true;
+            $.ajax({
+                url: "{{ route('client.cart.buy_now') }}",
+                type: "POST",
+                data: {
+                    product_id: product_id,
+                    product_variant: product_variant
+                },
+                dataType: "json",
+                success: function(rsp) {
+                    let name = rsp.product_detail_name;
+                    let price = rsp.product_price - (rsp.product_price * rsp.product_discount / 100);
+                    let thumbnail = rsp.product_details_thumb;
+                    let cost_price = rsp.cost_price;
+                    let newCart = {
+                        'id': product_variant,
+                        'name': name,
+                        'price': price,
+                        'cost_price': cost_price,
+                        'thumbnail': thumbnail,
+                        'qty': qty,
+                    }
+
+                    if (localStorage.getItem('data_cart') == null) {
+                        localStorage.setItem('data_cart', '[]');
+                    }
+
+                    let old_cart_data = JSON.parse(localStorage.getItem('data_cart'));
+                    const itemExists = old_cart_data.find(item => {
+                        if (item.id === product_variant) {
+                            item.qty += qty;
+                            return true;
+                        }
+                        return false;
+                    })
+
+                    if (!itemExists) {
+                        old_cart_data.push(newCart);
+                    }
+                    localStorage.setItem('data_cart', JSON.stringify(old_cart_data));
+                    num_in_cart();
+                    window.location.href = "http://localhost/nadshop/cart/checkout";
+                    is_busy = false;
+                },
+                error: function() {
+                    alert("error!!!!");
+                }
+            });
+        });
+
         function show(data, data2) {
             var output = ''
             output +=

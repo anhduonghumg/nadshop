@@ -26,7 +26,7 @@
     <link href="{{ url('public/client/css/account.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" href="{{ url('public/css/sweetalert2.css') }}">
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
         crossorigin="anonymous"></script>
@@ -43,6 +43,7 @@
     <script src="{{ url('public/client/js/client.js') }}"></script>
     <script src="{{ url('public/client/js/pagination.js') }}"></script>
     <script src="{{ url('public/js/sweetalert2.min.js') }}"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 </head>
 
 <body>

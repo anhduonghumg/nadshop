@@ -17,6 +17,12 @@ class AdminUserController extends Controller
     protected $role;
     public function __construct(UserRepositoryInterface $userRepo, Role $role, RoleUser $roleUser)
     {
+        $this->middleware(function ($request, $next) {
+            session(['module_active' => 'user']);
+
+            return $next($request);
+        });
+
         $this->userRepo = $userRepo;
         $this->role = $role;
         $this->roleUser = $roleUser;

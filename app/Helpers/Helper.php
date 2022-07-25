@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +13,12 @@ function currentcyFormat($val, $unit = "đ")
 function formatDateToDMY($val)
 {
     $result = date('d/m/Y H:i', strtotime($val));
+    return $result;
+}
+
+function formatDate($val)
+{
+    $result = Carbon::createFromFormat('Y-m-d', $val)->format('d/m/Y');
     return $result;
 }
 
@@ -54,4 +61,18 @@ function menu($menu, $parent = 0)
         $str_menu .= "</div>";
     }
     return $str_menu;
+}
+
+function translate_order($val)
+{
+    if ($val == 'pending') {
+        $result = "Chờ xác nhận";
+    } elseif ($val == 'shipping') {
+        $result = "Đang vận chuyển";
+    } elseif ($val == "success") {
+        $result = "Hoàn thành";
+    } elseif ($val == 'cancel') {
+        $result = "Hủy bỏ";
+    }
+    return $result;
 }

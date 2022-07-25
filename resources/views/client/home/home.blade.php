@@ -1,5 +1,10 @@
 @extends('layouts.client')
 @section('carousel')
+    <style>
+        .list-inline {
+            display: flex;
+        }
+    </style>
     <div class="carousel-inner">
         <div class="carousel-item active" style="height: 410px;">
             <img class="img-fluid" src="{{ url('public/client/img/carousel-1.jpg') }}" alt="Image">
@@ -178,8 +183,9 @@
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">{{ $shirt->product_name }}</h6>
                             <div class="d-flex justify-content-center">
-                                <h6>{{ currentcyFormat($shirt->product_price) }}</h6>
-                                <h6 class="text-muted ml-2"><del>{{ currentcyFormat($product->product_price) }}</del>
+                                <h6>{{ currentcyFormat($shirt->product_price - ($shirt->product_price * $shirt->product_discount) / 100) }}
+                                </h6>
+                                <h6 class="text-muted ml-2"><del>{{ currentcyFormat($shirt->product_price) }}</del>
                                 </h6>
                             </div>
                         </div>
@@ -187,8 +193,9 @@
                             <a href="{{ route('client.product.detail', $shirt->id) }}" data-id="{{ $shirt->id }}"
                                 data-name="{{ $shirt->product_name }}" data-img="{{ $shirt->product_thumb }}"
                                 data-url="{{ route('client.product.detail', $shirt->id) }}"
-                                data-price="{{ $shirt->product_price }}" class="btn btn-sm text-dark p-0 btn_view"><i
-                                    class="fas fa-eye text-primary mr-1"></i>Xem chi tiết</a>
+                                data-price="{{ $shirt->product_price - ($shirt->product_price * $shirt->product_discount) / 100 }}"
+                                class="btn btn-sm text-dark p-0 btn_view"><i class="fas fa-eye text-primary mr-1"></i>Xem
+                                chi tiết</a>
                             <a class="btn btn-sm text-dark p-0 btn_buy_now" data-id="{{ $shirt->id }}"><i
                                     class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
                         </div>
@@ -216,6 +223,34 @@
             </div>
         </div>
         <div class="row px-xl-5 pb-3 load_trouser_data">
+            @foreach ($list_trousers as $trouser)
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="img-fluid" src="{{ asset($trouser->product_thumb) }}" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">{{ $trouser->product_name }}</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>{{ currentcyFormat($trouser->product_price - ($trouser->product_price * $trouser->product_discount) / 100) }}
+                                </h6>
+                                <h6 class="text-muted ml-2"><del>{{ currentcyFormat($trouser->product_price) }}</del>
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="{{ route('client.product.detail', $trouser->id) }}" data-id="{{ $trouser->id }}"
+                                data-name="{{ $trouser->product_name }}" data-img="{{ $trouser->product_thumb }}"
+                                data-url="{{ route('client.product.detail', $trouser->id) }}"
+                                data-price="{{ $trouser->product_price - ($trouser->product_price * $trouser->product_discount) / 100 }}"
+                                class="btn btn-sm text-dark p-0 btn_view"><i class="fas fa-eye text-primary mr-1"></i>Xem
+                                chi tiết</a>
+                            <a class="btn btn-sm text-dark p-0 btn_buy_now" data-id="{{ $trouser->id }}"><i
+                                    class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
     <!-- Products End -->
@@ -236,7 +271,34 @@
             </div>
         </div>
         <div class="row px-xl-5 pb-3 load_accessory_data">
-
+            @foreach ($list_accessories as $accessorie)
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            <img class="img-fluid" src="{{ asset($accessorie->product_thumb) }}" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">{{ $accessorie->product_name }}</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>{{ currentcyFormat($accessorie->product_price - ($accessorie->product_price * $trouser->product_discount) / 100) }}
+                                </h6>
+                                <h6 class="text-muted ml-2"><del>{{ currentcyFormat($accessorie->product_price) }}</del>
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="{{ route('client.product.detail', $accessorie->id) }}" data-id="{{ $accessorie->id }}"
+                                data-name="{{ $accessorie->product_name }}" data-img="{{ $accessorie->product_thumb }}"
+                                data-url="{{ route('client.product.detail', $accessorie->id) }}"
+                                data-price="{{ $accessorie->product_price - ($accessorie->product_price * $accessorie->product_discount) / 100 }}"
+                                class="btn btn-sm text-dark p-0 btn_view"><i class="fas fa-eye text-primary mr-1"></i>Xem
+                                chi tiết</a>
+                            <a class="btn btn-sm text-dark p-0 btn_buy_now" data-id="{{ $accessorie->id }}"><i
+                                    class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
     <!-- Products End -->
@@ -517,7 +579,6 @@
 
         $('body').on('click', '#size_check', size_check);
 
-
         function buy_now(e) {
             e.preventDefault();
             if (is_busy == true) {
@@ -535,7 +596,9 @@
                 success: function(rsp) {
                     let product = rsp.product;
                     let colors = rsp.list_colors;
-                    let html = render_buy_now(product, colors);
+                    let rating = rsp.rating;
+                    let count_rating = rsp.count_rating;
+                    let html = render_buy_now(product, colors, rating, count_rating);
                     $('.show-modal-cart-buy').html(html);
                     $('#modal_cart').modal('show');
                     is_busy = false;
@@ -546,7 +609,7 @@
             });
         }
 
-        function render_buy_now(data, data2) {
+        function render_buy_now(data, data2, data3, data4) {
             let output = `<div class="modal fade" id="modal_cart" tabindex="-1" aria-hidden="true" data-backdrop=false>
                    <div class="modal-dialog modal-xl">
                        <div class="modal-content">
@@ -572,7 +635,25 @@
                         </div>
                         <div class="col-lg-4 pb-5">
                             <h3 class="font-weight-semi-bold">${data.product_name}</h3>
-                            <div class="mb-3">
+                           <ul style="margin: 0px" class="list-inline" title="average rating">`;
+            for (let count = 1; count <= 5; count++) {
+                if (count <= data3) {
+                    var color = 'color:#ffcc00;';
+                } else {
+                    var color = 'color:#ccc;';
+                }
+
+                output += `<li style="${color};font-size:20px;margin-right:10px;">
+                            &#9733;
+                        </li>`;
+            }
+            if (data4 > 0) {
+                output += `<p style="font-size:13px;margin-top:5px">${data4} đánh giá</p>`;
+            } else {
+                output += `<p style="font-size:13px;margin-top:5px">chưa có đánh giá</p>`;
+            }
+            output += `</ul>`;
+            output += `<div class="mb-3">
                                 <strong class="pt-1">Còn hàng</strong>
                             </div>
                             <h3 class="font-weight-semi-bold mb-4">${currencyFormat(data.product_price - (data.product_price * data.product_discount / 100))}</h3>

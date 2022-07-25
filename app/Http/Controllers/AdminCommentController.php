@@ -9,6 +9,11 @@ class AdminCommentController extends Controller
 {
     public function __construct()
     {
+        $this->middleware(function ($request, $next) {
+            session(['module_active' => 'comment']);
+
+            return $next($request);
+        });
     }
 
     public function show()

@@ -424,7 +424,7 @@
                     value.image == product_detail.product_details_thumb ?
                     "selected" :
                     null;
-                    output += `<option data-imagesrc="http://localhost:8080/nadshop/storage/app/public/images/product/thumb/${value.image}" value="${value.image}" ${selected}></option>`;
+                    output += `<option data-imagesrc="http://localhost/nadshop/storage/app/public/images/product/thumb/${value.image}" value="${value.image}" ${selected}></option>`;
             });
             output += `</select></div></div></div></div></div></div>`;
             output += `<div class="modal-footer">
