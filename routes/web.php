@@ -260,7 +260,7 @@ Route::post('district', [App\Http\Controllers\Client\DistrictController::class, 
 // Search
 Route::get('search', [App\Http\Controllers\Client\SearchController::class, 'show'])->name('client.search');
 Route::post('searchAjax', [App\Http\Controllers\Client\SearchController::class, 'searchAjax'])->name('client.ajax');
-
+Route::post('searchAuto', [App\Http\Controllers\Client\SearchController::class, 'searchAutoCompalte'])->name('client.searchAuto');
 // Login
 Route::post('userRegister', [App\Http\Controllers\Client\UserController::class, 'register'])->name('client.register');
 Route::post('userLogin', [App\Http\Controllers\Client\UserController::class, 'login'])->name('client.login');

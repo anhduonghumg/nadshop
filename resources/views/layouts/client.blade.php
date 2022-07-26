@@ -28,8 +28,8 @@
     <link rel="stylesheet" href="{{ url('public/css/sweetalert2.css') }}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
     </script>
@@ -57,6 +57,39 @@
     <style>
         .slick-carousel img {
             width: 200px;
+        }
+
+        .show_auto_search {
+            position: absolute;
+            z-index: 9999999999;
+        }
+
+        .show_auto_search ul {
+            list-style: none;
+            padding: 0px;
+            background-color: #ffffff;
+            width: 550px;
+        }
+
+        .show_auto_search ul li {
+            display: flex;
+            margin-left: 12px;
+            padding-top: 10px;
+            padding-bottom: 7px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .show_auto_search ul li .info {
+            margin-left: 20px;
+        }
+
+        .info p.price {
+            margin-top: 5px;
+        }
+
+        a.query-search {
+            font-size: 13px;
+            margin-left: 13px;
         }
     </style>
     <!-- Topbar Start -->
@@ -102,11 +135,14 @@
                 <div class="col-lg-6 col-6 text-left">
                     <form action="{{ route('client.search') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" class="form-control btn_search" name="key"
+                            <input type="text" class="form-control btn_search" id="search_value" name="key"
                                 value="{{ request()->input('key') }}" placeholder="Tìm kiếm gì đó...">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                         </div>
                     </form>
+                    <div class="show_auto_search">
+
+                    </div>
                 </div>
                 <div class="col-lg-3 col-6 text-right">
                     <a href="{{ route('client.product.wishlist') }}" class="btn border" title="Yêu thích">
@@ -141,48 +177,48 @@
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
                                 @foreach ($category_products as $cat)
-                                    <div class="nav-item dropdown">
-                                        @if ($cat->parent_id == 0)
-                                            <a href="{{ Route('client.product.cat.show', $cat->id) }}"
-                                                class="nav-link dropdown-toggle"
-                                                data-toggle="dropdown">{{ $cat->category_product_name }}</a>
-                                            <div class="dropdown-menu rounded-0 m-0">
-                                                @foreach ($category_products as $cat2)
-                                                    @if ($cat2->parent_id != 0 && $cat2->parent_id == $cat->id)
-                                                        <a href="{{ route('client.product.cat.show', $cat2->id) }}"
-                                                            class="nav-item nav-link">{{ $cat2->category_product_name }}</a>
-                                                    @endif
-                                                @endforeach
-                                            </div>
+                                <div class="nav-item dropdown">
+                                    @if ($cat->parent_id == 0)
+                                    <a href="{{ Route('client.product.cat.show', $cat->id) }}"
+                                        class="nav-link dropdown-toggle" data-toggle="dropdown">{{
+                                        $cat->category_product_name }}</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        @foreach ($category_products as $cat2)
+                                        @if ($cat2->parent_id != 0 && $cat2->parent_id == $cat->id)
+                                        <a href="{{ route('client.product.cat.show', $cat2->id) }}"
+                                            class="nav-item nav-link">{{ $cat2->category_product_name }}</a>
                                         @endif
+                                        @endforeach
                                     </div>
+                                    @endif
+                                </div>
                                 @endforeach
                                 <a href="" class="nav-item nav-link">Album</a>
                                 <a href="" class="nav-item nav-link">Tin tức</a>
                             </div>
                             <div class="navbar-nav ml-auto py-0">
                                 @if (request()->session()->get('client_login') == true)
-                                    {{-- <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
-                                            aria-hidden="true"></i>
-                                        {{ request()->session()->get('name') }}</a> --}}
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            {{ request()->session()->get('client_name') }}
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="{{ route('client.profile') }}">Thông tin
-                                                cá
-                                                nhân</a>
-                                            <a class="dropdown-item" href="{{ route('client.logout') }}">Đăng
-                                                xuất</a>
-                                        </div>
+                                {{-- <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
+                                        aria-hidden="true"></i>
+                                    {{ request()->session()->get('name') }}</a> --}}
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ request()->session()->get('client_name') }}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="{{ route('client.profile') }}">Thông tin
+                                            cá
+                                            nhân</a>
+                                        <a class="dropdown-item" href="{{ route('client.logout') }}">Đăng
+                                            xuất</a>
                                     </div>
+                                </div>
                                 @else
-                                    <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
-                                            aria-hidden="true"></i>
-                                        Tài
-                                        khoản</a>
+                                <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
+                                        aria-hidden="true"></i>
+                                    Tài
+                                    khoản</a>
                                 @endif
                                 {{-- < a href="" class="nav-item nav-link">Đăng ký</> --}}
                                 {{-- < span class='auth'><i class="fa fa-user" aria-hidden="true"></i></> --}}
@@ -227,16 +263,14 @@
                                         class="fa fa-angle-right mr-2"></i>Home</a>
                                 <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our
                                     Shop</a>
-                                <a class="text-dark mb-2" href="detail.html"><i
-                                        class="fa fa-angle-right mr-2"></i>Shop
+                                <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop
                                     Detail</a>
                                 <a class="text-dark mb-2" href="cart.html"><i
                                         class="fa fa-angle-right mr-2"></i>Shopping
                                     Cart</a>
                                 <a class="text-dark mb-2" href="checkout.html"><i
                                         class="fa fa-angle-right mr-2"></i>Checkout</a>
-                                <a class="text-dark" href="contact.html"><i
-                                        class="fa fa-angle-right mr-2"></i>Contact
+                                <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact
                                     Us</a>
                             </div>
                         </div>
@@ -247,16 +281,14 @@
                                         class="fa fa-angle-right mr-2"></i>Home</a>
                                 <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our
                                     Shop</a>
-                                <a class="text-dark mb-2" href="detail.html"><i
-                                        class="fa fa-angle-right mr-2"></i>Shop
+                                <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop
                                     Detail</a>
                                 <a class="text-dark mb-2" href="cart.html"><i
                                         class="fa fa-angle-right mr-2"></i>Shopping
                                     Cart</a>
                                 <a class="text-dark mb-2" href="checkout.html"><i
                                         class="fa fa-angle-right mr-2"></i>Checkout</a>
-                                <a class="text-dark" href="contact.html"><i
-                                        class="fa fa-angle-right mr-2"></i>Contact
+                                <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact
                                     Us</a>
                             </div>
                         </div>
@@ -369,6 +401,32 @@
                 return true;
             }
         });
+
+
+      // autoComplete-search
+
+        var myTimer = null;
+        $('#search_value').keyup(function(e) {
+            clearTimeout(myTimer);
+            myTimer = setTimeout(function () {
+                var search_text = $("#search_value").val();
+                $.ajax({
+                    url: "{{ route('client.searchAuto') }}",
+                    type: "POST",
+                    data: {
+                        search_text: search_text
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        $('.show_auto_search').html(data);
+                        if(search_text == ''){
+                            $(".query-search").hide();
+                        }
+                    }
+                });
+              }, 400);
+        });
+
 
         function addProduct(e) {
             e.preventDefault();

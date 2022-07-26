@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Models\OrderDetail;
-use App\Jobs\SendOrderEmail;
+use App\Mail\SendOrder;
 use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\Customer;
 use App\Models\Rating;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -173,15 +174,54 @@ class CartController extends Controller
                     'product_order_id' => $saveOrder->id
                 ];
                 $this->orderDetail->create($saveDataOrderDetail);
+
+                $product_detail = ProductDetail::where('id', $product_name[$key])->first();
+                $product_detail->product_qty_stock = $product_detail->product_qty_stock - $request->qty[$key];
+                $product_detail->save();
             }
 
-            $details['email'] = $request->email;
-            $emailJob = new SendOrderEmail($details);
-            dispatch($emailJob);
+            $list_product_order = $this->orderDetail->get_product_order($saveOrder->id);
+            $body = view('email.product', compact('list_product_order'))->render();
+            $data_email = [
+                'order_code' => $order_code,
+                'fullname' => $request->fullname,
+                'email' => $request->email,
+                'address' => $address,
+                'payment' => $request->payment,
+                'total_order' => $request->order_total,
+                'phone' => $request->phone,
+                'body' => $body
+            ];
+            $this->send_email_order($data_email);
             $code = Str::after($order_code, '#');
             $view = route('client.thank', $code);
             return response()->json(['success' => $view]);
         }
+    }
+
+    public function send_email_order($array)
+    {
+        $email = $array['email'];
+        $fullname = $array['fullname'];
+        $order_code = $array['order_code'];
+        $total_order = $array['total_order'];
+        $payment = $array['payment'];
+        $address = $array['address'];
+        $phone = $array['phone'];
+        $body = $array['body'];
+        // $content = view('client.email.order', compact('order_code', 'total_order', 'payment', 'address'));
+
+        $subject = "[NADSHOP - $fullname] Thư thông tin đơn hàng!";
+        $data = [
+            'order_code' => $order_code,
+            'fullname' => $fullname,
+            'payment' => $payment,
+            'total_order' => $total_order,
+            'address' => $address,
+            'phone' => $phone,
+            'body' => $body
+        ];
+        Mail::to($email)->send(new SendOrder($data, $subject));
     }
 
     public function thank(Request $request)
@@ -277,6 +317,10 @@ class CartController extends Controller
                         'product_order_id' => $saveOrder->id
                     ];
                     $this->orderDetail->create($saveDataOrderDetail);
+
+                    $product_detail = ProductDetail::where('id', $product_name[$key])->first();
+                    $product_detail->product_qty_stock = $product_detail->product_qty_stock - $request->qty[$key];
+                    $product_detail->save();
                 }
             }
 
@@ -300,7 +344,7 @@ class CartController extends Controller
             $order_code = get_order_code();
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
             $vnp_Returnurl = route('check_vnpay');
-            $vnp_TmnCode = "U25HD9I9"; //Mã website tại VNPAY 
+            $vnp_TmnCode = "U25HD9I9"; //Mã website tại VNPAY
             $vnp_HashSecret = "SJOHIHMOWXQXENHWOINIHFBIDYRLVWLL"; //Chuỗi bí mật
 
             $vnp_TxnRef = $order_code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
@@ -350,7 +394,7 @@ class CartController extends Controller
 
             $vnp_Url = $vnp_Url . "?" . $query;
             if (isset($vnp_HashSecret)) {
-                $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+                $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //
                 $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
             }
             $returnData = array(

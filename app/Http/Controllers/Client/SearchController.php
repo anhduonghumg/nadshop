@@ -86,4 +86,20 @@ class SearchController extends Controller
             return response()->json($view);
         }
     }
+
+    public function searchAutoCompalte(Request $request)
+    {
+        if ($request->ajax()) {
+            $key = $request->search_text ? $request->search_text : 'null';
+            $list_product = Product::select('products.id', 'products.product_name', 'product_details.product_price', 'products.product_thumb', 'product_details.product_discount')
+                ->join('product_details', 'product_details.product_id', '=', 'products.id')
+                ->where('products.product_name', 'like', "%{$key}%")
+                ->where('products.product_status', '=', 'public')
+                ->orderByDesc('products.id')
+                ->distinct()
+                ->get();
+            $view = view('client.search.autoajax', compact('list_product', 'key'))->render();
+            return response()->json($view);
+        }
+    }
 }

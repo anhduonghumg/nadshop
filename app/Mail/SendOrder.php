@@ -11,13 +11,18 @@ class SendOrder extends Mailable
 {
     use Queueable, SerializesModels;
 
-    
-    public function __construct()
+    public $data;
+    public $subject;
+    public function __construct($data, $subject)
     {
+        $this->data = $data;
+        $this->subject = $subject;
     }
 
     public function build()
     {
-        return $this->view('email.order');
+        return $this->view('email.order')
+            ->subject($this->subject)
+            ->with('data', $this->data);
     }
 }
