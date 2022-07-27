@@ -234,6 +234,10 @@ Route::post('product/comment/add', [App\Http\Controllers\Client\ProductControlle
 Route::get('product/comment/load', [App\Http\Controllers\Client\ProductController::class, 'load_comment'])->name('client.loadComment');
 Route::post('product/rating', [App\Http\Controllers\Client\ProductController::class, 'rating'])->name('client.insertRating');
 
+// Rank
+Route::post('product/rank', [App\Http\Controllers\Client\ProductController::class, 'rank'])->name('client.product.rank');
+Route::post('product/rankTopview', [App\Http\Controllers\Client\ProductController::class, 'rankTopView'])->name('client.product.rankTopView');
+
 // CART
 Route::post('cart/add', [App\Http\Controllers\Client\CartController::class, 'add'])->name('client.cart.add');
 Route::post('cart/buy_now', [App\Http\Controllers\Client\CartController::class, 'buy_now'])->name('client.cart.buy_now');
@@ -246,6 +250,7 @@ Route::post('cart/changePayment', [App\Http\Controllers\Client\CartController::c
 Route::post('vnpay_payment', [App\Http\Controllers\Client\CartController::class, 'vnpayPayment'])->name('vnpay_payment');
 Route::get('cart/checkvnpay', [App\Http\Controllers\Client\CartController::class, 'checkVnpay'])->name('check_vnpay');
 Route::post('confirm_vnpay', [App\Http\Controllers\Client\CartController::class, 'confirmVnpay'])->name('confirm_vnpay');
+Route::post('cart/checkqty', [App\Http\Controllers\Client\CartController::class, 'checkQty'])->name('client.cart.checkQty');
 // Route::get('', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
 // Route::get('thank/{code}', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
 // ORDER
@@ -274,3 +279,4 @@ Route::get('profile/order/history', [App\Http\Controllers\Client\UserController:
 Route::post('profile/order/detail', [App\Http\Controllers\Client\UserController::class, 'orderDetail'])->name('client.orderDetail');
 Route::post('profile/order/cancel', [App\Http\Controllers\Client\UserController::class, 'orderCancel'])->name('client.orderCancel');
 Route::post('profile/order/cancelConfirm', [App\Http\Controllers\Client\UserController::class, 'orderCancelConfirm'])->name('client.orderCancelConfirm');
+

@@ -16,8 +16,7 @@
         @php $temp++; @endphp
         <tr>
             <td scope="col">{{ $temp }}</td>
-            <td scope="col"><img
-                    src="{{ asset('storage/app/public/images/product/thumb/' . $item->product_details_thumb) }}"
+            <td scope="col"><img src="{{ asset('storage/app/public/images/product/thumb/' . $item->product_details_thumb) }}"
                     width='80px' height="80px" alt=""></td>
             <td scope="col">{{ $item->product_detail_name }}</td>
             <td scope="col">

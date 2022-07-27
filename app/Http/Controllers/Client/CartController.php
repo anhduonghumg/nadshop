@@ -99,6 +99,21 @@ class CartController extends Controller
         return view('client.cart.checkout', compact('category_products', 'list_city'));
     }
 
+    public function checkQty(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id ? (int)$request->id : die;
+            $qty = $request->qty ? (int)$request->qty : die;
+
+            $checkqty = ProductDetail::where('id', $id)->first(['product_qty_stock'])->product_qty_stock;
+            if ($qty > $checkqty - 1) {
+                return response()->json(['errors' => 'Không thể được số lượng lớn hơn số lượng trong kho']);
+            } else {
+                return true;
+            }
+        }
+    }
+
     public function order(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -4,6 +4,10 @@
         .list-inline {
             display: flex;
         }
+
+        ul li a {
+            color: black;
+        }
     </style>
     <div class="carousel-inner">
         <div class="carousel-item active" style="height: 410px;">
@@ -287,8 +291,9 @@
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
-                            <a href="{{ route('client.product.detail', $accessorie->id) }}" data-id="{{ $accessorie->id }}"
-                                data-name="{{ $accessorie->product_name }}" data-img="{{ $accessorie->product_thumb }}"
+                            <a href="{{ route('client.product.detail', $accessorie->id) }}"
+                                data-id="{{ $accessorie->id }}" data-name="{{ $accessorie->product_name }}"
+                                data-img="{{ $accessorie->product_thumb }}"
                                 data-url="{{ route('client.product.detail', $accessorie->id) }}"
                                 data-price="{{ $accessorie->product_price - ($accessorie->product_price * $accessorie->product_discount) / 100 }}"
                                 class="btn btn-sm text-dark p-0 btn_view"><i class="fas fa-eye text-primary mr-1"></i>Xem
@@ -344,86 +349,10 @@
     </div>
     <!-- Modal buy now end-->
 
-    <!-- Modal Account Start -->
-    <div class="modal fade login" id="loginModal">
-        <div class="modal-dialog login animated">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Đăng nhập với</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="box">
-                        <div class="content">
-                            <div class="social">
-                                {{-- <a class="circle github" href="#">
-                                <i class="fa fa-github fa-fw"></i>
-                            </a> --}}
-                                <a id="google_login" class="circle google" href="#">
-                                    <i class="fab fa-google"></i>
-                                </a>
-                                <a id="facebook_login" class="circle facebook" href="#">
-                                    <i class="fab fa-facebook"></i>
-                                </a>
-                            </div>
-                            <div class="division">
-                                <div class="line l"></div>
-                                <span>Hoặc</span>
-                                <div class="line r"></div>
-                            </div>
-                            <div class="error"></div>
-                            <div class="form loginBox">
-                                <form method="">
-                                    <input id="email_login" class="form-control" type="text" placeholder="email"
-                                        name="email">
-                                    <input id="password_login" class="form-control" type="password"
-                                        placeholder="Mật khẩu" name="password">
-                                    <input class="btn btn-default btn-login" type="button" value="Đăng nhập">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box">
-                        <div class="content registerBox" style="display:none;">
-                            <div class="form" id="">
-                                <form id="form_reg" method="" html="{:multipart=>true}" data-remote="true"
-                                    action="" accept-charset="UTF-8">
-                                    <input class="form-control" type="text" placeholder="Họ tên" name="fullname">
-                                    <input class="form-control" type="text" placeholder="Số điện thọai"
-                                        name="phone">
-                                    <input class="form-control" type="text" placeholder="email" name="email">
-                                    <input class="form-control" type="password" placeholder="Password" name="password">
-                                    <input class="btn btn-default btn-register" type="button" value="Tạo tài khoản">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="forgot login-footer">
-                        <span><a href="" class='register'>Tạo một tài khoản</a>?</span>
-                    </div>
-                    <div class="forgot register-footer" style="display:none">
-                        <span>Bạn đã có tài khoản?</span>
-                        <a href="javascript: showLoginForm();">Đăng nhập</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Account End -->
-
+    
     <script type="text/javascript">
         var is_busy = false;
-        $(document).on('click', '.account', function(e) {
-            e.preventDefault();
-            openLoginModal();
-        });
 
-        $(document).on('click', '.register', function(e) {
-            e.preventDefault();
-            openRegisterModal();
-        });
 
         $(document).on('click', '.tp_title', function(e) {
             e.preventDefault();
@@ -455,51 +384,6 @@
             load_data(selector, data);
         });
 
-        $(document).on('click', '.btn-login', function() {
-            let email = $('#email_login').val();
-            let password = $('#password_login').val();
-            let current_url = window.location.href;
-            $.ajax({
-                url: "{{ route('client.login') }}",
-                type: 'POST',
-                data: {
-                    email: email,
-                    password: password,
-                    current_url: current_url
-                },
-                dataType: "json",
-                success: function(rsp) {
-                    if ($.isEmptyObject(rsp.errors)) {
-                        window.location.href = rsp.success;
-                    } else {
-                        confirm_warning(rsp.errors);
-                    }
-                },
-                error: function() {
-                    alert("error!!!!");
-                }
-            });
-        });
-
-        $(document).on('click', '.btn-register', function() {
-            let form_reg = $("#form_reg").serialize();
-            $.ajax({
-                url: "{{ route('client.register') }}",
-                type: 'POST',
-                data: form_reg,
-                dataType: "json",
-                success: function(rsp) {
-                    if ($.isEmptyObject(rsp.errors)) {
-                        confirm_success(rsp.success);
-                    } else {
-                        confirm_warning(rsp.errors);
-                    }
-                },
-                error: function() {
-                    alert("error!!!!");
-                }
-            });
-        });
 
         $('body').on('click', '.btn_buy_now', buy_now);
 
@@ -836,44 +720,6 @@
                     alert("error!!!!");
                 },
             });
-        }
-
-
-        function openLoginModal() {
-            showLoginForm();
-            setTimeout(function() {
-                $('#loginModal').modal('show');
-            }, 230);
-        }
-
-        function openRegisterModal() {
-            showRegisterForm();
-            setTimeout(function() {
-                $('#loginModal').modal('show');
-            }, 230);
-
-        }
-
-        function showLoginForm() {
-            $('#loginModal .registerBox').fadeOut('fast', function() {
-                $('.loginBox').fadeIn('fast');
-                $('.register-footer').fadeOut('fast', function() {
-                    $('.login-footer').fadeIn('fast');
-                });
-                $('.modal-title').html('Login with');
-            });
-            $('.error').removeClass('alert alert-danger').html('');
-        }
-
-        function showRegisterForm() {
-            $('.loginBox').fadeOut('fast', function() {
-                $('.registerBox').fadeIn('fast');
-                $('.login-footer').fadeOut('fast', function() {
-                    $('.register-footer').fadeIn('fast');
-                });
-                $('.modal-title').html('Register with');
-            });
-            $('.error').removeClass('alert alert-danger').html('');
         }
     </script>
 @endsection

@@ -428,6 +428,42 @@
             $("#buy_now").removeAttr('disabled');
         }
 
+        $(document).on('input', '.qty_pro', function() {
+            if (is_busy == true) return false;
+            let id = $(this).data('id');
+            let qty = $(this).val();
+            is_busy = true;
+            $.ajax({
+                url: "{{ route('client.cart.checkQty') }}",
+                type: "post",
+                data: {
+                    id: id,
+                    qty: qty
+                },
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        $('.check-qty').attr('disabled', false);
+                    } else {
+                        confirm_warning(rsp.errors);
+                        $('.check-qty').attr('disabled', true);
+                    }
+                    // if (qty == rsp) {
+                    //     // alert('Không thể thêm sản phẩm tiếp theo');
+                    //     $('.check-qty').attr('disabled', true);
+                    // } else {
+                    //     $('.check-qty').attr('disabled', false);
+                    // }
+                    is_busy = false;
+                },
+                error: function() {
+                    // $('.loading').hide();
+                    alert("error!!!!");
+                    is_busy = false;
+                },
+            });
+        });
+
         function remove_background(product_id) {
             for (var count = 1; count <= 5; count++) {
                 $('#' + product_id + '-' + count).css('color', '#ccc');
@@ -568,7 +604,9 @@
                     dataType: "json",
                     success: function(rsp) {
                         var show_data = show(rsp.variant_id, rsp.pro_id);
+                        var show_qty = show_input_qty(rsp.variant_id);
                         $('.btn_action').html(show_data);
+                        $('.quantity').html(show_qty);
                         is_busy = false;
                     },
                     error: function() {
@@ -726,6 +764,22 @@
                 }
             });
         });
+
+        function show_input_qty(data) {
+            var output = ''
+            output += `<div class="input-group-btn">
+                            <button class="btn btn-primary btn-minus">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                        <input type="text" class="form-control bg-secondary text-center qty_pro" value="1" data-id='${data}' disabled>
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary btn-plus check-qty">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>`;
+            return output;
+        }
 
         function show(data, data2) {
             var output = ''

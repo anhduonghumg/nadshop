@@ -8,6 +8,8 @@ use App\Models\CategoryProduct;
 use App\Constants\Constants;
 use App\Models\Product;
 use Illuminate\Support\Arr;
+use App\Models\Color;
+use App\Models\Size;
 
 class SearchController extends Controller
 {
@@ -27,13 +29,15 @@ class SearchController extends Controller
             ->distinct()
             ->paginate(10);
         $count = count($list_product);
-        return view('client.search.show', compact('category_products', 'list_product', 'count'));
+        $list_color = Color::all();
+        $list_size = Size::all();
+        return view('client.search.show', compact('category_products', 'list_product', 'count', 'list_color', 'list_size', 'list_color'));
     }
 
     public function searchAjax(Request $request)
     {
         if ($request->ajax()) {
-            $key = $request->key ? $request->key : 'null';
+            $key = $request->key ? $request->key : '';
             $color = $request->color_filter;
             $size = $request->size_filter;
             $price = $request->price_filter;
@@ -81,9 +85,12 @@ class SearchController extends Controller
                 $list_product = $list_product->orderBy('product_details.product_price', 'asc');
             }
 
-            $list_product = $list_product->paginate(20);
-            $view = view('client.search.showajax', compact('list_product'))->render();
-            return response()->json($view);
+            $list_product = $list_product->get();
+            // $view = view('client.search.showajax', compact('list_product'))->render();
+            $result = [
+                'list_product' => $list_product
+            ];
+            return response()->json($result);
         }
     }
 
@@ -91,12 +98,13 @@ class SearchController extends Controller
     {
         if ($request->ajax()) {
             $key = $request->search_text ? $request->search_text : 'null';
-            $list_product = Product::select('products.id', 'products.product_name', 'product_details.product_price', 'products.product_thumb', 'product_details.product_discount')
+            $list_product = Product::select('products.id', 'products.product_name', 'product_details.product_price', 'product_details.product_details_thumb', 'product_details.product_discount')
                 ->join('product_details', 'product_details.product_id', '=', 'products.id')
                 ->where('products.product_name', 'like', "%{$key}%")
                 ->where('products.product_status', '=', 'public')
                 ->orderByDesc('products.id')
                 ->distinct()
+                ->take(5)
                 ->get();
             $view = view('client.search.autoajax', compact('list_product', 'key'))->render();
             return response()->json($view);

@@ -28,8 +28,8 @@
     <link rel="stylesheet" href="{{ url('public/css/sweetalert2.css') }}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
     </script>
@@ -136,7 +136,8 @@
                     <form action="{{ route('client.search') }}" method="GET">
                         <div class="input-group">
                             <input type="text" class="form-control btn_search" id="search_value" name="key"
-                                value="{{ request()->input('key') }}" placeholder="Tìm kiếm gì đó...">
+                                value="{{ request()->input('key') }}" placeholder="Tìm kiếm gì đó..."
+                                autocomplete="off">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                         </div>
                     </form>
@@ -177,48 +178,48 @@
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
                                 @foreach ($category_products as $cat)
-                                <div class="nav-item dropdown">
-                                    @if ($cat->parent_id == 0)
-                                    <a href="{{ Route('client.product.cat.show', $cat->id) }}"
-                                        class="nav-link dropdown-toggle" data-toggle="dropdown">{{
-                                        $cat->category_product_name }}</a>
-                                    <div class="dropdown-menu rounded-0 m-0">
-                                        @foreach ($category_products as $cat2)
-                                        @if ($cat2->parent_id != 0 && $cat2->parent_id == $cat->id)
-                                        <a href="{{ route('client.product.cat.show', $cat2->id) }}"
-                                            class="nav-item nav-link">{{ $cat2->category_product_name }}</a>
+                                    <div class="nav-item dropdown">
+                                        @if ($cat->parent_id == 0)
+                                            <a href="{{ Route('client.product.cat.show', $cat->id) }}"
+                                                class="nav-link dropdown-toggle"
+                                                data-toggle="dropdown">{{ $cat->category_product_name }}</a>
+                                            <div class="dropdown-menu rounded-0 m-0">
+                                                @foreach ($category_products as $cat2)
+                                                    @if ($cat2->parent_id != 0 && $cat2->parent_id == $cat->id)
+                                                        <a href="{{ route('client.product.cat.show', $cat2->id) }}"
+                                                            class="nav-item nav-link">{{ $cat2->category_product_name }}</a>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         @endif
-                                        @endforeach
                                     </div>
-                                    @endif
-                                </div>
                                 @endforeach
                                 <a href="" class="nav-item nav-link">Album</a>
                                 <a href="" class="nav-item nav-link">Tin tức</a>
                             </div>
                             <div class="navbar-nav ml-auto py-0">
                                 @if (request()->session()->get('client_login') == true)
-                                {{-- <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
+                                    {{-- <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
                                         aria-hidden="true"></i>
                                     {{ request()->session()->get('name') }}</a> --}}
-                                <div class="dropdown">
-                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        {{ request()->session()->get('client_name') }}
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{{ route('client.profile') }}">Thông tin
-                                            cá
-                                            nhân</a>
-                                        <a class="dropdown-item" href="{{ route('client.logout') }}">Đăng
-                                            xuất</a>
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {{ request()->session()->get('client_name') }}
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="{{ route('client.profile') }}">Thông tin
+                                                cá
+                                                nhân</a>
+                                            <a class="dropdown-item" href="{{ route('client.logout') }}">Đăng
+                                                xuất</a>
+                                        </div>
                                     </div>
-                                </div>
                                 @else
-                                <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
-                                        aria-hidden="true"></i>
-                                    Tài
-                                    khoản</a>
+                                    <a href="#" class="nav-item nav-link account"><i class="fa fa-user"
+                                            aria-hidden="true"></i>
+                                        Tài
+                                        khoản</a>
                                 @endif
                                 {{-- < a href="" class="nav-item nav-link">Đăng ký</> --}}
                                 {{-- < span class='auth'><i class="fa fa-user" aria-hidden="true"></i></> --}}
@@ -234,7 +235,7 @@
         <!-- Nav end -->
 
         <div class="wp-content">
-            @yield('content');
+            @yield('content')
         </div>
 
         <!-- Footer Start -->
@@ -263,14 +264,16 @@
                                         class="fa fa-angle-right mr-2"></i>Home</a>
                                 <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our
                                     Shop</a>
-                                <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop
+                                <a class="text-dark mb-2" href="detail.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Shop
                                     Detail</a>
                                 <a class="text-dark mb-2" href="cart.html"><i
                                         class="fa fa-angle-right mr-2"></i>Shopping
                                     Cart</a>
                                 <a class="text-dark mb-2" href="checkout.html"><i
                                         class="fa fa-angle-right mr-2"></i>Checkout</a>
-                                <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact
+                                <a class="text-dark" href="contact.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Contact
                                     Us</a>
                             </div>
                         </div>
@@ -281,14 +284,16 @@
                                         class="fa fa-angle-right mr-2"></i>Home</a>
                                 <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our
                                     Shop</a>
-                                <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop
+                                <a class="text-dark mb-2" href="detail.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Shop
                                     Detail</a>
                                 <a class="text-dark mb-2" href="cart.html"><i
                                         class="fa fa-angle-right mr-2"></i>Shopping
                                     Cart</a>
                                 <a class="text-dark mb-2" href="checkout.html"><i
                                         class="fa fa-angle-right mr-2"></i>Checkout</a>
-                                <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact
+                                <a class="text-dark" href="contact.html"><i
+                                        class="fa fa-angle-right mr-2"></i>Contact
                                     Us</a>
                             </div>
                         </div>
@@ -374,6 +379,81 @@
         </aside>
         <!-- end sidebar cart -->
         <div class="lightbox js-lightbox js-toggle-cart"></div>
+
+        <!-- Modal Account Start -->
+        <div class="modal fade login" id="loginModal">
+            <div class="modal-dialog login animated">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Đăng nhập với</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box">
+                            <div class="content">
+                                <div class="social">
+                                    {{-- <a class="circle github" href="#">
+                                <i class="fa fa-github fa-fw"></i>
+                            </a> --}}
+                                    <a id="google_login" class="circle google" href="#">
+                                        <i class="fab fa-google"></i>
+                                    </a>
+                                    <a id="facebook_login" class="circle facebook" href="#">
+                                        <i class="fab fa-facebook"></i>
+                                    </a>
+                                </div>
+                                <div class="division">
+                                    <div class="line l"></div>
+                                    <span>Hoặc</span>
+                                    <div class="line r"></div>
+                                </div>
+                                <div class="error"></div>
+                                <div class="form loginBox">
+                                    <form method="">
+                                        <input id="email_login" class="form-control" type="text"
+                                            placeholder="email" name="email">
+                                        <input id="password_login" class="form-control" type="password"
+                                            placeholder="Mật khẩu" name="password">
+                                        <input class="btn btn-default btn-login" type="button" value="Đăng nhập">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box">
+                            <div class="content registerBox" style="display:none;">
+                                <div class="form" id="">
+                                    <form id="form_reg" method="" html="{:multipart=>true}" data-remote="true"
+                                        action="" accept-charset="UTF-8">
+                                        <input class="form-control" type="text" placeholder="Họ tên"
+                                            name="fullname">
+                                        <input class="form-control" type="text" placeholder="Số điện thọai"
+                                            name="phone">
+                                        <input class="form-control" type="text" placeholder="email"
+                                            name="email">
+                                        <input class="form-control" type="password" placeholder="Password"
+                                            name="password">
+                                        <input class="btn btn-default btn-register" type="button"
+                                            value="Tạo tài khoản">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="forgot login-footer">
+                            <span><a href="" class='register'>Tạo một tài khoản</a>?</span>
+                        </div>
+                        <div class="forgot register-footer" style="display:none">
+                            <span>Bạn đã có tài khoản?</span>
+                            <a href="javascript: showLoginForm();">Đăng nhập</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Account End -->
+
     </div>
 
     <script type="text/javascript">
@@ -403,12 +483,12 @@
         });
 
 
-      // autoComplete-search
+        // autoComplete-search
 
         var myTimer = null;
         $('#search_value').keyup(function(e) {
             clearTimeout(myTimer);
-            myTimer = setTimeout(function () {
+            myTimer = setTimeout(function() {
                 var search_text = $("#search_value").val();
                 $.ajax({
                     url: "{{ route('client.searchAuto') }}",
@@ -419,14 +499,110 @@
                     dataType: "json",
                     success: function(data) {
                         $('.show_auto_search').html(data);
-                        if(search_text == ''){
+                        if (search_text == '') {
                             $(".query-search").hide();
                         }
                     }
                 });
-              }, 400);
+            }, 400);
         });
 
+
+        // Login - Register
+        $('body').on('click', '.account', function(e) {
+            e.preventDefault();
+            openLoginModal();
+        });
+
+        $('body').on('click', '.register', function(e) {
+            e.preventDefault();
+            openRegisterModal();
+        });
+
+        $('body').on('click', '.btn-login', function() {
+            let email = $('#email_login').val();
+            let password = $('#password_login').val();
+            let current_url = window.location.href;
+            $.ajax({
+                url: "{{ route('client.login') }}",
+                type: 'POST',
+                data: {
+                    email: email,
+                    password: password,
+                    current_url: current_url
+                },
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        window.location.href = rsp.success;
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
+                },
+                error: function() {
+                    alert("error!!!!");
+                }
+            });
+        });
+
+        $('body').on('click', '.btn-register', function() {
+            let form_reg = $("#form_reg").serialize();
+            $.ajax({
+                url: "{{ route('client.register') }}",
+                type: 'POST',
+                data: form_reg,
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        confirm_success(rsp.success);
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
+                },
+                error: function() {
+                    alert("error!!!!");
+                }
+            });
+        });
+
+        function openLoginModal() {
+            showLoginForm();
+            setTimeout(function() {
+                $('#loginModal').modal('show');
+            }, 230);
+        }
+
+        function openRegisterModal() {
+            showRegisterForm();
+            setTimeout(function() {
+                $('#loginModal').modal('show');
+            }, 230);
+
+        }
+
+        function showLoginForm() {
+            $('#loginModal .registerBox').fadeOut('fast', function() {
+                $('.loginBox').fadeIn('fast');
+                $('.register-footer').fadeOut('fast', function() {
+                    $('.login-footer').fadeIn('fast');
+                });
+                $('.modal-title').html('Login with');
+            });
+            $('.error').removeClass('alert alert-danger').html('');
+        }
+
+        function showRegisterForm() {
+            $('.loginBox').fadeOut('fast', function() {
+                $('.registerBox').fadeIn('fast');
+                $('.login-footer').fadeOut('fast', function() {
+                    $('.register-footer').fadeIn('fast');
+                });
+                $('.modal-title').html('Register with');
+            });
+            $('.error').removeClass('alert alert-danger').html('');
+        }
+
+        // end login - register
 
         function addProduct(e) {
             e.preventDefault();

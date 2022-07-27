@@ -4,6 +4,31 @@
         #contentSearch {
             top: 22px !important;
         }
+
+        .paginationjs {
+            display: flex;
+        }
+
+        .paginationjs-go-input {
+            width: 37px;
+
+        }
+
+        .J-paginationjs-go-pagenumber {
+            width: 35px;
+            padding: 3px;
+            margin-left: 7px;
+        }
+
+        .J-paginationjs-go-button {
+            padding: 3px;
+            margin-left: 12px;
+        }
+
+        .s-filter {
+            margin-top: 10px;
+            margin-right: 142px !important;
+        }
     </style>
     <!-- Shop Start -->
     <div class="heading-page text-center mt-5 mb-5">
@@ -11,7 +36,7 @@
         <p class="subtxt">Có {{ $count }}<span> sản phẩm</span> cho tìm kiếm</p>
     </div>
     <div class="container-fluid">
-        <div class="row px-xl-5">
+        <div class="d-flex">
             <div class="col-lg-8">
                 <div class="groupFilterNew d-flex">
                     <h5 class="mr-3">Bộ lọc</h5>
@@ -32,11 +57,13 @@
                     <div id="contentSearch" class="contentFilter clearfix">
                         <div class="filter-color s-filter">
                             <ul class="check-box-list">
-                                <li class="filter-item">
-                                    <input type="checkbox" style="background-color: black" class='color-filter filter-check'
-                                        value='2'>
-                                </li>
-                                <li class="filter-item">
+                                @foreach ($list_color as $color)
+                                    <li class="filter-item">
+                                        <input type="checkbox" style="background-color:{{ $color->code_color }}"
+                                            class='color-filter filter-check' value='{{ $color->id }}'>
+                                    </li>
+                                @endforeach
+                                {{-- <li class="filter-item">
                                     <input type="checkbox" style="background-color: yellow"
                                         class='color-filter filter-check' value='5'>
                                 </li>
@@ -47,19 +74,21 @@
                                 <li class="filter-item">
                                     <input type="checkbox" style="background-color: pink" class='color-filter filter-check'
                                         value='6'>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                         <div class="filter-size s-filter">
                             <ul class="check-box-list clearfix">
-                                <li class="filter-item">
-                                    <input type="checkbox" class="size-filter filter-check" value="xl">
-                                    <label>
-                                        <span class="button tp_button"></span>
-                                        XL
-                                    </label>
-                                </li>
-                                <li class="filter-item">
+                                @foreach ($list_size as $size)
+                                    <li class="filter-item">
+                                        <input type="checkbox" class="size-filter filter-check" value="{{ $size->id }}">
+                                        <label>
+                                            <span class="button tp_button"></span>
+                                            {{ $size->size_name }}
+                                        </label>
+                                    </li>
+                                @endforeach
+                                {{-- <li class="filter-item">
                                     <input type="checkbox" class="size-filter filter-check" value="5">
                                     <label>
                                         <span class="button tp_button"></span>
@@ -82,7 +111,7 @@
                                     <label>
                                         <span class="button tp_button"></span>
                                         XS </label>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                         <div class="filter-price s-filter">
@@ -119,46 +148,46 @@
                     </select>
                 </div>
             </div>
-            <div id="show_data_search">
-                <div class="row px-xl-5 pb-3">
-                    @if ($list_product->isNotEmpty())
-                        @foreach ($list_product as $item)
-                            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                                <div class="card product-item border-0 mb-4">
-                                    <div
-                                        class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                                        <img class="img-fluid" src="{{ asset($item->product_thumb) }}" alt="">
-                                    </div>
-                                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                                        <h6 class="text-truncate mb-3">{{ $item->product_name }}</h6>
-                                        <div class="d-flex justify-content-center">
-                                            <h6>{{ currentcyFormat($item->product_price - ($item->product_price * $item->product_discount) / 100) }}
-                                            </h6>
-                                            <h6 class="text-muted ml-2">
-                                                <del>{{ currentcyFormat($item->product_price) }}</del>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer d-flex justify-content-between bg-light border">
-                                        <a href="{{ route('client.product.detail', $item->id) }}"
-                                            data-id="{{ $item->id }}" data-name="{{ $item->product_name }}"
-                                            data-img="{{ $item->product_thumb }}"
-                                            data-url="{{ route('client.product.detail', $item->id) }}"
-                                            data-price="{{ $item->product_price - ($item->product_price * $item->product_discount) / 100 }}"
-                                            class="btn btn-sm text-dark p-0 btn_view"><i
-                                                class="fas fa-eye text-primary mr-1"></i>Xem chi
-                                            tiết</a>
-                                        <a href="" class="btn btn-sm text-dark p-0 btn_buy_now"
-                                            data-id="{{ $item->id }}"><i
-                                                class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
+        </div>
+        <div id="show_data_search">
+            <div class="row px-xl-5 pb-3">
+                @if ($list_product->isNotEmpty())
+                    @foreach ($list_product as $item)
+                        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                            <div class="card product-item border-0 mb-4">
+                                <div
+                                    class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                    <img class="img-fluid" src="{{ asset($item->product_thumb) }}" alt="">
+                                </div>
+                                <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                    <h6 class="text-truncate mb-3">{{ $item->product_name }}</h6>
+                                    <div class="d-flex justify-content-center">
+                                        <h6>{{ currentcyFormat($item->product_price - ($item->product_price * $item->product_discount) / 100) }}
+                                        </h6>
+                                        <h6 class="text-muted ml-2">
+                                            <del>{{ currentcyFormat($item->product_price) }}</del>
+                                        </h6>
                                     </div>
                                 </div>
+                                <div class="card-footer d-flex justify-content-between bg-light border">
+                                    <a href="{{ route('client.product.detail', $item->id) }}" data-id="{{ $item->id }}"
+                                        data-name="{{ $item->product_name }}" data-img="{{ $item->product_thumb }}"
+                                        data-url="{{ route('client.product.detail', $item->id) }}"
+                                        data-price="{{ $item->product_price - ($item->product_price * $item->product_discount) / 100 }}"
+                                        class="btn btn-sm text-dark p-0 btn_view"><i
+                                            class="fas fa-eye text-primary mr-1"></i>Xem chi
+                                        tiết</a>
+                                    <a href="" class="btn btn-sm text-dark p-0 btn_buy_now"
+                                        data-id="{{ $item->id }}"><i
+                                            class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
+                                </div>
                             </div>
-                        @endforeach
-                    @endif
-                </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
+        <div id="pagination"></div>
     </div>
     <div class="show-modal-cart-buy">
 
@@ -166,6 +195,7 @@
     <!-- Shop End -->
     <script type="text/javascript">
         var is_busy = false;
+        load_data();
         $('body').on('click', '.btn_buy_now', buy_now);
 
         $('body').on('click', '.btn_color', color_check);
@@ -189,6 +219,7 @@
 
         })
 
+        /*
         $(document).on('click', '.pagination a', function(event) {
             event.preventDefault();
             // var url = "http://localhost/nadshop/admin/product/detail/list";
@@ -201,6 +232,8 @@
             // }
             load_data();
         });
+
+        */
 
 
         $('body').on('click', '#buy_now', function(e) {
@@ -503,13 +536,73 @@
                 dataType: "json",
                 success: function(rsp) {
                     $('.loading').hide();
-                    $('#show_data_search').html(rsp);
+                    var total = rsp.list_product.length;
+                    var data = rsp.list_product;
+                    pagination_ajax(data, total);
+                    // $('#show_data_search').html(rsp);
                 },
                 error: function() {
                     $(".loading").hide();
                     alert("error!!!!");
                 }
             });
+        }
+
+        function pagination_ajax(data, total) {
+            if (data.length > 0) {
+                $('#pagination').pagination({
+                    dataSource: data,
+                    locator: 'data',
+                    showGoInput: true,
+                    showGoButton: true,
+                    totalNumber: total,
+                    pageSize: 20,
+                    callback: function(data, pagination) {
+                        var show = show_data_filter(data);
+                        $('#show_data_search').html(show);
+                        $('#pagination').show();
+                    }
+                })
+            } else {
+                $('#show_data_search').html('<p class="px-xl-5">Không có dữ liệu.</p>');
+            }
+        }
+
+        function show_data_filter(data) {
+            var output = "";
+            output += `<div class="row px-xl-5 pb-3">`;
+            if (data.length > 0) {
+                $.each(data, function(key, value) {
+                    var price = currencyFormat(value.product_price - (value.product_price * value.product_discount /
+                        100));
+                    var format_price = currencyFormat(value.product_price);
+                    output += `<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+    <div class="card product-item border-0 mb-4">
+        <div
+            class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+            <img class="img-fluid w-100" src='http://localhost/nadshop/${value.product_thumb}' alt="">
+        </div>
+        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+            <h6 class="text-truncate mb-3">${value.product_name}</h6>
+            <div class="d-flex justify-content-center">
+                <h6>${price}</h6>
+                <h6 class="text-muted ml-2"><del>${format_price}</del></h6>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between bg-light border">
+                    <a href="http://localhost/nadshop/product/${value.id}" class="btn btn-sm text-dark p-0 btn_view"><i
+                            class="fas fa-eye text-primary mr-1"></i>Xem chi tiết</a>
+                    <a class="btn btn-sm text-dark p-0 btn_buy_now" data-id="${value.id}"><i
+                            class="fas fa-shopping-cart text-primary mr-1"></i>Mua ngay</a>
+        </div>
+    </div>
+</div>`;
+                });
+            } else {
+                output += `<p>Không có dữ liệu.</p>`
+            }
+            output += `</div>`;
+            return output;
         }
 
         function get_filter(class_name) {

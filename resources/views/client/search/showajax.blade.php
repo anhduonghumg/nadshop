@@ -32,4 +32,3 @@
         @endforeach
     @endif
 </div>
-{{ $list_product->links('layouts.paginationlink') }}

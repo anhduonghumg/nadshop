@@ -34,7 +34,7 @@
                                 Stylish Shirt</td>
                             <td class="align-middle">$150</td>
                             <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group quantity mx-auto show_qty" style="width: 100px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-primary btn-minus">
                                             <i class="fa fa-minus"></i>
@@ -71,6 +71,7 @@
     </div>
     <!-- Cart End -->
     <script type="text/javascript">
+        var is_fetching = false;
         load_cart();
         $(document).on('click', '.btn_delete_cart', function() {
             let confirm_delete = confirm("Bạn có chắc chắn muốn xóa không?");
@@ -102,6 +103,43 @@
             $('#item-' + key + ' .total_price').html(show_total_price);
             num_in_cart();
             show_total_cart();
+        });
+
+        $('body').on('input', '.quantity_pro', function() {
+            if (is_fetching == true) return false;
+            let id = $(this).data('id');
+            let qty = $(this).val();
+            let key = $(this).data('key');
+            is_fetching = true;
+            $.ajax({
+                url: "{{ route('client.cart.checkQty') }}",
+                type: "post",
+                data: {
+                    id: id,
+                    qty: qty
+                },
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        $('.check-qty-' + key).attr('disabled', false);
+                    } else {
+                        confirm_warning(rsp.errors);
+                        $('.check-qty-' + key).attr('disabled', true);
+                    }
+                    // if (qty == rsp) {
+                    //     alert('Không thể thêm sản phẩm tiếp theo');
+                    //     $('.check-qty-' + key).attr('disabled', true);
+                    // } else {
+                    //     $('.check-qty-' + key).attr('disabled', false);
+                    // }
+                    is_fetching = false;
+                },
+                error: function() {
+                    // $('.loading').hide();
+                    alert("error!!!!");
+                    is_fetching = false;
+                },
+            });
         });
 
         function update_total_cart() {
@@ -146,10 +184,10 @@
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
-                    <input type="text" class="form-control form-control-sm bg-secondary text-center product_quantity"
-                        value="${value.qty}" data-key="${key}" data-id="${value.id}">
+                    <input type="text" class="form-control form-control-sm bg-secondary text-center product_quantity quantity_pro"
+                        value="${value.qty}" data-key="${key}" data-id="${value.id}" disabled>
                     <div class="input-group-btn">
-                        <button class="btn btn-sm btn-primary btn-plus btn_qty">
+                        <button class="btn btn-sm btn-primary check-qty-${key} btn-plus btn_qty">
                             <i class="fa fa-plus"></i>
                         </button>
                     </div>

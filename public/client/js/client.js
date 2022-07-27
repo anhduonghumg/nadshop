@@ -93,8 +93,6 @@
 
 })(jQuery);
 
-
-
 function currencyFormat(val, unit = 'đ') {
     if (val != null) {
         return val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") + unit;

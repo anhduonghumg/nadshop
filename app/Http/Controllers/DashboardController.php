@@ -62,6 +62,7 @@ class DashboardController extends Controller
                     'period' => $day,
                     'sale' => $val->sale,
                     'profit' => $val->profit,
+                    'product_qty' => $val->product_qty,
                 );
             }
             $data = json_encode($chart_data);
@@ -131,6 +132,7 @@ class DashboardController extends Controller
                     'period' => $val->year_order,
                     'sale' => $val->sale,
                     'profit' => $val->profit,
+                    'product_qty' => $val->product_qty,
                 );
             }
             $data = json_encode($chart_data);
@@ -218,6 +220,7 @@ class DashboardController extends Controller
                     'period' => $day,
                     'sale' => $val->sale,
                     'profit' => $val->profit,
+                    'product_qty' => $val->product_qty,
                 );
             }
 
