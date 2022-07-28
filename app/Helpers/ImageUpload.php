@@ -29,6 +29,25 @@ trait ImageUpload
         }
     }
 
+    public function uploadImage2($file)
+    {
+        $file = $file;
+        $upload_dir =  Constants::PATH_IMAGE . "product/main/";
+        $file_name = $file->getClientOriginalName();
+        $file_extension = $file->getClientOriginalExtension();
+        if (strcasecmp($file_extension, 'jpg') === 0 || strcasecmp($file_extension, 'png') === 0 || strcasecmp($file_extension, 'jepg') === 0) {
+            $name = Str::random(5) . "-" . $file_name;
+            while (file::exists($upload_dir . $name)) {
+                $name = Str::random(5) . "-" . $file_name;
+            }
+            $path = $file->move($upload_dir, $name);
+            if ($path) {
+                return $path;
+            }
+            return false;
+        }
+    }
+
     public function uploadMultipleImage($file, $folder, $id)
     {
         $file = $file;

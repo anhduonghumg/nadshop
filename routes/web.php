@@ -263,6 +263,7 @@ Route::post('vnpay_payment', [App\Http\Controllers\Client\CartController::class,
 Route::get('cart/checkvnpay', [App\Http\Controllers\Client\CartController::class, 'checkVnpay'])->name('check_vnpay');
 Route::post('confirm_vnpay', [App\Http\Controllers\Client\CartController::class, 'confirmVnpay'])->name('confirm_vnpay');
 Route::post('cart/checkqty', [App\Http\Controllers\Client\CartController::class, 'checkQty'])->name('client.cart.checkQty');
+Route::post('cart/discount', [App\Http\Controllers\Client\CartController::class, 'discount'])->name('client.cart.discount');
 // Route::get('', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
 // Route::get('thank/{code}', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
 // ORDER
@@ -287,3 +288,4 @@ Route::get('userLogout', [App\Http\Controllers\Client\UserController::class, 'lo
 // NEWS
 Route::get('news', [App\Http\Controllers\Client\PostController::class, 'show'])->name('client.news');
 Route::get('new/{id}', [App\Http\Controllers\Client\PostController::class, 'detail'])->name('client.new.detail');
+

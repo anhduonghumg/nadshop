@@ -39,10 +39,10 @@
                         if (rsp.status = 201) {
                             localStorage.removeItem('data_cart');
                             $('.order-success').html(rsp.success);
-                            console.log(rsp.success);
+                            // console.log(rsp.success);
                         } else {
                             $('.order-success').html(rsp.errors);
-                            console.log(rsp.errors);
+                            // console.log(rsp.errors);
                         }
                         is_fetching = false;
                     },

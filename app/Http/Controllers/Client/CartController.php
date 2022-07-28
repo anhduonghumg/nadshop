@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Models\OrderDetail;
 use App\Mail\SendOrder;
+use App\Models\Coupon;
 use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\Customer;
@@ -211,6 +212,41 @@ class CartController extends Controller
             $code = Str::after($order_code, '#');
             $view = route('client.thank', $code);
             return response()->json(['success' => $view]);
+        }
+    }
+
+    public function discount(Request $request)
+    {
+        if ($request->ajax()) {
+            $validator = Validator::make($request->all(), [
+                'discount_code' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                $error = collect($validator->errors())->unique()->first();
+                return response()->json(['errors' => $error]);
+            }
+
+            $discount_code = $request->discount_code ? $request->discount_code : null;
+            $total = $request->total_cart ? $request->total_cart : die;
+            $check = Coupon::where('code', $discount_code)->first();
+            if ($check) {
+                $qty_discount = $check->qty;
+                if ($qty_discount > 0) {
+                    $check->qty = $qty_discount - 1;
+                    $check->save();
+                    $total_cart = $total - $check->value;
+                    $result = [
+                        'success' => 'Áp dụng thành công.',
+                        'total_cart' => currentcyFormat($total_cart),
+                    ];
+                    return response()->json($result);
+                } else {
+                    return response()->json(['errors' => 'Mã giảm giá đã hết số lượng sử dụng.']);
+                }
+            } else {
+                return response()->json(['errors' => 'Mã giảm giá không tồn tại.']);
+            }
         }
     }
 

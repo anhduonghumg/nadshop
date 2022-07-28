@@ -192,7 +192,7 @@ class AdminProductController extends Controller
             ];
 
             if ($request->hasFile('product_thumb')) {
-                $dataImg = $this->ImageUpload($request->product_thumb, 'product');
+                $dataImg = $this->ImageUpload2($request->product_thumb);
                 $data['product_thumb'] = $dataImg['file_path'];
             }
 

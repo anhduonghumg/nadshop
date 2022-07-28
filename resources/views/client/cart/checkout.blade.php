@@ -1,5 +1,14 @@
 @extends('layouts.client')
 @section('content')
+    <style>
+        .show_point {
+            text-align: end;
+        }
+
+        .cumulative_point {
+            width: 265px;
+        }
+    </style>
     <div class="breadcrumb-shop clearfix bg-none px-xl-5">
         <div class="clearfix">
             <div class="">
@@ -89,9 +98,21 @@
                             </div>
                             <hr class="mt-0">
                             <div class="d-flex justify-content-between">
-                                <h6 class="font-weight-medium">Phí vận chuyển</h6>
-                                <h6 class="font-weight-medium">Chọn nhà vận chuyển</h6>
+                                <input style="width:365px" type="text" name="discount_code" class="discount_code" data-value=""
+                                    placeholder="Mã giảm giá">
+                                <button type="button" style="width:115px" id="btn_apply_discount"
+                                    class="btn btn-primary">Sử dụng</button>
                             </div>
+                            <hr class="mt-0">
+                            {{-- @if (request()->session()->has('client_login')) --}}
+                            <div class="point">
+                                <div class="d-flex justify-content-between">
+                                    <label for="point">Nhập điểm cần tiêu:</label>
+                                    <input type="number" min="0" class="cumulative_point">
+                                </div>
+                                <p class="show_point">0 điểm<span class="point_money" data-point="">(- 0đ)</span></p>
+                            </div>
+                            {{-- @endif --}}
                         </div>
                         <div class="card-footer border-secondary bg-transparent">
                             <div class="d-flex justify-content-between mt-2">
@@ -107,15 +128,15 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input payment" name="payment" id="cod"
-                                        value='cod' checked="checked">
+                                    <input type="radio" class="custom-control-input payment" name="payment"
+                                        id="cod" value='cod' checked="checked">
                                     <label class="custom-control-label" for="cod">COD</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input payment" name="payment" id="vnpay"
-                                        value='vnpay'>
+                                    <input type="radio" class="custom-control-input payment" name="payment"
+                                        id="vnpay" value='vnpay'>
                                     <label class="custom-control-label" for="vnpay">VNPAY</label>
                                 </div>
                             </div>
@@ -150,6 +171,31 @@
                 success: function(rsp) {
                     let show = render_district(rsp);
                     $('#district').html(show);
+                },
+                error: function() {
+                    alert("error!!!!");
+                },
+            });
+        });
+
+        $(document).on('click', '#btn_apply_discount', function() {
+            let discount_code = $('.discount_code').val();
+            let total_cart = stringToNumber($('.show_total_cart').text());
+            $.ajax({
+                url: "{{ route('client.cart.discount') }}",
+                type: "POST",
+                data: {
+                    discount_code: discount_code,
+                    total_cart: total_cart
+                },
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        $('.show_total_cart').html(rsp.total_cart);
+                        confirm_success(rsp.success);
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
                 },
                 error: function() {
                     alert("error!!!!");
