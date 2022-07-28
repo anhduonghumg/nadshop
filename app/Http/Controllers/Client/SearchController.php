@@ -25,6 +25,8 @@ class SearchController extends Controller
         $list_product = Product::select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'product_details.product_discount')
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->where('products.product_name', 'like', "%{$kw}%")
+            ->where('products.product_status', Constants::PUBLIC)
+            ->where('products.deleted_at', Constants::EMPTY)
             ->orderByDesc('products.id')
             ->distinct()
             ->paginate(10);
@@ -44,6 +46,8 @@ class SearchController extends Controller
             $sort_by = isset($request->sort_by) ? $request->sort_by : 'new';
             $list_product = Product::select('products.id', 'products.product_name', 'product_details.product_price', 'products.product_thumb', 'product_details.product_discount')
                 ->join('product_details', 'product_details.product_id', '=', 'products.id')
+                ->where('products.product_status', Constants::PUBLIC)
+                ->where('products.deleted_at', Constants::EMPTY)
                 ->distinct();
 
             if (!empty($key)) {

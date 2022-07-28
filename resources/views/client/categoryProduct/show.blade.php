@@ -350,18 +350,18 @@
         //     var output = ''
         //     output +=
         //         `<div class="input-group quantity mr-3" style="width: 130px;">
-        //                 <div class="input-group-btn">
-        //                     <button class="btn btn-primary btn-minus">
-        //                         <i class="fa fa-minus"></i>
-        //                     </button>
-        //                 </div>
-        //                 <input type="text" class="form-control bg-secondary text-center product_quantity" value="1" data-id='${data}' disabled>
-        //                 <div class="input-group-btn">
-        //                     <button class="btn btn-primary btn-plus check-qty">
-        //                         <i class="fa fa-plus"></i>
-        //                     </button>
-        //                 </div>
-        //             </div>`
+    //                 <div class="input-group-btn">
+    //                     <button class="btn btn-primary btn-minus">
+    //                         <i class="fa fa-minus"></i>
+    //                     </button>
+    //                 </div>
+    //                 <input type="text" class="form-control bg-secondary text-center product_quantity" value="1" data-id='${data}' disabled>
+    //                 <div class="input-group-btn">
+    //                     <button class="btn btn-primary btn-plus check-qty">
+    //                         <i class="fa fa-plus"></i>
+    //                     </button>
+    //                 </div>
+    //             </div>`
         //     return output;
         // }
 
@@ -451,11 +451,15 @@
                     showGoInput: true,
                     showGoButton: true,
                     totalNumber: total,
-                    pageSize: 1,
+                    pageSize: 20,
                     callback: function(data, pagination) {
                         var show = show_data(data);
                         $('.filter-here').html(show);
-                        $('#pagination').show();
+                        if (pagination.pageNumber = 1) {
+                            $('#pagination').hide();
+                        } else {
+                            $('#pagination').show();
+                        }
                     }
                 })
             } else {

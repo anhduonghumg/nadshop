@@ -218,6 +218,18 @@ Route::middleware('auth', 'verified')->group(function () {
 
 // CLIENT
 
+Route::middleware('isLogin')->group(function () {
+    Route::get('profile', [App\Http\Controllers\Client\UserController::class, 'profile'])->name('client.profile');
+    Route::get('profile/edit', [App\Http\Controllers\Client\UserController::class, 'profileEdit'])->name('client.profileEdit');
+    Route::post('profile/update', [App\Http\Controllers\Client\UserController::class, 'profileUpdate'])->name('client.customerUpdateInfo');
+    Route::get('profile/changePass', [App\Http\Controllers\Client\UserController::class, 'profileChangePass'])->name('client.changePass');
+    Route::post('changePass', [App\Http\Controllers\Client\UserController::class, 'changePass'])->name('client.updatePass');
+    Route::get('profile/order/history', [App\Http\Controllers\Client\UserController::class, 'orderHistory'])->name('client.orderHistory');
+    Route::post('profile/order/detail', [App\Http\Controllers\Client\UserController::class, 'orderDetail'])->name('client.orderDetail');
+    Route::post('profile/order/cancel', [App\Http\Controllers\Client\UserController::class, 'orderCancel'])->name('client.orderCancel');
+    Route::post('profile/order/cancelConfirm', [App\Http\Controllers\Client\UserController::class, 'orderCancelConfirm'])->name('client.orderCancelConfirm');
+});
+
 Route::get('user/signin', [App\Http\Controllers\Client\UserController::class, 'login']);
 Route::get('user/signup', [App\Http\Controllers\Client\UserController::class, 'register']);
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('client.home');
@@ -270,13 +282,8 @@ Route::post('searchAuto', [App\Http\Controllers\Client\SearchController::class, 
 Route::post('userRegister', [App\Http\Controllers\Client\UserController::class, 'register'])->name('client.register');
 Route::post('userLogin', [App\Http\Controllers\Client\UserController::class, 'login'])->name('client.login');
 Route::get('userLogout', [App\Http\Controllers\Client\UserController::class, 'logout'])->name('client.logout');
-Route::get('profile', [App\Http\Controllers\Client\UserController::class, 'profile'])->name('client.profile');
-Route::get('profile/edit', [App\Http\Controllers\Client\UserController::class, 'profileEdit'])->name('client.profileEdit');
-Route::post('profile/update', [App\Http\Controllers\Client\UserController::class, 'profileUpdate'])->name('client.customerUpdateInfo');
-Route::get('profile/changePass', [App\Http\Controllers\Client\UserController::class, 'profileChangePass'])->name('client.changePass');
-Route::post('changePass', [App\Http\Controllers\Client\UserController::class, 'changePass'])->name('client.updatePass');
-Route::get('profile/order/history', [App\Http\Controllers\Client\UserController::class, 'orderHistory'])->name('client.orderHistory');
-Route::post('profile/order/detail', [App\Http\Controllers\Client\UserController::class, 'orderDetail'])->name('client.orderDetail');
-Route::post('profile/order/cancel', [App\Http\Controllers\Client\UserController::class, 'orderCancel'])->name('client.orderCancel');
-Route::post('profile/order/cancelConfirm', [App\Http\Controllers\Client\UserController::class, 'orderCancelConfirm'])->name('client.orderCancelConfirm');
 
+
+// NEWS
+Route::get('news', [App\Http\Controllers\Client\PostController::class, 'show'])->name('client.news');
+Route::get('new/{id}', [App\Http\Controllers\Client\PostController::class, 'detail'])->name('client.new.detail');

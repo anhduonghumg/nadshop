@@ -78,6 +78,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->join('product_details', 'products.id', '=', 'product_details.product_id')
             ->where("products.{$column}", Constants::TRUE)
             ->where('products.product_status', Constants::PUBLIC)
+            ->where('products.deleted_at', '=', Constants::EMPTY)
             ->orderByDesc('products.id')
             ->distinct()
             ->take($take)
@@ -129,7 +130,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->where('product_detail_name', 'LIKE', "%{$kw}%")
             ->orderByDesc('product_details.color_id')
             ->paginate(20);
-            // ->withPath("http://localhost/nadshop/admin/product/variant?id=" . $id);
+        // ->withPath("http://localhost/nadshop/admin/product/variant?id=" . $id);
         return $result;
     }
 

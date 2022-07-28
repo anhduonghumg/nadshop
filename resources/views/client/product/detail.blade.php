@@ -772,7 +772,7 @@
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary text-center qty_pro" value="1" data-id='${data}' disabled>
+                        <input type="text" class="form-control bg-secondary text-center qty_pro product_quantity" value="1" data-id='${data}' disabled>
                         <div class="input-group-btn">
                             <button class="btn btn-primary btn-plus check-qty">
                                 <i class="fa fa-plus"></i>

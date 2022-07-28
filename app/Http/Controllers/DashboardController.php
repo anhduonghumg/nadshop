@@ -19,6 +19,7 @@ class DashboardController extends Controller
             return $next($request);
         });
     }
+
     function index()
     {
         $order_success = Order::where('order_status', Constants::SUCCESS)->count();

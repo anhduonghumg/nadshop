@@ -59,7 +59,7 @@
                                 class='btn_variant'>Danh sách</a>
                         </td>
                         <td>
-                            <input type="hidden" class="data-img"
+                            {{-- <input type="hidden" class="data-img"
                                 data-img="{{ asset('storage/app/public/images/upload_img.png') }}" />
                             <button id="add_product_detail" type="button"
                                 class="btn btn-primary btn-sm rounded-0 text-white" data-toggle="modal"
@@ -67,7 +67,7 @@
                                 data-url="{{ route('admin.product.detail.add') }}"
                                 data-placement="top" title="Add product detail" data-token="{{ csrf_token() }}">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
-                            </button>
+                            </button> --}}
                             <a href="{{ route('admin.product.edit', ['id' => $item->id]) }}"
                                 class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip"
                                 data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>

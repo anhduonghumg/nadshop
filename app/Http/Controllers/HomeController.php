@@ -42,6 +42,7 @@ class HomeController extends Controller
                 $query->where('is_product_new', 1)
                     ->orWhere('is_product_bestseller', 1);
             })->where('product_status', Constants::PUBLIC)
+            ->where('products.deleted_at','=', Constants::EMPTY)
             ->where('product_name', 'like', '%Áo%')
             ->orderByDesc('views')
             ->distinct()
@@ -53,6 +54,7 @@ class HomeController extends Controller
                 $query->where('is_product_new', 1)
                     ->orWhere('is_product_bestseller', 1);
             })->where('product_status', Constants::PUBLIC)
+            ->where('products.deleted_at','=', Constants::EMPTY)
             ->where('product_name', 'like', '%Quần%')
             ->orderByDesc('views')
             ->distinct()
@@ -69,6 +71,7 @@ class HomeController extends Controller
                     ->orWhere('product_cat_id', 29)
                     ->orWhere('product_cat_id', 30);
             })->where('product_status', Constants::PUBLIC)
+            ->where('products.deleted_at','=', Constants::EMPTY)
             ->orderByDesc('views')
             ->distinct()
             ->take($take)

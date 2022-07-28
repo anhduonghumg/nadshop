@@ -58,7 +58,7 @@
                                         <option value="">Chọn</option>
                                         <option value="new">Sản phẩm mới</option>
                                         <option value="best_sell">Sản phẩm bán chạy</option>
-                                        <option value="top_view">Sản phẩm xem nhiều</option>
+                                        {{-- <option value="top_view">Sản phẩm xem nhiều</option> --}}
                                     </select>
                                     <button type="button" id="btn_filter" name="btn_filter"
                                         class="btn btn-primary">Lọc</button>
@@ -86,7 +86,7 @@
                                         @else
                                             <th scope="col">Ngày tạo</th>
                                         @endif
-                                        @if (request()->input('status') == Constants::PUBLIC || !request()->input('status'))
+                                        @if (request()->input('status') == 'active' || !request()->input('status'))
                                             <th scope="col">Phiên bản</th>
                                         @endif
                                         <th scope="col">Tác vụ</th>
@@ -134,7 +134,7 @@
                                                     <td><a href="{{ route('admin.product.variant', ['id' => $item->id]) }}"
                                                             class='btn_variant'>Danh sách</a></td>
                                                     <td>
-                                                        <input type="hidden" class="data-img"
+                                                        {{-- <input type="hidden" class="data-img"
                                                             data-img="{{ asset('storage/app/public/images/upload_img.png') }}" />
                                                         <button id="add_product_detail" type="button"
                                                             class="btn btn-primary btn-sm rounded-0 text-white"
@@ -143,7 +143,7 @@
                                                             data-placement="top" title="Add product detail"
                                                             data-token="{{ csrf_token() }}">
                                                             <i class="fa fa-plus" aria-hidden="true"></i>
-                                                        </button>
+                                                        </button> --}}
                                                         <a href="{{ route('admin.product.edit', ['id' => $item->id]) }}"
                                                             class="btn btn-success btn-sm rounded-0 text-white"
                                                             type="button" data-toggle="tooltip" data-placement="top"
@@ -172,8 +172,8 @@
                     </form>
                     <form action="{{ route('admin.product.export') }}" method="POST" id="form-excel">
                         @csrf
-                        <input type="submit" id="export_excel" value="Xuất excel" name="export_csv"
-                            class="btn btn-success ml-2">
+                        {{-- <input type="submit" id="export_excel" value="Xuất excel" name="export_csv"
+                            class="btn btn-success ml-2"> --}}
                     </form>
                 </div>
         </div>

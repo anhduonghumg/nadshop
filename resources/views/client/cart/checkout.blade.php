@@ -296,6 +296,7 @@
                 value: profit
             });
             is_fetching = true;
+            console.log(fm_data);
             $.ajax({
                 url: "{{ route('client.cart.order') }}",
                 type: "post",
@@ -317,7 +318,6 @@
                     is_fetching = false;
                 },
             });
-
         });
 
         function load_product_cart() {
@@ -347,7 +347,7 @@
                     </div>
                     <input type="text"
                         class="form-control form-control-sm bg-secondary text-center product_qty check_qty"
-                      name="qty[]" value="${value.qty}" data-key="${key}" data-id="${value.id}" disabled>
+                      name="qty[]" value="${value.qty}" data-key="${key}" data-id="${value.id}">
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-sm btn-primary check-qty-${key} btn-plus btn_qty">
                             <i class="fa fa-plus"></i>
