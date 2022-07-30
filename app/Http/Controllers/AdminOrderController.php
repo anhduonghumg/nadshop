@@ -14,6 +14,10 @@ use App\Repositories\ProductDetail\ProductDetailRepositoryInterface;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Constants\Constants;
 use App\Models\Customer;
+use App\Models\CustomerAccount;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
+use PDF;
 
 class AdminOrderController extends Controller
 {
@@ -41,6 +45,22 @@ class AdminOrderController extends Controller
         $this->city = $city;
         $this->district = $district;
         $this->orderDetail = $orderDetail;
+    }
+
+    public function print_order($id)
+    {
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($this->print_order_convert($id));
+        return $pdf->stream();
+    }
+
+    public function print_order_convert($id)
+    {
+        $info_orders = $this->order->get_info_order($id);
+        $list_product_order = $this->orderDetail->get_product_order($id);
+        $body = view('admin.order.print', compact('list_product_order', 'info_orders'))->render();
+        return $body;
     }
 
     public function list(Request $request)
@@ -341,10 +361,56 @@ class AdminOrderController extends Controller
                             ];
                             Customer::where('id', $check_customer->id)->update($data_customer);
                         }
+
+                        // tính điểm tích lũy
+                        if ($order->customer_account_id != null) {
+                            $point = 0;
+                            $customer_acc = CustomerAccount::where('id', $order->customer_account_id)->first();
+                            $customer_point = $customer_acc->point ? $customer_acc->point : 0;
+                            if ($customer_point < 3000) {
+                                $point += (float)$order->order_total * 0.03 / 1000;
+                            } elseif ($customer_point >= 3000 && $customer_point <= 6000) {
+                                $point += (float)$order->order_total * 0.05 / 1000;
+                            } elseif ($customer_point > 6000) {
+                                $point += (float)$order->order_total * 0.08 / 1000;
+                            }
+
+                            // tháng sinh nhật
+                            $birthday_cus = $customer_acc->birthday ? $customer_acc->birthday : null;
+                            if ($birthday_cus != null) {
+                                $month_birthday = Carbon::createFromFormat('Y-m-d', $birthday_cus)->month;
+                                $month_order = Carbon::createFromFormat('Y-m-d', $order->order_date)->month;
+                                if ($month_birthday == $month_order) {
+                                    if ($customer_point < 3000) {
+                                        $point += (float)$order->order_total * 0.1 / 1000;
+                                    } elseif ($customer_point >= 3000 && $customer_point <= 6000) {
+                                        $point += (float)$order->order_total * 0.15 / 1000;
+                                    } elseif ($customer_point > 6000) {
+                                        $point += (float)$order->order_total * 0.2 / 1000;
+                                    }
+                                }
+                            }
+                            $data = [
+                                'point' => $customer_point + $point
+                            ];
+                            CustomerAccount::where('id', $order->customer_account_id)->update($data);
+                        }
                     }
                     return response()->json(['success' => trans('notification.update_order')]);
                 } elseif ($act == Constants::CANCEL) {
                     $data = ['order_status' => Constants::CANCEL];
+                    foreach ($list_check as $id) {
+                        $order_cancel = Order::where('id', $id)->first();
+                        $customer_p = CustomerAccount::where('id', $order_cancel->customer_account_id)->first();
+                        $customer_points = $customer_p->point ? $customer_p->point : 0;
+                        if ($order_cancel->customer_account_id != null) {
+                            $point_refund = $order_cancel->use_points;
+                            $data_point = [
+                                'point' => $customer_points + $point_refund
+                            ];
+                            CustomerAccount::where('id', $order_cancel->customer_account_id)->update($data_point);
+                        }
+                    }
                     $this->order->update($data, $list_check);
                     return response()->json(['success' => trans('notification.update_order')]);
                 } elseif ($act == Constants::DELETE) {

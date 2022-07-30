@@ -50,7 +50,7 @@ class DashboardController extends Controller
 
             $format_from_date = Carbon::createFromFormat('d/m/Y', $from_date)->format('Y-m-d');
             $format_to_date = Carbon::createFromFormat('d/m/Y', $to_date)->format('Y-m-d');
-            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
+            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
                 ->where('product_orders.order_status', '=', 'success')
                 ->whereBetween('product_orders.order_date', [$format_from_date, $format_to_date])
                 ->groupBy('product_orders.order_date')
@@ -86,7 +86,7 @@ class DashboardController extends Controller
 
             $format_from_date = Carbon::createFromFormat('d/m/Y', $from_month)->startOfMonth()->format('Y-m-d');
             $format_to_date = Carbon::createFromFormat('d/m/Y', $to_month)->lastOfMonth()->format('Y-m-d');
-            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,MONTH(product_orders.order_date) as month_order")
+            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,MONTH(product_orders.order_date) as month_order")
                 ->where('product_orders.order_status', '=', 'success')
                 ->whereBetween('product_orders.order_date', [$format_from_date, $format_to_date])
                 ->groupBy('month_order')
@@ -121,7 +121,7 @@ class DashboardController extends Controller
                 return response()->json(['errors' => 'Năm bắt đầu không được lớn hơn Năm kết thúc']);
             }
 
-            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,YEAR(product_orders.order_date) as year_order")
+            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,YEAR(product_orders.order_date) as year_order")
                 ->where('product_orders.order_status', '=', 'success')
                 ->whereRaw("product_orders.order_status = 'success' and YEAR(product_orders.order_date) BETWEEN '{$from_year}' and '{$to_year}'")
                 ->groupBy('year_order')
@@ -152,35 +152,35 @@ class DashboardController extends Controller
             $last_year = now()->subDays(20)->format('Y-m-d');
             $now = now()->format('Y-m-d');
             if ($data['filter'] == 'lastWeek') {
-                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
+                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
                     ->where('product_orders.order_status', '=', 'success')
                     ->whereBetween('product_orders.order_date', [$last_week, $now])
                     ->groupBy('product_orders.order_date')
                     ->orderBy('product_orders.order_date', 'ASC')
                     ->get();
             } elseif ($data['filter'] == 'lastMonth') {
-                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
+                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
                     ->where('product_orders.order_status', '=', 'success')
                     ->whereBetween('product_orders.order_date', [$early_last_month, $end_last_month])
                     ->groupBy('product_orders.order_date')
                     ->orderBy('product_orders.order_date', 'ASC')
                     ->get();
             } elseif ($data['filter'] == 'thisMonth') {
-                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
+                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
                     ->where('product_orders.order_status', '=', 'success')
                     ->whereBetween('product_orders.order_date', [$first_day_this_month, $now])
                     ->groupBy('product_orders.order_date')
                     ->orderBy('product_orders.order_date', 'ASC')
                     ->get();
             } elseif ($data['filter'] == 'lastYear') {
-                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
+                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
                     ->where('product_orders.order_status', '=', 'success')
                     ->whereBetween('product_orders.order_date', [$last_year, $now])
                     ->groupBy('product_orders.order_date')
                     ->orderBy('product_orders.order_date', 'ASC')
                     ->get();
             } else {
-                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
+                $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
                     ->where('product_orders.order_status', '=', 'success')
                     ->where('product_orders.order_date', $now)
                     ->orderBy('product_orders.order_date', 'ASC')
@@ -208,7 +208,7 @@ class DashboardController extends Controller
         if ($request->ajax()) {
             $thirty_day = now()->subDays(7)->format('Y-m-d');
             $now = now()->format('Y-m-d');
-            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_total) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
+            $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")
                 ->where('product_orders.order_status', '=', 'success')
                 ->whereBetween('product_orders.order_date', [$thirty_day, $now])
                 ->groupBy('product_orders.order_date')

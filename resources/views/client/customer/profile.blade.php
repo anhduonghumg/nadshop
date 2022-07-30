@@ -41,6 +41,12 @@
                         <div class="profiile-item">
                             <ul class="list_item_info">
                                 <li>
+                                    <p href="">Điểm tích lũy của bạn: <strong>{{ $point }}</strong></p>
+                                </li>
+                                <li>
+                                    <p href="">Cấp độ khách hàng: <strong>{{ translate_point($point) }}</strong></p>
+                                </li>
+                                <li>
                                     <a href="{{ route('client.profileEdit') }}">Thay đổi thông tin tài khoản</a>
                                 </li>
                                 <li>

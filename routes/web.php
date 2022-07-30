@@ -163,6 +163,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/admin/order/edit/{id}', [App\Http\Controllers\AdminOrderController::class, 'edit'])->name('admin.order.edit');
     Route::post('/admin/order/delete', [App\Http\Controllers\AdminOrderController::class, 'delete'])->name('admin.order.delete');
     Route::post('/admin/order/action', [App\Http\Controllers\AdminOrderController::class, 'action'])->name('admin.order.action');
+    Route::get('/admin/order/print_order/{id}', [App\Http\Controllers\AdminOrderController::class, 'print_order'])->name('admin.order.print_order');
 
     // Admin/customer
     Route::get('/admin/customer/list', [App\Http\Controllers\AdminCustomerController::class, 'list'])->name('admin.customer.list');
@@ -264,6 +265,7 @@ Route::get('cart/checkvnpay', [App\Http\Controllers\Client\CartController::class
 Route::post('confirm_vnpay', [App\Http\Controllers\Client\CartController::class, 'confirmVnpay'])->name('confirm_vnpay');
 Route::post('cart/checkqty', [App\Http\Controllers\Client\CartController::class, 'checkQty'])->name('client.cart.checkQty');
 Route::post('cart/discount', [App\Http\Controllers\Client\CartController::class, 'discount'])->name('client.cart.discount');
+Route::post('cart/point', [App\Http\Controllers\Client\CartController::class, 'point'])->name('client.cart.point');
 // Route::get('', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
 // Route::get('thank/{code}', [App\Http\Controllers\Client\CartController::class, 'thank'])->name('client.thank');
 // ORDER
@@ -288,4 +290,3 @@ Route::get('userLogout', [App\Http\Controllers\Client\UserController::class, 'lo
 // NEWS
 Route::get('news', [App\Http\Controllers\Client\PostController::class, 'show'])->name('client.news');
 Route::get('new/{id}', [App\Http\Controllers\Client\PostController::class, 'detail'])->name('client.new.detail');
-

@@ -20,6 +20,7 @@ use App\Models\Coupon;
 use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\Customer;
+use App\Models\CustomerAccount;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Mail;
 
@@ -137,6 +138,15 @@ class CartController extends Controller
             return response()->json(['errors' => trans('notification.not_select')]);
         }
 
+        $poduct_name_qty = $request->product_name;
+        foreach ($poduct_name_qty as $key => $value) {
+            $product_detail = ProductDetail::where('id', $poduct_name_qty[$key])->first();
+            if ($product_detail->product_qty_stock < $request->qty[$key]) {
+                $announcement = 'Số lượng sản phẩm ' . $product_detail->product_detail_name . ' không đủ hàng';
+                return response()->json(['errors' => $announcement]);
+            }
+        }
+
         if ($request->session()->has('client_login') && $request->session()->get('client_login') == true) {
             $customer_id = $request->session()->get('client_id');
         } else {
@@ -155,10 +165,12 @@ class CartController extends Controller
             'address' => $address,
             'email' => $request->email,
             'order_qty' => $request->order_qty,
+            'order_sales' => $request->sales,
             'order_date' => now()->format('Y/m/d'),
             'order_total' => $request->order_total,
             'order_profit' => $request->profit,
             'payment' => $request->payment,
+            'use_points' => $request->use_point,
             'customer_account_id' => $customer_id,
             'note' => $request->note,
             'created_at' => now(),
@@ -236,9 +248,13 @@ class CartController extends Controller
                     $check->qty = $qty_discount - 1;
                     $check->save();
                     $total_cart = $total - $check->value;
+                    $show_value_discount = "<span style='font-size:13px' class='font-weight-bold'>Tổng mã giảm giá:</span>
+                        <span class='font-weight-bold'>-" . currentcyFormat($check->value) . "</h5>";
                     $result = [
                         'success' => 'Áp dụng thành công.',
+                        'value_discount' => $show_value_discount,
                         'total_cart' => currentcyFormat($total_cart),
+                        'data_value' => $check->value
                     ];
                     return response()->json($result);
                 } else {
@@ -246,6 +262,48 @@ class CartController extends Controller
                 }
             } else {
                 return response()->json(['errors' => 'Mã giảm giá không tồn tại.']);
+            }
+        }
+    }
+
+    public function point(Request $request)
+    {
+        if ($request->ajax()) {
+            $validator = Validator::make($request->all(), [
+                'point' => 'required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                $error = collect($validator->errors())->unique()->first();
+                return response()->json(['errors' => $error]);
+            }
+            $id = $request->id ? (int)$request->id : die;
+            $point = $request->point ? (int)$request->point : 0;
+            $total = $request->total_cart ? (int)$request->total_cart : die;
+            $check = CustomerAccount::where('id', $id)->first();
+
+            if ($point === 0) {
+                return response()->json(['errors' => "Số điểm tích lũy phải lớn hơn 0"]);
+            }
+
+            if ($check->point >= $point) {
+                $total_cart = $total - ($point * 1000);
+                $show_value_point = "<span style='font-size:13px' class='font-weight-bold'>Tổng điểm thưởng:</span>
+                        <span class='font-weight-bold'>-" . currentcyFormat($point * 1000) . "</span>";
+                $result = [
+                    'success' => 'Áp dụng thành công.',
+                    'value_point' => $show_value_point,
+                    'total_cart' => currentcyFormat($total_cart),
+                    'point' => $point
+                ];
+
+                $data = [
+                    'point' => (int)$check->point - (int)$point,
+                ];
+                CustomerAccount::where('id', $id)->update($data);
+                return response()->json($result);
+            } else {
+                return response()->json(['errors' => 'Điểm tích lũy của bạn không đủ.']);
             }
         }
     }
@@ -329,6 +387,15 @@ class CartController extends Controller
                 return response()->json(['errors' => trans('notification.not_select')]);
             }
 
+            $poduct_name_qty = $request->product_name;
+            foreach ($poduct_name_qty as $key => $value) {
+                $product_detail = ProductDetail::where('id', $poduct_name_qty[$key])->first();
+                if ($product_detail->product_qty_stock < $request->qty[$key]) {
+                    $announcement = 'Số lượng sản phẩm ' . $product_detail->product_detail_name . ' không đủ hàng';
+                    return response()->json(['errors' => $announcement]);
+                }
+            }
+
             if ($request->session()->has('client_login') && $request->session()->get('client_login') == true) {
                 $customer_id = $request->session()->get('client_id');
             } else {
@@ -346,10 +413,12 @@ class CartController extends Controller
                 'phone' => $request->phone,
                 'address' => $address,
                 'email' => $request->email,
+                'order_sales' => $request->sales,
                 'order_qty' => $request->order_qty,
                 'order_total' => $request->order_total,
                 'order_profit' => $request->profit,
                 'payment' => $request->payment,
+                'use_points' => $request->use_point,
                 'order_date' => now()->format('Y/m/d'),
                 'is_paid' => 0,
                 'customer_account_id' => $customer_id,

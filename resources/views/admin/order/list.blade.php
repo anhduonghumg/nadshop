@@ -78,6 +78,11 @@
                                                 aria-hidden="true"></i></button>
                                     </td>
                                     <td>
+                                        <a target="_blank" href="{{ route('admin.order.print_order', $order['id']) }}"
+                                            class="btn btn-sm btn-secondary rounded-0 text-white order-edit" type="button"
+                                            data-toggle="tooltip" data-placement="top" title="print"
+                                            edit-id={{ $order['product_order_id'] }}><i class="fa fa-print"
+                                                aria-hidden="true"></i></a>
                                         <a href="{{ route('admin.order.edit', $order['id']) }}"
                                             class="btn btn-success btn-sm rounded-0 text-white order-edit" type="button"
                                             data-toggle="tooltip" data-placement="top" title="Edit"

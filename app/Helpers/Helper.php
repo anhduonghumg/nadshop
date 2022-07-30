@@ -76,3 +76,21 @@ function translate_order($val)
     }
     return $result;
 }
+
+function translate_point($val)
+{
+    if ($val < 3000) {
+        $result = "Bạc";
+    } elseif ($val >= 3000 && $val <= 6000) {
+        $result = "Vàng";
+    } elseif ($val > 6000) {
+        $result = "Kim cương";
+    }
+    return $result;
+}
+
+function get_info_customer($id)
+{
+    $result = DB::table('customer_accounts')->where('id', $id)->first();
+    return $result;
+}

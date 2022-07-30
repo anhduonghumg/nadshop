@@ -73,7 +73,7 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 'fullname' => 'bail|required|string',
                 'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-                'email' => 'bail|required|email|unique:customers',
+                'email' => 'bail|required|email|unique:customer_accounts',
                 'password' => 'bail|required|regex:/^([\w_\.!@#$%^&*()]+){5,32}$/',
 
             ]);
@@ -95,10 +95,15 @@ class UserController extends Controller
         }
     }
 
-    public function profile()
+    public function profile(Request $request)
     {
         $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
-        return view('client.customer.profile', compact('category_products'));
+        if ($request->session()->has('client_login') && $request->session()->get('client_login') == true) {
+            $client_id = session()->get('client_id');
+            $client = CustomerAccount::find($client_id);
+            $point = $client->point;
+        }
+        return view('client.customer.profile', compact('category_products', 'point'));
     }
 
     public function profileEdit(Request $request)

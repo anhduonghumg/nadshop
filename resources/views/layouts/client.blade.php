@@ -44,40 +44,40 @@
     <script src="{{ url('public/client/js/pagination.js') }}"></script>
     <script src="{{ url('public/js/sweetalert2.min.js') }}"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-   
+
 </head>
 
 <body>
-     <!-- Messenger Plugin chat Code -->
-     <div id="fb-root"></div>
+    <!-- Messenger Plugin chat Code -->
+    <div id="fb-root"></div>
 
-     <!-- Your Plugin chat code -->
-     <div id="fb-customer-chat" class="fb-customerchat">
-     </div>
-     <script>
-         var chatbox = document.getElementById('fb-customer-chat');
-         chatbox.setAttribute("page_id", "111172065012648");
-         chatbox.setAttribute("attribution", "biz_inbox");
-     </script>
- 
-     <!-- Your SDK code -->
-     <script>
-         window.fbAsyncInit = function() {
-             FB.init({
-                 xfbml: true,
-                 version: 'v14.0'
-             });
-         };
- 
-         (function(d, s, id) {
-             var js, fjs = d.getElementsByTagName(s)[0];
-             if (d.getElementById(id)) return;
-             js = d.createElement(s);
-             js.id = id;
-             js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
-             fjs.parentNode.insertBefore(js, fjs);
-         }(document, 'script', 'facebook-jssdk'));
-     </script>
+    <!-- Your Plugin chat code -->
+    <div id="fb-customer-chat" class="fb-customerchat">
+    </div>
+    <script>
+        var chatbox = document.getElementById('fb-customer-chat');
+        chatbox.setAttribute("page_id", "111172065012648");
+        chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+    <!-- Your SDK code -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                xfbml: true,
+                version: 'v14.0'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -86,6 +86,10 @@
         });
     </script>
     <style>
+        .fb_dialog_content iframe {
+            right: 1180px !important;
+        }
+
         .slick-carousel img {
             width: 200px;
         }

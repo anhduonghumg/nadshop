@@ -8,6 +8,10 @@
         .cumulative_point {
             width: 265px;
         }
+
+        .point_money {
+            margin-right: 83px;
+        }
     </style>
     <div class="breadcrumb-shop clearfix bg-none px-xl-5">
         <div class="clearfix">
@@ -26,44 +30,96 @@
         <form id="form_order" method="POST">
             @csrf
             <div class="row px-xl-5">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label>Họ và tên</label>
-                        <input class="form-control" name="fullname" type="text" placeholder="Họ và tên">
+                @if (request()->session()->has('client_login') &&
+                    request()->session()->get('client_login') == true)
+                    @php
+                        $id_cus = request()
+                            ->session()
+                            ->get('client_id');
+                        $customer = get_info_customer($id_cus);
+                    @endphp
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Họ và tên</label>
+                            <input class="form-control" name="fullname" type="text" placeholder="Họ và tên"
+                                value="{{ $customer->fullname }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input class="form-control" name="phone" type="text" placeholder="Số điện thoại"
+                                value="{{ $customer->phone }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input class="form-control" name="email" type="email" placeholder="email"
+                                value="{{ $customer->email }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ</label>
+                            <input class="form-control" name='address' type="text" placeholder="Địa chỉ"
+                                value="{{ $customer->address }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Tỉnh/Thành phố</label>
+                            <select class="form-control" name="city" id="city">
+                                <option value="">Tỉnh/Thành phố</option>
+                                @if ($list_city->isNotEmpty())
+                                    @foreach ($list_city as $city)
+                                        <option value="{{ $city->id }}">{{ $city->city_name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quận/Huyện</label>
+                            <select class="form-control" name="district" id="district">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ghi Chú</label>
+                            <textarea class="form-control" rows="5" placeholder="Ghi chú"></textarea>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Số điện thoại</label>
-                        <input class="form-control" name="phone" type="text" placeholder="Số điện thoại">
+                @else
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Họ và tên</label>
+                            <input class="form-control" name="fullname" type="text" placeholder="Họ và tên">
+                        </div>
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input class="form-control" name="phone" type="text" placeholder="Số điện thoại">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input class="form-control" name="email" type="email" placeholder="email">
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ</label>
+                            <input class="form-control" name='address' type="text" placeholder="Địa chỉ">
+                        </div>
+                        <div class="form-group">
+                            <label>Tỉnh/Thành phố</label>
+                            <select class="form-control" name="city" id="city">
+                                <option value="">Tỉnh/Thành phố</option>
+                                @if ($list_city->isNotEmpty())
+                                    @foreach ($list_city as $city)
+                                        <option value="{{ $city->id }}">{{ $city->city_name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quận/Huyện</label>
+                            <select class="form-control" name="district" id="district">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ghi Chú</label>
+                            <textarea class="form-control" rows="5" placeholder="Ghi chú"></textarea>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input class="form-control" name="email" type="email" placeholder="email">
-                    </div>
-                    <div class="form-group">
-                        <label>Địa chỉ</label>
-                        <input class="form-control" name='address' type="text" placeholder="Địa chỉ">
-                    </div>
-                    <div class="form-group">
-                        <label>Tỉnh/Thành phố</label>
-                        <select class="form-control" name="city" id="city">
-                            <option value="">Tỉnh/Thành phố</option>
-                            @if ($list_city->isNotEmpty())
-                                @foreach ($list_city as $city)
-                                    <option value="{{ $city->id }}">{{ $city->city_name }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Quận/Huyện</label>
-                        <select class="form-control" name="district" id="district">
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Ghi Chú</label>
-                        <textarea class="form-control" rows="5" placeholder="Ghi chú"></textarea>
-                    </div>
-                </div>
+                @endif
                 <div class="col-lg-6">
                     <div class="card border-secondary mb-5">
                         <div class="card-body">
@@ -98,23 +154,41 @@
                             </div>
                             <hr class="mt-0">
                             <div class="d-flex justify-content-between">
-                                <input style="width:365px" type="text" name="discount_code" class="discount_code" data-value=""
-                                    placeholder="Mã giảm giá">
+                                <input style="width:365px" type="text" name="discount_code" class="discount_code"
+                                    data-value="" placeholder="Mã giảm giá">
                                 <button type="button" style="width:115px" id="btn_apply_discount"
                                     class="btn btn-primary">Sử dụng</button>
                             </div>
                             <hr class="mt-0">
-                            {{-- @if (request()->session()->has('client_login')) --}}
-                            <div class="point">
-                                <div class="d-flex justify-content-between">
-                                    <label for="point">Nhập điểm cần tiêu:</label>
-                                    <input type="number" min="0" class="cumulative_point">
+                            @if (request()->session()->has('client_login'))
+                                @php
+                                    $user_id = request()
+                                        ->session()
+                                        ->get('client_id');
+                                @endphp
+                                <div class="point">
+                                    <div class="d-flex justify-content-between">
+                                        <label for="point">Nhập điểm cần tiêu:</label>
+                                        <input type="hidden" class='used_point' name="use_point" value="0">
+                                        <input type="number" min="0" name="point" class="cumulative_point"
+                                            value="0">
+                                        <button type="button" style="wdth:80px" data-id="{{ $user_id }}"
+                                            id="btn_apply_point" class="btn btn-sm btn-primary">Sử dụng</button>
+                                    </div>
+                                    <p class="show_point">0 điểm<span class="point_money" data-point="">(- 0đ)</span>
+                                    </p>
                                 </div>
-                                <p class="show_point">0 điểm<span class="point_money" data-point="">(- 0đ)</span></p>
-                            </div>
-                            {{-- @endif --}}
+                            @endif
                         </div>
                         <div class="card-footer border-secondary bg-transparent">
+                            <div class="d-flex justify-content-between mt-2 show_discount">
+                                {{-- <span class="font-weight-bold">Tổng cộng:</h5>
+                                <span class="font-weight-bold show_total_cart">500.0000đ</h5> --}}
+                            </div>
+                            <div class="d-flex justify-content-between mt-2 show_point_accumulated">
+                                {{-- <span class="font-weight-bold">Tổng cộng:</h5>
+                                <span class="font-weight-bold show_total_cart">500.0000đ</h5> --}}
+                            </div>
                             <div class="d-flex justify-content-between mt-2">
                                 <h5 class="font-weight-bold">Tổng cộng:</h5>
                                 <h5 class="font-weight-bold show_total_cart">500.0000đ</h5>
@@ -192,6 +266,45 @@
                 success: function(rsp) {
                     if ($.isEmptyObject(rsp.errors)) {
                         $('.show_total_cart').html(rsp.total_cart);
+                        $('.show_discount').html(rsp.value_discount);
+                        $('.discount_code').attr('data-value', rsp.data_value);
+                        confirm_success(rsp.success);
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
+                },
+                error: function() {
+                    alert("error!!!!");
+                },
+            });
+        });
+
+        $(document).on('change', '.cumulative_point', function() {
+            let point = $(this).val();
+            $('.show_point').html(point + ' điểm<span class="point_money" data-point=' + point + '>(- ' + point *
+                1000 + 'đ)</span>');
+        });
+
+        $(document).on('click', '#btn_apply_point', function() {
+            let id = $(this).data('id');
+            let point = $('.cumulative_point').val();
+            let total_cart = stringToNumber($('.show_total_cart').text());
+            let used_point = $('.used_point').val();
+            $.ajax({
+                url: "{{ route('client.cart.point') }}",
+                type: "POST",
+                data: {
+                    id: id,
+                    point: point,
+                    total_cart: total_cart
+                },
+                dataType: "json",
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        $('.show_total_cart').html(rsp.total_cart);
+                        $('.show_point_accumulated').html(rsp.value_point);
+                        used_point = Number(used_point) + Number(rsp.point);
+                        $('.used_point').val(used_point);
                         confirm_success(rsp.success);
                     } else {
                         confirm_warning(rsp.errors);
@@ -266,14 +379,24 @@
         });
 
         $(document).on('click', '.btn_vnpay', function() {
+            $('.loading').show();
+            if (is_fetching == true) return false;
             let profit = 0;
+            let sales = 0;
+            let discount = $('.discount_code').data('value');
+            let point = $('.used_point').val() ? $('.used_point').val() * 1000 : 0;
             $('tbody#show_data_product tr.list_pro').each(function() {
                 get_profit = $(this).find('.show_profit').val();
                 profit += Number(get_profit);
             });
 
-            //$('.loading').show();
-            // if (is_fetching == true) return false;
+            profit = profit - Number(discount) - Number(point);
+
+            $('tbody#show_data_product tr.list_pro').each(function() {
+                get_sales = stringToNumber($(this).find('.total_price').text());
+                sales += Number(get_sales);
+            });
+            
             let total_cart = stringToNumber($('.show_total_cart').text());
             let total_qty = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
                 return sum + (current.qty);
@@ -290,6 +413,10 @@
             fm_data.push({
                 name: "profit",
                 value: profit
+            });
+            fm_data.push({
+                name: "sales",
+                value: sales
             });
             //console.log(fm_data);
             is_fetching = true;
@@ -316,13 +443,24 @@
         })
 
         $('body').on('click', '.btn_complate_order', function() {
+            $('.loading').show();
             let profit = 0;
+            let sales = 0;
+            let discount = $('.discount_code').data('value');
+            let point = $('.used_point').val() ? $('.used_point').val() * 1000 : 0;
             $('tbody#show_data_product tr.list_pro').each(function() {
                 get_profit = $(this).find('.show_profit').val();
                 profit += Number(get_profit);
             });
 
-            $('.loading').show();
+            profit = profit - Number(discount) - Number(point);
+
+            $('tbody#show_data_product tr.list_pro').each(function() {
+                get_sales = stringToNumber($(this).find('.total_price').text());
+                sales += Number(get_sales);
+            });
+
+            // $('.loading').show();
             if (is_fetching == true) return false;
             let total_cart = stringToNumber($('.show_total_cart').text());
             let total_qty = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
@@ -341,8 +479,12 @@
                 name: "profit",
                 value: profit
             });
+            fm_data.push({
+                name: "sales",
+                value: sales
+            });
             is_fetching = true;
-            console.log(fm_data);
+            // console.log(fm_data);
             $.ajax({
                 url: "{{ route('client.cart.order') }}",
                 type: "post",
@@ -364,6 +506,7 @@
                     is_fetching = false;
                 },
             });
+
         });
 
         function load_product_cart() {
