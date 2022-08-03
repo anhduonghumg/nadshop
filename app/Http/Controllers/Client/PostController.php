@@ -18,7 +18,7 @@ class PostController extends Controller
     public function show()
     {
         $category_products = $this->cat->where('deleted_at', Constants::EMPTY)->get();
-        $list_posts = Post::where('status', 'public')->paginate(20);
+        $list_posts = Post::where('status', 'public')->where('deleted_at', Constants::EMPTY)->paginate(20);
         return view('client.post.show', compact('list_posts', 'category_products'));
     }
 

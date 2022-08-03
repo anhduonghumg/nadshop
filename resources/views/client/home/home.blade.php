@@ -284,7 +284,7 @@
                         <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                             <h6 class="text-truncate mb-3">{{ $accessorie->product_name }}</h6>
                             <div class="d-flex justify-content-center">
-                                <h6>{{ currentcyFormat($accessorie->product_price - ($accessorie->product_price * $trouser->product_discount) / 100) }}
+                                <h6>{{ currentcyFormat($accessorie->product_price - ($accessorie->product_price * $accessorie->product_discount) / 100) }}
                                 </h6>
                                 <h6 class="text-muted ml-2"><del>{{ currentcyFormat($accessorie->product_price) }}</del>
                                 </h6>
@@ -349,7 +349,7 @@
     </div>
     <!-- Modal buy now end-->
 
-    
+
     <script type="text/javascript">
         var is_busy = false;
 

@@ -58,13 +58,13 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="status" id="pending" value="pending" checked>
                         <label class="form-check-label" for="pending">
-                            Chờ duyệt
+                            Hoạt động
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="status" id="public" value="public">
                         <label class="form-check-label" for="public">
-                            Công khai
+                            Không hoạt động
                         </label>
                     </div>
                 </div>

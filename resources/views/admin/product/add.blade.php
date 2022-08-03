@@ -111,14 +111,14 @@
                                 <input class="form-check-input" type="radio" name="product_status" id="pending"
                                     value="pending" checked>
                                 <label class="form-check-label" for="pending">
-                                    Chờ duyệt
+                                    Không hoạt động
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="product_status" id="public"
                                     value="public">
                                 <label class="form-check-label" for="public">
-                                    Công khai
+                                    Hoạt động
                                 </label>
                             </div>
                             @error('product_status')

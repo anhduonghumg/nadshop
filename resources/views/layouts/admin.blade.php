@@ -142,7 +142,7 @@
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                     </li>
-                    <li class="nav-link {{ $module_active == 'page' ? 'active' : '' }}">
+                    {{-- <li class="nav-link {{ $module_active == 'page' ? 'active' : '' }}">
                         <a href="{{ url('admin/page/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -154,7 +154,7 @@
                             <li><a href="{{ url('admin/page/add') }}">Thêm mới</a></li>
                             <li><a href="{{ url('admin/page/list') }}">Danh sách</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                     <li class="nav-link {{ $module_active == 'post' ? 'active' : '' }}">
                         <a href="{{ url('admin/post/list') }}">
                             <div class="nav-link-icon d-inline-flex">
@@ -264,7 +264,7 @@
                             <li><a href="{{ url('admin/slider/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link {{ $module_active == 'role' ? 'active' : '' }}">
+                    {{-- <li class="nav-link {{ $module_active == 'role' ? 'active' : '' }}">
                         <a href="{{ url('admin/role/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -276,7 +276,7 @@
                             <li><a href="{{ url('admin/role/list') }}">Role</a></li>
                             <li><a href="{{ url('admin/permission/list') }}">Permission</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
             <div id="wp-content">

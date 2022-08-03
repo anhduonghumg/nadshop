@@ -114,6 +114,8 @@ class ProductController extends Controller
             $list_product = $this->product->select('products.id', 'products.product_name', 'products.product_thumb', 'product_details.product_price', 'product_details.product_discount')
                 ->join('product_details', 'products.id', '=', 'product_details.product_id')
                 ->where('products.product_cat_id', $id)
+                ->where('product_status', Constants::PUBLIC)
+                ->where('products.deleted_at', '=', Constants::EMPTY)
                 ->orderByDesc('products.id')
                 ->distinct()
                 ->take(8)

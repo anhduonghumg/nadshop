@@ -42,7 +42,7 @@ class AdminProductController extends Controller
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
             $list_products = $this->productRepo->get_list_products_trash($key, $paginate = 10, $orderBy = "deleted_at");
         } elseif ($status == Constants::PENDING) {
-            $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
+            $list_act = ['active' => 'Hoạt động', 'delete' => 'Xóa'];
             $list_products = $this->productRepo->get_list_products_status(Constants::PENDING, $key, $paginate = 10, $orderBy = "id");
         }
 

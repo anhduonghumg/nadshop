@@ -18,6 +18,13 @@
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="code_color">Mã màu</label>
+                            <input class="form-control" type="text" name="code_color" id="code_color">
+                            @error('code_color')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
                         <button type="submit" name="btn_add" class="btn btn-primary">Thêm mới</button>
                     </form>
                 </div>

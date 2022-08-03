@@ -33,6 +33,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/load-chart', [App\Http\Controllers\DashboardController::class, 'load_chart'])->name('load.chart');
     Route::post('/filter-month', [App\Http\Controllers\DashboardController::class, 'filter_month'])->name('load.chartMonth');
     Route::post('/filter-year', [App\Http\Controllers\DashboardController::class, 'filter_year'])->name('load.chartYear');
+    Route::post('/export-excel-date', [App\Http\Controllers\DashboardController::class, 'export_date'])->name('dashboard.export.excel.date');
+    Route::post('/export-excel-month', [App\Http\Controllers\DashboardController::class, 'export_month'])->name('dashboard.export.excel.month');
+    Route::post('/export-excel-year', [App\Http\Controllers\DashboardController::class, 'export_year'])->name('dashboard.export.excel.year');
     // Admin/user
     Route::get('/admin/user/list', [App\Http\Controllers\AdminUserController::class, 'list'])->name('admin.user.list');
     Route::get('/admin/user/add', [App\Http\Controllers\AdminUserController::class, 'add'])->name('admin.user.add');

@@ -32,12 +32,12 @@
                 </div>
                 <div class="card-body">
                     <div class="analytic">
-                        <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
-                            hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
-                        <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chờ
-                            duyệt<span class="text-muted">({{ $count[2] }}) |</span></a>
-                        <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
-                            hóa<span class="text-muted">({{ $count[1] }})</span></a>
+                        <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Hoạt
+                            động<span class="text-muted">({{ $count[0] }}) |</span></a>
+                        <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Không hoạt
+                            động<span class="text-muted">({{ $count[2] }}) |</span></a>
+                        <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Xóa tạm
+                            thời<span class="text-muted">({{ $count[1] }})</span></a>
                     </div>
                     <form action="{{ route('admin.product.action') }}" method="POST">
                         @csrf

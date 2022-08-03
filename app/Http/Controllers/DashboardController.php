@@ -8,6 +8,10 @@ use App\Models\Statistical;
 use App\Models\OrderDetail;
 use App\Constants\Constants;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportSaleDate;
+use App\Exports\ExportSaleMonth;
+use App\Exports\ExportSaleYear;
 
 class DashboardController extends Controller
 {
@@ -34,17 +38,82 @@ class DashboardController extends Controller
         return view('admin.dashboard', compact('order_success', 'order_pending', 'order_cancel', 'sale'));
     }
 
+    function export_date(Request $request)
+    {
+        if ($request->ajax()) {
+            $from_date = $request->from_date;
+            $to_date = $request->to_date;
+
+            if ($from_date == null || $to_date == null) {
+                return response()->json(['errors' => 'Vui lòng chọn ngày'], 421);
+            }
+            if ($from_date != null && $to_date != null) {
+                $start_date = Carbon::createFromFormat('d/m/Y', $from_date)->format('Y-m-d');
+                $end_date =  Carbon::createFromFormat('d/m/Y', $to_date)->format('Y-m-d');
+            }
+
+            if ($start_date > $end_date) {
+                return response()->json(['errors' => 'Ngày bắt đầu không được lớn hơn ngày kết thúc'], 422);
+            }
+
+            return Excel::download(new ExportSaleDate($from_date, $to_date), 'doanhsotheongay.xlsx');
+        }
+    }
+
+    function export_month(Request $request)
+    {
+        if ($request->ajax()) {
+            $from_month = $request->from_month;
+            $to_month = $request->to_month;
+
+            if ($from_month == null || $to_month == null) {
+                return response()->json(['errors' => 'Vui lòng chọn ngày'], 421);
+            }
+            if ($from_month != null && $to_month != null) {
+                $start_date = Carbon::createFromFormat('d/m/Y', $from_month)->format('Y-m-d');
+                $end_date =  Carbon::createFromFormat('d/m/Y', $to_month)->format('Y-m-d');
+            }
+
+            if ($start_date > $end_date) {
+                return response()->json(['errors' => 'Tháng bắt đầu không được lớn hơn tháng kết thúc'], 422);
+            }
+
+            return Excel::download(new ExportSaleMonth($from_month, $to_month), 'doanhsotheothang.xlsx');
+        }
+    }
+
+    function export_year(Request $request)
+    {
+        if ($request->ajax()) {
+            $from_year = $request->fromYear;
+            $to_year = $request->toYear;
+            if ($from_year == null || $to_year == null) {
+                return response()->json(['errors' => 'Vui lòng chọn năm']);
+            }
+
+            if ($from_year > $to_year) {
+                return response()->json(['errors' => 'Năm bắt đầu không được lớn hơn Năm kết thúc']);
+            }
+            return Excel::download(new ExportSaleYear($from_year, $to_year), 'doanhsotheonam.xlsx');
+        }
+    }
+
     function filter_by_date(Request $request)
     {
         if ($request->ajax()) {
             $chart_data = array();
             $from_date = $request->from_date;
             $to_date = $request->to_date;
+
             if ($from_date == null || $to_date == null) {
                 return response()->json(['errors' => 'Vui lòng chọn ngày']);
             }
+            if ($from_date != null && $to_date != null) {
+                $start_date = Carbon::createFromFormat('d/m/Y', $from_date)->format('Y-m-d');
+                $end_date =  Carbon::createFromFormat('d/m/Y', $to_date)->format('Y-m-d');
+            }
 
-            if ($from_date > $to_date) {
+            if ($start_date > $end_date) {
                 return response()->json(['errors' => 'Ngày bắt đầu không được lớn hơn ngày kết thúc']);
             }
 

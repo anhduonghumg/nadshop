@@ -39,7 +39,7 @@ class AdminPostController extends Controller
             $list_act = ['restore' => 'Khôi phục', 'forceDelete' => 'Xóa vĩnh viễn'];
             $list_posts = $this->postRepo->get_list_posts_trash($key, $paginate = 20, $orderBy = "deleted_at");
         } elseif ($status == Constants::PENDING) {
-            $list_act = ['active' => 'Duyệt', 'delete' => 'Xóa'];
+            $list_act = ['active' => 'Hoạt động', 'delete' => 'Xóa'];
             $list_posts = $this->postRepo->get_list_posts_status(Constants::PENDING, $key, $paginate = 20, $orderBy = "id");
         }
 
@@ -107,7 +107,7 @@ class AdminPostController extends Controller
             $post = $this->postRepo->get_post_by_id($id, ['title', 'desc', 'content', 'thumbnail', 'post_cat_id']);
 
             $data_cat_post = $this->dataSelect(new CategoryPost);
-            return view('admin.post.edit', compact('post', 'data_cat_post'));
+            return view('admin.post.edit', compact('post', 'data_cat_post', 'id'));
         } else {
             return abort(403);
         }
@@ -140,8 +140,9 @@ class AdminPostController extends Controller
                 ];
 
                 if ($request->hasFile('thumbnail')) {
-                    $dataImg = $this->ImageUpload($request->thumbnail, 'post');
-                    $data['thumbnail'] = $dataImg['file_path'];
+                    $file = $request->thumbnail;
+                    $dataImg = $this->uploadImage($file, 'post', Auth::id());
+                    $data['thumbnail'] = $dataImg;
                 }
 
                 $this->postRepo->update($data, $id);

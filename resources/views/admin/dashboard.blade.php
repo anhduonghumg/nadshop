@@ -9,6 +9,13 @@
             margin-left: -16px;
         }
 
+        #btn-export-excel-date,
+        #btn-export-excel-month,
+        #btn-export-excel-year {
+            margin-top: 22px;
+            margin-left: 15px;
+        }
+
         .product_best_sell {
             list-style: none;
             padding: 0px;
@@ -97,6 +104,7 @@
                     </div>
                     <div class="col-md-3">
                         <button type="button" id="btn-dashboard-filter" class='btn btn-primary'>Lọc</button>
+                        <button type="button" id="btn-export-excel-date" class='btn btn-success'>Xuất excel</button>
                     </div>
                 </form>
             </div>
@@ -106,7 +114,7 @@
         </div>
         <div class="card">
             <div class="card-header font-weight-bold">
-                THỐNG KÊ BÁN HÀNG THEO THÁNG
+                THỐNG KÊ BÁN HÀNG THEO THÁNG CÙNG NĂM
             </div>
             <div class="card-body card-month">
                 <form class='d-flex' autocomplete="off">
@@ -120,6 +128,7 @@
                     </div>
                     <div class="col-md-3">
                         <button type="button" id="btn-filter-month" class='btn btn-primary'>Lọc</button>
+                        <button type="button" id="btn-export-excel-month" class='btn btn-success'>Xuất excel</button>
                     </div>
                 </form>
             </div>
@@ -143,6 +152,7 @@
                     </div>
                     <div class="col-md-3">
                         <button type="button" id="btn-filter-year" class='btn btn-primary'>Lọc</button>
+                        <button type="button" id="btn-export-excel-year" class='btn btn-success'>Xuất excel</button>
                     </div>
                 </form>
             </div>
@@ -339,6 +349,127 @@
         });
 
         load_chart();
+
+        $(document).on('click', '#btn-export-excel-date', function() {
+            let from_date = $('#datepicker').val() ? $('#datepicker').val() : '';
+            let to_date = $('#datepicker2').val() ? $('#datepicker2').val() : '';
+            $(".loadajax").show();
+            $.ajax({
+                url: "{{ route('dashboard.export.excel.date') }}",
+                type: "post",
+                data: {
+                    from_date: from_date,
+                    to_date: to_date
+                },
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                success: function(rsp, status, xhr) {
+                    $(".loadajax").hide();
+
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] :
+                        'baocaodoanhthungay.xlsx');
+                    // The actual download
+                    var blob = new Blob([rsp], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $(".loadajax").hide();
+                    confirm_warning(
+                        "Không được để trống dữ liệu và ngày bắt đầu không được lớn hơn ngày kết thúc"
+                    );
+                },
+            });
+        });
+
+        $(document).on('click', '#btn-export-excel-month', function() {
+            var from_month = $('#first').val() ? $('#first').val() : '';
+            var to_month = $('#last').val() ? $('#last').val() : '';
+            $(".loadajax").show();
+            $.ajax({
+                url: "{{ route('dashboard.export.excel.month') }}",
+                type: "post",
+                data: {
+                    from_month: from_month,
+                    to_month: to_month
+                },
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                success: function(rsp, status, xhr) {
+                    $(".loadajax").hide();
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] :
+                        'baocaodoanhthuthang.xlsx');
+                    // The actual download
+                    var blob = new Blob([rsp], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $(".loadajax").hide();
+                    confirm_warning(
+                        "Không được để trống dữ liệu và tháng bắt đầu không được lớn hơn tháng kết thúc"
+                    );
+                },
+            });
+        });
+
+        $(document).on('click', '#btn-export-excel-year', function() {
+            let fromYear = $('#startYear').val() ? $('#startYear').val() : '';
+            let toYear = $('#lastYear').val() ? $('#lastYear').val() : '';
+            $(".loadajax").show();
+            $.ajax({
+                url: "{{ route('dashboard.export.excel.year') }}",
+                type: "post",
+                data: {
+                    fromYear: fromYear,
+                    toYear: toYear
+                },
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                success: function(rsp, status, xhr) {
+                    $(".loadajax").hide();
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] :
+                        'baocaodoanhthunam.xlsx');
+                    // The actual download
+                    var blob = new Blob([rsp], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $(".loadajax").hide();
+                    confirm_warning(
+                        "Không được để trống dữ liệu và năm bắt đầu không được lớn hơn năm kết thúc"
+                    );
+                },
+            });
+        });
 
         $(document).on('click', '#btn-dashboard-filter', function() {
             var from_date = $('#datepicker').val() ? $('#datepicker').val() : '';

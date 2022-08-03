@@ -29,10 +29,12 @@ class AdminColorController extends Controller
             $request->validate(
                 [
                     'color_name' => 'required|max:100|unique:colors',
+                    'code_color' => 'required|max:100|unique:colors'
                 ],
             );
             $data = [
                 'color_name' => $request->input('color_name'),
+                'code_color' => $request->input('code_color'),
                 'slug' => Str::slug($request->input('color_name')),
                 "created_at" =>  now(),
                 "updated_at" => now(),
@@ -46,7 +48,7 @@ class AdminColorController extends Controller
     public function edit($id)
     {
         if ($id != null) {
-            $color = $this->colorRepo->get_color_by_id($id, ['id', 'color_name']);
+            $color = $this->colorRepo->get_color_by_id($id, ['id', 'color_name', 'code_color']);
             return view('admin.color.edit', compact('color'));
         }
     }
@@ -56,11 +58,13 @@ class AdminColorController extends Controller
         if ($request->has('btn_update')) {
             $request->validate(
                 [
-                    'color_name' => 'required|max:100|unique:colors,color_name,' . $id . ',id'
+                    'color_name' => 'required|max:100|unique:colors,color_name,' . $id . ',id',
+                    'code_color' => 'required|max:100|unique:colors,code_color,' . $id . ',id'
                 ],
             );
             $data = [
                 'color_name' => $request->input('color_name'),
+                'code_color' => $request->input('code_color'),
                 'slug' => Str::slug($request->input('color_name')),
                 "created_at" =>  now(),
                 "updated_at" => now(),
