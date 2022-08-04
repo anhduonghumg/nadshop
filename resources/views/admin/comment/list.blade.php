@@ -35,14 +35,12 @@
                 </div> --}}
             </div>
             <div class="card-body">
-                {{-- <div class="analytic">
-                    <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Kích
-                        hoạt<span class="text-muted">({{ $count[0] }}) |</span></a>
-                    <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chờ duyệt<span
-                            class="text-muted">({{ $count[2] }}) |</span></a>
-                    <a href="{{ request()->fullUrlWithQuery(['status' => 'trash']) }}" class="text-primary">Vô hiệu
-                        hóa<span class="text-muted">({{ $count[1] }})</span></a>
-                </div> --}}
+                <div class="analytic">
+                    <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" class="text-primary">Chưa duyệt<span
+                            class="text-muted">({{ $count_pending }}) |</span></a>
+                    <a href="{{ request()->fullUrlWithQuery(['status' => 'approved']) }}" class="text-primary">Đã duyệt<span
+                            class="text-muted">({{ $count_approved }})</span></a>
+                </div>
                 <form action="" method="POST">
                     @csrf
                     {{-- <div class="form-action form-inline py-3">
@@ -107,14 +105,15 @@
                                             href="{{ route('client.product.detail', $cmt->product_id) }}">{{ $cmt->product_name }}</a>
                                     </td>
                                     <td>
-                                        <a href="" class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                        {{-- <a href="" class="btn btn-success btn-sm rounded-0 text-white" type="button"
                                             data-toggle="tooltip" data-placement="top" title="Edit"><i
-                                                class="fa fa-edit"></i></a>
-
-                                        <a href="" onclick="return confirm('Bạn muốn xóa bản ghi này?')"
-                                            data-url="" class="btn btn-danger btn-sm rounded-0 text-white action_delete"
-                                            type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i
-                                                class="fa fa-trash"></i></a>
+                                                class="fa fa-edit"></i></a> --}}
+                                        @if ($cmt->comment_status == 0)
+                                            <button data-id='{{ $cmt->id }}'
+                                                class="btn btn-danger btn-sm rounded-0 text-white cmt_delete" type="button"
+                                                data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                                    class="fa fa-trash"></i></button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -152,6 +151,33 @@
                 }
             });
         })
+
+        $(document).on('click', '.cmt_delete', function() {
+            let id = $(this).data('id');
+            $.ajax({
+                url: "{{ route('admin.comment.delete') }}",
+                type: "POST",
+                data: {
+                    id: id
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    return confirm("Bạn thực sự muốn xóa?");
+                },
+                success: function(rsp) {
+                    if ($.isEmptyObject(rsp.errors)) {
+                        confirm_success(rsp.success);
+                        location.reload();
+                    } else {
+                        confirm_warning(rsp.errors);
+                    }
+                },
+                error: function() {
+                    //$(".loading").hide();
+                    alert("error!!!!");
+                }
+            });
+        });
 
         $(document).on('click', '.btn-reply', function() {
 

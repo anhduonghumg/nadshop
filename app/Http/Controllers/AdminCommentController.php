@@ -16,19 +16,33 @@ class AdminCommentController extends Controller
         });
     }
 
-    public function show()
+    public function show(Request $request)
     {
-        $list_comment = Comment::select('comments.id', 'comments.comment', 'comments.comment_date', 'comment_name', 'comment_status', 'products.product_name', 'products.id as product_id', 'comment_parent')
-            ->leftJoin('products', 'products.id', '=', 'comments.comment_product_id')
-            ->where('comments.comment_parent', 0)
-            ->orderByDesc('comments.id')
-            ->paginate(30);
+        $status = $request->input('status');
+        if (!$status || $status == 'pending') {
+            $list_comment = Comment::select('comments.id', 'comments.comment', 'comments.comment_date', 'comment_name', 'comment_status', 'products.product_name', 'products.id as product_id', 'comment_parent')
+                ->leftJoin('products', 'products.id', '=', 'comments.comment_product_id')
+                ->where('comments.comment_parent', 0)
+                ->where('comments.comment_status', 0)
+                ->orderByDesc('comments.id')
+                ->paginate(30);
+        } else {
+            $list_comment = Comment::select('comments.id', 'comments.comment', 'comments.comment_date', 'comment_name', 'comment_status', 'products.product_name', 'products.id as product_id', 'comment_parent')
+                ->leftJoin('products', 'products.id', '=', 'comments.comment_product_id')
+                ->where('comments.comment_parent', 0)
+                ->where('comments.comment_status', 1)
+                ->orderByDesc('comments.id')
+                ->paginate(30);
+        }
+
         $comment_rep = Comment::select('comments.id', 'comments.comment', 'comments.comment_date', 'comment_name', 'comment_status', 'products.product_name', 'products.id as product_id', 'comment_parent')
             ->leftJoin('products', 'products.id', '=', 'comments.comment_product_id')
             ->where('comments.comment_parent', '>', 0)
             ->orderByDesc('comments.id')
             ->get();
-        return view('admin.comment.list', compact('list_comment', 'comment_rep'));
+        $count_pending = Comment::where('comment_status', 0)->where('comment_parent', 0)->count();
+        $count_approved = Comment::where('comment_status', 1)->where('comment_parent', 0)->count();
+        return view('admin.comment.list', compact('list_comment', 'comment_rep', 'count_pending', 'count_approved'));
     }
 
     public function approve(Request $request)
@@ -70,6 +84,19 @@ class AdminCommentController extends Controller
             ];
             Comment::create($data);
             return response()->json(['success' => 'Trả lời bình luận thành công']);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = (int)$request->id;
+            $delete = Comment::where('id', $id)->delete();
+            if ($delete) {
+                return response()->json(['success' => 'Xóa bình luận thành công']);
+            } else {
+                return response()->json(['errors' => 'Xóa bình luận thất bại']);
+            }
         }
     }
 }

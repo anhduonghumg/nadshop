@@ -76,7 +76,7 @@
                         </tbody>
                     </table>
                 </form>
-                {{ $customer->links('layouts.paginationlink') }}
+                {{-- {{ $customer->links('layouts.paginationlink') }} --}}
             </div>
         </div>
         <script>
@@ -86,7 +86,7 @@
                 lengthChange: false,
                 drawCallback: function(settings) {
                     if ($(this).find('tbody tr').length < 20) {
-                        $('.dataTables_paginate ').hide();
+                        $('.dataTables_paginate').hide();
                     }
                 }
             });

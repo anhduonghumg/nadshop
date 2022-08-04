@@ -191,6 +191,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/admin/comment/list', [App\Http\Controllers\AdminCommentController::class, 'show'])->name('admin.comment.list');
     Route::post('/admin/comment/approve', [App\Http\Controllers\AdminCommentController::class, 'approve'])->name('admin.approveComment');
     Route::post('/admin/comment/reply', [App\Http\Controllers\AdminCommentController::class, 'reply'])->name('admin.replyComment');
+    Route::post('/admin/comment/delete', [App\Http\Controllers\AdminCommentController::class, 'delete'])->name('admin.comment.delete');
     // Export excel
     Route::post('/admin/product/export-csv', [App\Http\Controllers\AdminProductController::class, 'export'])->name('admin.product.export');
     // Route::post('/import-csv', 'ProductController@import_csv');
