@@ -1,5 +1,5 @@
 @extends ('layouts.admin')
-@section('title', 'Danh sách bài viết')
+@section('title', 'Danh sách sản phẩm chi tiết')
 @section('content')
     <div id="content" class="container-fluid">
         <div class="card">

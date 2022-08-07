@@ -4,7 +4,7 @@
         <div class="modal-content p-3">
             <form method='POST'>
                 <div class="modal-header ui-dranggale-handle" style="cursor: move;">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm chi tiết sản phẩm</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Cập nhập chi tiết sản phẩm</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -90,3 +90,4 @@
         </div>
     </div>
 </div>
+

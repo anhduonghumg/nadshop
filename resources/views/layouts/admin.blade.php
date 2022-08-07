@@ -182,9 +182,7 @@
                             <li><a href="{{ route('admin.product.list') }}">Danh sách</a></li>
                             {{-- <li><a href="{{ route('admin.product.detail.list') }}">Sản phẩm chi tiết</a></li> --}}
                             <li><a href="{{ route('admin.catProduct.list') }}">Danh mục</a></li>
-                            <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
-                            <li><a href="{{ route('admin.color.list') }}">Màu</a></li>
-                            <li><a href="{{ route('admin.size.list') }}">Size</a></li>
+                            <li><a href="{{ route('admin.product.stock') }}">Sản phẩm sắp hết</a></li>
                         </ul>
                     </li>
                     <li class="nav-link {{ $module_active == 'comment' ? 'active' : '' }}">
@@ -262,6 +260,20 @@
                         <ul class="sub-menu">
                             {{-- <li><a href="{{ url('admin/slider/add') }}">Thêm mới</a></li> --}}
                             <li><a href="{{ url('admin/slider/list') }}">Danh sách</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{{ url('admin/product/list') }}">
+                            <div class="nav-link-icon d-inline-flex">
+                                <i class="far fa-folder"></i>
+                            </div>
+                            Thuộc tính sản phẩm
+                        </a>
+                        <i class="arrow fas fa-angle-down"></i>
+                        <ul class="sub-menu">
+                            <li><a href="{{ route('admin.brand.list') }}">Thương hiệu</a></li>
+                            <li><a href="{{ route('admin.color.list') }}">Màu</a></li>
+                            <li><a href="{{ route('admin.size.list') }}">Size</a></li>
                         </ul>
                     </li>
                     {{-- <li class="nav-link {{ $module_active == 'role' ? 'active' : '' }}">

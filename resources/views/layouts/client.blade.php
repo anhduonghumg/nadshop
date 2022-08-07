@@ -87,7 +87,7 @@
     </script>
     <style>
         .fb_dialog_content iframe {
-            right: 1180px !important;
+            /* right: 1180px !important; */
         }
 
         .slick-carousel img {
@@ -395,9 +395,6 @@
                             <div class="box">
                                 <div class="content">
                                     <div class="social">
-                                        {{-- <a class="circle github" href="#">
-                                <i class="fa fa-github fa-fw"></i>
-                            </a> --}}
                                         <a id="google_login" class="circle google" href="#">
                                             <i class="fab fa-google"></i>
                                         </a>
@@ -442,9 +439,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="forgot-pass-box">
+                                <div class="content forgotPassBox" style="display:none;">
+                                    <div class="form" id="">
+                                        <form id="forgotPassBox" method="" html="{:multipart=>true}"
+                                            data-remote="true" action="" accept-charset="UTF-8">
+                                            <input class="form-control" type="email" placeholder="email"
+                                                name="email">
+                                            <input class="btn btn-primary btn-forgot-pass form-control mt-3"
+                                                type="button" value="Xác nhận">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <div class="forgot login-footer">
+                                <p><a class='forgot_pass'>Quên mật khẩu</a>?</p>
                                 <span><a href="" class='register'>Tạo một tài khoản</a>?</span>
                             </div>
                             <div class="forgot register-footer" style="display:none">
@@ -522,6 +533,11 @@
                 openRegisterModal();
             });
 
+            $('body').on('click', '.forgot_pass', function(e) {
+                e.preventDefault();
+                openForgotModal();
+            });
+
             $('body').on('click', '.btn-login', function() {
                 let email = $('#email_login').val();
                 let password = $('#password_login').val();
@@ -583,13 +599,32 @@
 
             }
 
+            function openForgotModal() {
+                showForgotForm();
+                setTimeout(function() {
+                    $('#loginModal').modal('show');
+                }, 230);
+            }
+
             function showLoginForm() {
                 $('#loginModal .registerBox').fadeOut('fast', function() {
+                    $('.forgotPassBox').fadeOut('fast');
                     $('.loginBox').fadeIn('fast');
                     $('.register-footer').fadeOut('fast', function() {
                         $('.login-footer').fadeIn('fast');
                     });
                     $('.modal-title').html('Login with');
+                });
+                $('.error').removeClass('alert alert-danger').html('');
+            }
+
+            function showForgotForm() {
+                $('.loginBox').fadeOut('fast', function() {
+                    $('.forgotPassBox').fadeIn('fast');
+                    $('.login-footer').fadeOut('fast', function() {
+                        $('.register-footer').fadeOut('fast');
+                    });
+                    $('.modal-title').html('Forgot Password');
                 });
                 $('.error').removeClass('alert alert-danger').html('');
             }

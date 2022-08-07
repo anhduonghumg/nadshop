@@ -11,7 +11,6 @@ class AdminCommentController extends Controller
     {
         $this->middleware(function ($request, $next) {
             session(['module_active' => 'comment']);
-
             return $next($request);
         });
     }

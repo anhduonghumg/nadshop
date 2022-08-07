@@ -241,7 +241,7 @@ class CartController extends Controller
 
             $discount_code = $request->discount_code ? $request->discount_code : null;
             $total = $request->total_cart ? $request->total_cart : die;
-            $check = Coupon::where('code', $discount_code)->first();
+            $check = Coupon::where('code', $discount_code)->where('status', 'on')->first();
             if ($check) {
                 $qty_discount = $check->qty;
                 if ($qty_discount > 0) {

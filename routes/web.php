@@ -100,6 +100,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/admin/product/list', [App\Http\Controllers\AdminProductController::class, 'list'])->name('admin.product.list');
     Route::get('/admin/product/variant', [App\Http\Controllers\AdminProductController::class, 'variant'])->name('admin.product.variant');
     Route::post('/admin/product/filter', [App\Http\Controllers\AdminProductController::class, 'filter'])->name('admin.product.filter');
+
     // Admin/product/detail
     Route::get('/admin/product/detail/show', [App\Http\Controllers\AdminProductDetailController::class, 'show'])->name('admin.product.detail.show');
     Route::get('/admin/product/detail/list', [App\Http\Controllers\AdminProductDetailController::class, 'list'])->name('admin.product.detail.list');
@@ -111,7 +112,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/admin/product/detail/test', [App\Http\Controllers\AdminProductDetailController::class, 'test'])->name('admin.product.detail.test');
     Route::get('/admin/product/detail/addVariant', [App\Http\Controllers\AdminProductDetailController::class, 'addVariant'])->name('admin.product.detail.addVariant');
     Route::post('/admin/product/detail/storeVariant', [App\Http\Controllers\AdminProductDetailController::class, 'storeVariant'])->name('admin.product.detail.storeVariant');
-
+    Route::get('/admin/product/stock', [App\Http\Controllers\AdminProductDetailController::class, 'stock'])->name('admin.product.stock');
+    Route::post('/admin/product/stock/edit', [App\Http\Controllers\AdminProductDetailController::class, 'editStock'])->name('admin.product.edit.stock');
+    Route::post('/admin/product/stock/update', [App\Http\Controllers\AdminProductDetailController::class, 'updateStock'])->name('admin.product.update.stock');
     // Admin/brand
     Route::get('/admin/brand/list', [App\Http\Controllers\AdminBrandController::class, 'list'])->name('admin.brand.list');
     Route::post('/admin/brand/add', [App\Http\Controllers\AdminBrandController::class, 'add'])->name('admin.brand.add');
@@ -171,6 +174,7 @@ Route::middleware('auth', 'verified')->group(function () {
     // Admin/customer
     Route::get('/admin/customer/list', [App\Http\Controllers\AdminCustomerController::class, 'list'])->name('admin.customer.list');
     Route::get('/admin/customer/export', [App\Http\Controllers\AdminCustomerController::class, 'export'])->name('admin.customer.export');
+    Route::get('/admin/customer/sendCoupon', [App\Http\Controllers\AdminCustomerController::class, 'sendCoupon'])->name('admin.customer.sendCoupon');
     // Admin/role
     Route::get('/admin/role/list', [App\Http\Controllers\AdminRoleController::class, 'list'])->name('admin.role.list');
     Route::get('/admin/role/add', [App\Http\Controllers\AdminRoleController::class, 'add'])->name('admin.role.add');

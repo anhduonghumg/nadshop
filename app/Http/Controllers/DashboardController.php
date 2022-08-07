@@ -275,6 +275,7 @@ class DashboardController extends Controller
     function load_chart(Request $request)
     {
         if ($request->ajax()) {
+            $chart_data = [];
             $thirty_day = now()->subDays(7)->format('Y-m-d');
             $now = now()->format('Y-m-d');
             $get = Order::selectRaw("SUM(product_orders.order_profit) as profit,SUM(product_orders.order_sales) as sale,SUM(product_orders.order_qty) as product_qty,COUNT(product_orders.id) as order_qty,product_orders.order_date")

@@ -3,9 +3,9 @@
 @section('content')
     <div id="content" class="container-fluid">
         <div class="card">
-            @if (session('status'))
+            @if (session('message'))
                 <div class="alert alert-success">
-                    {{ session('status') }}
+                    {{ session('message') }}
                 </div>
             @endif
             <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
@@ -28,7 +28,7 @@
                 </div> --}}
                 <form action="" method="POST">
                     @csrf
-                    <div class="form-action form-inline py-3">
+                    <div class="form-action form-inline py-3 d-flex">
                         {{-- <select class="form-control mr-1" name="act" id="">
                             <option>Chọn</option>
                             @foreach ($list_act as $k => $v)
@@ -36,7 +36,9 @@
                             @endforeach
                         </select> --}}
                         <a href="{{ route('admin.customer.export') }}" name="export_excel"
-                            class="btn btn-success export_excel">Xuất excel</a>
+                            class="btn btn-success export_excel mr-3">Xuất excel</a>
+                        <a href="{{ route('admin.customer.sendCoupon') }}" name="send_coupon"
+                            class="btn btn-secondary send_coupon">Gửi mã giảm giá</a>
                     </div>
                     <table class="table table-striped table-checkall customer_table">
                         <thead>

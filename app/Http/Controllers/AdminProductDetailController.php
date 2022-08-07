@@ -237,4 +237,43 @@ class AdminProductDetailController extends Controller
             return view('admin.productDetail.show', compact('product'))->render();
         }
     }
+
+    public function stock()
+    {
+        $list_product_run_out = ProductDetail::where('product_qty_stock', '<=', 5)->get();
+        return view('admin.productDetail.stock', compact('list_product_run_out'));
+    }
+
+    public function editStock(Request $request)
+    {
+        if ($request->ajax()) {
+            $id = $request->id;
+            $product = $this->productDetailRepo->find($id);
+            $view = view('admin.productDetail.editStock', compact('product'))->render();
+            return response()->json($view);
+        }
+    }
+
+    public function updateStock(Request $request)
+    {
+        if ($request->ajax()) {
+            $validator = Validator::make($request->all(), [
+                'product_qty_stock' => 'bail|required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                $error = collect($validator->errors())->unique()->first();
+                return response()->json(['errors' => $error]);
+            }
+
+            $id = (int)$request->productId;
+
+            $data = [
+                'product_qty_stock' => (int)$request->product_qty_stock
+            ];
+
+            ProductDetail::find($id)->update($data);
+            return response()->json(['success' => "Cập nhập thành công"]);
+        }
+    }
 }
