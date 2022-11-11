@@ -564,6 +564,26 @@
                 });
             });
 
+            $('body').on('click', '.btn-forgot-pass', function() {
+                let form_forgot = $('#forgotPassBox').serialize();
+                $.ajax({
+                    url: "{{ route('client.forgotPass') }}",
+                    type: 'POST',
+                    data: form_forgot,
+                    dataType: "json",
+                    success: function(rsp) {
+                        if ($.isEmptyObject(rsp.errors)) {
+                            confirm_success(rsp.success);
+                        } else {
+                            confirm_warning(rsp.errors);
+                        }
+                    },
+                    error: function() {
+                        alert("error!!!!");
+                    }
+                });
+            });
+
             $('body').on('click', '.btn-register', function() {
                 let form_reg = $("#form_reg").serialize();
                 $.ajax({

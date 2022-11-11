@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use App\Models\CustomerAccount;
 use App\Constants\Constants;
 use App\Models\CategoryProduct;
@@ -12,6 +13,8 @@ use App\Models\Order;
 use Illuminate\Support\Carbon;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Models\OrderDetail;
+use App\Mail\SendForgotPass;
+use App\Models\ProductDetail;
 
 class UserController extends Controller
 {
@@ -217,6 +220,14 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             $id = (int)$request->id;
+            $product_order = OrderDetail::where('order_id', $id)->first();
+            $pro_detail_id = $product_order->product_detail_id;
+            $pro_ty_ctd = $product_order->pro_order_qty;
+            $qty_pro = ProductDetail::where('id', $pro_detail_id)->first()->SLCTD;
+            $data = [
+                'SLCTD' => $pro_ty_ctd - $qty_pro
+            ];
+            ProductDetail::where('id', $pro_detail_id)->update($data);
             $view = view('client.customer.orderCancel', compact('id'))->render();
             return response()->json($view);
         }
@@ -245,5 +256,62 @@ class UserController extends Controller
             Order::where('id', $id)->update($data);
             return response()->json(['success' => 'Hủy đơn hàng thành công']);
         }
+    }
+
+    public function forgotPass(Request $request)
+    {
+        if ($request->ajax()) {
+            $validator = Validator::make($request->all(), [
+                'email' => 'bail|required|email',
+            ]);
+
+            if ($validator->fails()) {
+                $error = collect($validator->errors())->unique()->first();
+                return response()->json(['errors' => $error]);
+            }
+
+            $email = $request->email;
+            $customer = CustomerAccount::where('email', $email)->first();
+            if (!$customer) {
+                return response()->json(['errors' => 'Email không tồn tại']);
+            }
+            $password = $this->generateRandomString(8);
+            $data = [
+                'password' => md5($password)
+            ];
+            CustomerAccount::where('email', $customer->email)->update($data);
+
+            $data_send_forgot_pass = [
+                'fullname' => $customer->fullname,
+                'new_password' => $password,
+                'email' => $email
+            ];
+            $this->send_email_forgot_pass($data_send_forgot_pass);
+            return response()->json(['success' => 'NADSHOP đã gửi lại cụm mật khẩu mới ở trong mail của bạn.Vui lòng truy cập mail để lấy mật khẩu mới.']);
+        }
+    }
+
+    public function generateRandomString($length = 20)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function send_email_forgot_pass($array)
+    {
+        $email = $array['email'];
+        $fullname = $array['fullname'];
+        $new_pass = $array['new_password'];
+        $subject = "[NADSHOP - Khôi phục mật khẩu] Thư khôi phục mật khẩu!";
+        $data = [
+            'fullname' => $fullname,
+            'new_password' => $new_pass,
+        ];
+        Mail::to($email)->send(new SendForgotPass($data, $subject));
     }
 }

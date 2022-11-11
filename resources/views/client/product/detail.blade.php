@@ -65,7 +65,8 @@
                     @endif
                 </ul>
                 <div class="mb-3">
-                    <strong class="pt-1">Còn hàng</strong>
+                    <strong id="status_check" class="pt-1"></strong><br>
+                    <strong id="qty_ctd"></strong>
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">
                     {{ currentcyFormat($product->product_price - ($product->product_price * $product->product_discount) / 100) }}
@@ -132,7 +133,7 @@
                     </div>
                 </div>
                 <div class="select-action">
-                    <div class="d-flex btn_action">
+                    <div class="btn_action" id="option-btn">
                         <button class="btn btn-dark px-3 mr-2" id="add_to_cart">Thêm vào giỏ hàng</button>
                         <button class="btn btn-dark px-3 mr-2" id="buy_now">Mua ngay</button>
                     </div>
@@ -603,10 +604,22 @@
                     },
                     dataType: "json",
                     success: function(rsp) {
-                        var show_data = show(rsp.variant_id, rsp.pro_id);
-                        var show_qty = show_input_qty(rsp.variant_id);
-                        $('.btn_action').html(show_data);
-                        $('.quantity').html(show_qty);
+                        // console.log(rsp.qty_ctd);
+                        let show_qt_cl = rsp.qty_variant - rsp.qty_ctd;
+                        console.log(show_qt_cl);
+                        $('#qty_ctd').text("Số lượng còn lại: " + show_qt_cl);
+                        if (rsp.qty_variant - rsp.qty_ctd > 0) {
+                            $('#option-btn').addClass('d-flex');
+                            $('#status_check').text('Còn hàng');
+                            var show_data = show(rsp.variant_id, rsp.pro_id);
+                            var show_qty = show_input_qty(rsp.variant_id);
+                            $('.btn_action').html(show_data);
+                            $('.quantity').html(show_qty);
+                        } else {
+                            $('#status_check').text('Hết hàng');
+                            $('#option-btn').addClass('d-none');
+
+                        }
                         is_busy = false;
                     },
                     error: function() {

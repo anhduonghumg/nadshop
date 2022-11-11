@@ -18,6 +18,7 @@ use App\Models\CustomerAccount;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use PDF;
+use App\Models\ProductDetail;
 
 class AdminOrderController extends Controller
 {
@@ -252,6 +253,7 @@ class AdminOrderController extends Controller
                 'updated_at' => now()
             ];
 
+
             $saveOrder = $this->order->add($saveDataOrder);
             $check_customer = Customer::where('fullname', $request->fullname)->where('email', $request->email)->first();
             if (!$check_customer) {
@@ -274,6 +276,13 @@ class AdminOrderController extends Controller
                         'product_order_id' => $saveOrder->id
                     ];
                     $this->orderDetail->create($saveDataOrderDetail);
+                    foreach ($product_name as $k => $v) {
+                        // $product = ProductDetail::where('id', $product_name[$k])->first()->SLCTD;
+                        $saveDataDetail = [
+                            'SLCTD' => $request->qty[$key],
+                        ];
+                        ProductDetail::where('id', $product_name[$k])->update($saveDataDetail);
+                    }
                 }
                 return response()->json(['success' => trans('notification.add_success')]);
             }

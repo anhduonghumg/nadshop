@@ -10,6 +10,7 @@ use App\Repositories\Order\OrderRepositoryInterface;
 use Illuminate\Support\Facades\Validator;
 use App\Models\OrderDetail;
 use App\Models\Order;
+use App\Models\ProductDetail;
 
 class OrderController extends Controller
 {
@@ -83,12 +84,20 @@ class OrderController extends Controller
             }
 
             $id = (int)$request->id;
+            $qty_ctd = OrderDetail::where('product_order_id', $id)->first()->pro_order_qty;
+            $id_product = OrderDetail::where('product_order_id', $id)->first()->product_detail_id;
+            $product_qty = ProductDetail::where('id', $id_product)->first()->SLCTD;
             $note = $request->note;
             $data = [
                 'note' => $note,
                 'order_status' => 'cancel'
             ];
 
+            $data_tc = [
+                'SLCTD' => (int)$qty_ctd - (int)$product_qty
+            ];
+
+            ProductDetail::where('id', $id_product)->update($data_tc);
             Order::where('id', $id)->update($data);
             return response()->json(['success' => 'Hủy đơn hàng thành công']);
         }

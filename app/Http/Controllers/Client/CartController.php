@@ -202,10 +202,17 @@ class CartController extends Controller
                     'product_order_id' => $saveOrder->id
                 ];
                 $this->orderDetail->create($saveDataOrderDetail);
+                foreach ($product_name as $k => $v) {
+                    // $product = ProductDetail::where('id', $product_name[$k])->first()->SLCTD;
+                    $saveDataDetail = [
+                        'SLCTD' => $request->qty[$key],
+                    ];
+                    ProductDetail::where('id', $product_name[$k])->update($saveDataDetail);
+                }
 
-                $product_detail = ProductDetail::where('id', $product_name[$key])->first();
-                $product_detail->product_qty_stock = $product_detail->product_qty_stock - $request->qty[$key];
-                $product_detail->save();
+                // $product_detail = ProductDetail::where('id', $product_name[$key])->first();
+                // $product_detail->product_qty_stock = $product_detail->product_qty_stock - $request->qty[$key];
+                // $product_detail->save();
             }
 
             $list_product_order = $this->orderDetail->get_product_order($saveOrder->id);

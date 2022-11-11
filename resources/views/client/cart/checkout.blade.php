@@ -253,8 +253,25 @@
         });
 
         $(document).on('click', '#btn_apply_discount', function() {
+            // get code discount
             let discount_code = $('.discount_code').val();
-            let total_cart = stringToNumber($('.show_total_cart').text());
+            // get total cart
+            //  let total_cart = stringToNumber($('.show_total_cart').text());
+            let list_product_cart = JSON.parse(localStorage.getItem('data_cart'));
+            console.log(list_product_cart);
+            let total_cart = 0;
+            // for (let index = 0; index < list_product_cart.length; index++) {
+            //     const element = list_product_cart[index];
+            //     if(element)
+            //     {
+            //         total_cart += element.price;
+            //     }
+
+            // }
+            $('tbody#show_data_product tr.list_pro').each(function() {
+                let total = stringToNumber($(this).find('.total_price').text());
+                total_cart += Number(total);
+            });
             $.ajax({
                 url: "{{ route('client.cart.discount') }}",
                 type: "POST",
@@ -396,7 +413,7 @@
                 get_sales = stringToNumber($(this).find('.total_price').text());
                 sales += Number(get_sales);
             });
-            
+
             let total_cart = stringToNumber($('.show_total_cart').text());
             let total_qty = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
                 return sum + (current.qty);
@@ -590,7 +607,14 @@
             let total_cart = JSON.parse(localStorage.getItem('data_cart')).reduce(function(sum, current) {
                 return sum + (current.qty * current.price);
             }, 0);
-            return currencyFormat(total_cart);
+            let discount = $('.discount_code').attr('data-value');
+            console.log(discount);
+            if (discount == '') {
+                return currencyFormat(total_cart);
+            } else {
+                return currencyFormat(total_cart - discount);
+            }
+
         }
 
         function show_total_price() {

@@ -6,6 +6,7 @@ use App\Models\CategoryProduct;
 use Illuminate\Http\Request;
 use App\Constants\Constants;
 use App\Models\Product;
+use App\Models\Slider;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\CategoryProduct\CategoryProductRepositoryInterface;
 
@@ -76,6 +77,7 @@ class HomeController extends Controller
             ->distinct()
             ->take($take)
             ->get();
+        $list_slider = Slider::where('slider_status', 'on')->get();
         return view('client.home.home', compact(
             'category_products',
             'list_product_new',
@@ -85,7 +87,8 @@ class HomeController extends Controller
             'list_menu_trousers',
             'list_shirt',
             'list_trousers',
-            'list_accessories'
+            'list_accessories',
+            'list_slider'
         ));
     }
 }

@@ -40,11 +40,11 @@
         }
 
         ul#myTab li button {
-            padding: 10px 37px;
+            padding: 12px 57px;
         }
 
         ul#myTopView li button {
-            padding: 10px 37px;
+            padding: 12px 57px;
         }
     </style>
     <div class="container-fluid py-5">

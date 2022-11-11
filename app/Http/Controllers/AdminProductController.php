@@ -177,6 +177,16 @@ class AdminProductController extends Controller
             $new_product = $request->product_new ? $request->product_new : 0;
             $best_seller_product = $request->product_best_seller ? $request->product_best_seller : 0;
 
+            if ($request->hasFile('product_thumb')) {
+                $path_img = Constants::PATH_AVATAR;
+                $file = $request->file('product_thumb');
+                $extension = $request->product_thumb->extension();
+                $filename = time() . "." . $extension;
+                // $path = $file->move($path_img, $filename);
+                // $path_avatar = public_path(Constants::PATH_IMAGE . "product/avatar/" . $filename);
+                $image = Image::make($file->getRealPath())->fit(261, 340)->save(storage_path('app/public/images/product/main/' . $filename));
+            }
+
             $data = [
                 'product_name' => $request->input('product_name'),
                 'product_slug' => Str::slug($request->input('product_name')),
@@ -187,14 +197,15 @@ class AdminProductController extends Controller
                 'product_cat_id' => $request->input('category_product'),
                 'is_product_new' => $new_product,
                 'is_product_bestseller' => $best_seller_product,
+                'product_thumb' => "storage/" . Constants::PATH_AVATAR . $filename,
                 "created_at" => now(),
                 "updated_at" => now(),
             ];
 
-            if ($request->hasFile('product_thumb')) {
-                $dataImg = $this->ImageUpload2($request->product_thumb);
-                $data['product_thumb'] = $dataImg['file_path'];
-            }
+            // if ($request->hasFile('product_thumb')) {
+            //     $dataImg = $this->ImageUpload2($request->product_thumb);
+            //     $data['product_thumb'] = $dataImg['file_path'];
+            // }
 
             $this->productRepo->update($data, $id);
             return redirect()->route('admin.product.list')->with('status', trans('notification.update_success'));

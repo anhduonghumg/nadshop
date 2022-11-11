@@ -293,7 +293,7 @@ Route::post('searchAuto', [App\Http\Controllers\Client\SearchController::class, 
 Route::post('userRegister', [App\Http\Controllers\Client\UserController::class, 'register'])->name('client.register');
 Route::post('userLogin', [App\Http\Controllers\Client\UserController::class, 'login'])->name('client.login');
 Route::get('userLogout', [App\Http\Controllers\Client\UserController::class, 'logout'])->name('client.logout');
-
+Route::post('userForgotPass', [App\Http\Controllers\Client\UserController::class, 'forgotPass'])->name('client.forgotPass');
 
 // NEWS
 Route::get('news', [App\Http\Controllers\Client\PostController::class, 'show'])->name('client.news');

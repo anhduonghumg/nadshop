@@ -10,27 +10,18 @@
         }
     </style>
     <div class="carousel-inner">
-        <div class="carousel-item active" style="height: 410px;">
-            <img class="img-fluid" src="{{ url('public/client/img/carousel-1.jpg') }}" alt="Image">
-            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                <div class="p-3" style="max-width: 700px;">
-                    <h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First Order</h4>
-                    <h3 class="display-4 text-white font-weight-semi-bold mb-4">Fashionable Dress</h3>
-                    <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+        @foreach ($list_slider as $slider)
+            <div class="carousel-item" style="height: 410px;">
+                <img class="img-fluid" src="{{ asset($slider->slider_path) }}" alt="Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    {{-- <div class="p-3" style="max-width: 700px;">
+                        <h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First Order</h4>
+                        <h3 class="display-4 text-white font-weight-semi-bold mb-4">Fashionable Dress</h3>
+                        <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+                    </div> --}}
                 </div>
             </div>
-        </div>
-        <div class="carousel-item" style="height: 410px;">
-            <img class="img-fluid" src="{{ url('public/client/img/carousel-2.jpg') }}" alt="Image">
-            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                <div class="p-3" style="max-width: 700px;">
-                    <h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First
-                        Order</h4>
-                    <h3 class="display-4 text-white font-weight-semi-bold mb-4">Reasonable Price</h3>
-                    <a href="" class="btn btn-light py-2 px-3">Shop Now</a>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
     <a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
         <div class="btn btn-dark" style="width: 45px; height: 45px;">
@@ -352,8 +343,7 @@
 
     <script type="text/javascript">
         var is_busy = false;
-
-
+        carousel();
         $(document).on('click', '.tp_title', function(e) {
             e.preventDefault();
             if (is_busy == true) {
@@ -383,7 +373,6 @@
             var selector = $('.load_accessory_data');
             load_data(selector, data);
         });
-
 
         $('body').on('click', '.btn_buy_now', buy_now);
 
@@ -463,6 +452,10 @@
 
         $('body').on('click', '#size_check', size_check);
 
+        function carousel() {
+            $('.carousel-inner .carousel-item:first-child').addClass('active');
+        }
+
         function buy_now(e) {
             e.preventDefault();
             if (is_busy == true) {
@@ -538,7 +531,7 @@
             }
             output += `</ul>`;
             output += `<div class="mb-3">
-                                <strong class="pt-1">Còn hàng</strong>
+                                <strong class="pt-1" id="status_product"></strong>
                             </div>
                             <h3 class="font-weight-semi-bold mb-4">${currencyFormat(data.product_price - (data.product_price * data.product_discount / 100))}</h3>
                             <div class="mb-4">
@@ -680,8 +673,15 @@
                     },
                     dataType: "json",
                     success: function(rsp) {
-                        let show = render_button(rsp.variant_id, rsp.pro_id);
-                        $('.btn_buy').html(show);
+                        if (rsp.qty_variant > 0) {
+                            let show = render_button(rsp.variant_id, rsp.pro_id);
+                            $('.btn_buy').html(show);
+                            $('#status_product').text('Còn hàng');
+                        } else {
+                            $('.btn_buy').removeClass('d-flex');
+                            $('.btn_buy').addClass('d-none');
+                            $('#status_product').text('Hết hàng');
+                        }
                         is_busy = false;
                     },
                     error: function() {

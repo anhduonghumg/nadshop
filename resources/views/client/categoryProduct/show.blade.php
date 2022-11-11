@@ -380,10 +380,15 @@
                     },
                     dataType: "json",
                     success: function(rsp) {
-                        let show = render_button(rsp.variant_id, rsp.pro_id);
-                        // let show_qty = render_qty(rsp.variant_id);
-                        $('.btn_buy').html(show);
-                        // $('')
+                        if (rsp.qty_variant > 0) {
+                            let show = render_button(rsp.variant_id, rsp.pro_id);
+                            $('.btn_buy').html(show);
+                            $('#status_product_cat').text('Còn hàng');
+                        } else {
+                            $('.btn_buy').removeClass('d-flex');
+                            $('.btn_buy').addClass('d-none');
+                            $('#status_product_cat').text('Hết hàng');
+                        }
                         is_busy = false;
                     },
                     error: function() {
@@ -513,7 +518,7 @@
             }
             output += `</ul>`;
             output += `<div class="mb-3">
-                                <strong class="pt-1">Còn hàng</strong>
+                                <strong class="pt-1" id="status_product_cat"></strong>
                             </div>
                             <h3 class="font-weight-semi-bold mb-4">${currencyFormat(data.product_price - (data.product_price * data.product_discount / 100))}</h3>
                             <div class="mb-4">

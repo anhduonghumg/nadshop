@@ -16,6 +16,7 @@ use App\Models\Rating;
 use App\Models\OrderDetail;
 use Illuminate\Support\Carbon;
 use App\Models\View;
+use App\Models\ProductDetail;
 
 class ProductController extends Controller
 {
@@ -92,9 +93,14 @@ class ProductController extends Controller
             $variant = (int)$request->product_variant;
             $product = (int)$request->product;
 
+            $qty_variant = ProductDetail::where('id', $variant)->first()->product_qty_stock;
+            $qty_ctd = ProductDetail::where('id', $variant)->first()->SLCTD;
+
             $result = [
                 'variant_id' => $variant,
-                'pro_id' => $product
+                'pro_id' => $product,
+                'qty_variant' => $qty_variant,
+                'qty_ctd' => $qty_ctd
             ];
 
             return response()->json($result);

@@ -71,6 +71,9 @@
     </div>
     <!-- Cart End -->
     <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
         var is_fetching = false;
         load_cart();
         $(document).on('click', '.btn_delete_cart', function() {
